@@ -1,6 +1,5 @@
 #ifndef _KING_H_
 #define _KING_H_
-#include <string>
 #include "pieces.h"
 
 class King: public Pieces {
@@ -16,3 +15,4 @@ class King: public Pieces {
 
 };
 #endif
+

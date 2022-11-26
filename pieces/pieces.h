@@ -1,13 +1,18 @@
 #ifndef _PIECES_H_
 #define _PIECES_H_
-#include <string>
-//forward declaration so we know that Board, Player, and Position exist
+//forward declaration (only if we have ptrs) so we know that Board and Player exist OR include board and player class directly
 
+
+// to discuss - having a position struct that stores the rank and file of each piece 
+struct Position {
+  int rank;
+  int file;
+};
 
 class Pieces {
  protected:
   Player owner;
-  int id() const;
+  int id;
 
  public:
   //ctor
@@ -33,13 +38,13 @@ class Pieces {
 
   // discuss implementaion of these vs paper methods 
   /*
-  virtual int getColour(); // fix to enum later!!!!!!!!!!!!!!!!!!!!!!!!
-  virtual std::string getPos(); // discuss the implementation without the Square!!!!!!!!!!!!!!
-  virtual void setPos(Board b, int rank, int file); // difference between setPos and moveTo???
-  virtual bool onBoard();
-  virtual void moveTo(int rank, int file, Player p);
+  virtual int getColour(); // this should be up to the player class
+  virtual std::string getPos(); // this should kept track of by the player class
+  virtual void setPos(Board b, int rank, int file); // difference between setPos and moveTo??? - shd be done by the board class
+  virtual bool onBoard(); // boad class
+  virtual void moveTo(int rank, int file, Player p); // board class
   virtual void validMove(Board b, int rank, int file); // made this different from the UML - must update
-  virtual void attack(int rank, int file); // different because of Square
+  virtual void attack(int rank, int file); // board class
   */
 };
 #endif
