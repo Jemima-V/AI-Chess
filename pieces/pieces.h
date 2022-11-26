@@ -1,5 +1,5 @@
-#ifndef _OBSERVER_H_
-#define _OBSERVER_H_
+#ifndef _PIECES_H_
+#define _PIECES_H_
 #include <string>
 //forward declaration so we know that Board, Player, and Position exist
 
@@ -12,6 +12,9 @@ class Pieces {
  public:
   //ctor
   Pieces(Player owner, int id);
+
+  //dtor
+  virtual ~Pieces();
 
   // return the owner of the specfied piece
   Player getowner() const;
