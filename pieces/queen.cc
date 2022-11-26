@@ -1,7 +1,7 @@
 #include "queen.h"
 
 // ctor
-Queen::Queen(Player owner, int id): Pieces(owner, id) {}
+Queen::Queen(int owner, int id): Pieces(owner, id) {}
 
 // dtor
 Queen::~Queen() {}

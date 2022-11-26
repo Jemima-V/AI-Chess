@@ -5,24 +5,25 @@
 
 // to discuss - having a position struct that stores the rank and file of each piece 
 struct Position {
-  int rank;
-  int file;
+  // e.g h5 -> file = h(8) and rank = 5
+  int file; // cols
+  int rank; // rows
 };
 
 class Pieces {
  protected:
-  Player owner;
+  int owner; // 1 for player 1 (moves up the board) and 2 for player 2 (moves down the board)
   int id;
 
  public:
   //ctor
-  Pieces(Player owner, int id);
+  Pieces(int owner, int id);
 
   //dtor
   virtual ~Pieces();
 
   // return the owner of the specfied piece
-  Player getowner() const;
+  int getowner() const;
 
   // We can give each piece an id from 0-15 -this would be done in the Player class when we create the respective
   //   pieces for each player

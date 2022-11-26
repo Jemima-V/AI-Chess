@@ -5,7 +5,7 @@
 class Bishop: public Pieces {
  public:
   //ctor
-  Bishop(Player owner, int id);
+  Bishop(int owner, int id);
 
   //dtor
   ~Bishop();

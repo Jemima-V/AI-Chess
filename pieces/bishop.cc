@@ -1,7 +1,7 @@
 #include "bishop.h"
 
 // ctor
-Bishop::Bishop(Player owner, int id): Pieces(owner, id) {}
+Bishop::Bishop(int owner, int id): Pieces(owner, id) {}
 
 // dtor
 Bishop::~Bishop() {}

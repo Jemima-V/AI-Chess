@@ -5,7 +5,7 @@
 class King: public Pieces {
  public:
   //ctor
-  King(Player owner, int id);
+  King(int owner, int id);
 
   //dtor
   ~King();
