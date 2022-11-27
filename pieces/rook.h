@@ -5,7 +5,7 @@
 class Rook: public Pieces {
  public:
   //ctor
-  Rook(int owner, bool gotCaptured);
+  Rook(int owner, bool captured, int id);
 
   //dtor
   ~Rook();

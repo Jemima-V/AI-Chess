@@ -1,7 +1,7 @@
 #include "bishop.h"
 
 // ctor
-Bishop::Bishop(int owner, bool gotCaptured): Pieces(owner, gotCaptured) {}
+Bishop::Bishop(int owner, bool captured, int id): Pieces(owner, captured, id) {}
 
 // dtor
 Bishop::~Bishop() {}

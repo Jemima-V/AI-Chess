@@ -1,10 +1,18 @@
 #include "king.h"
 
 // ctor
-King::King(int owner, bool gotCaptured): Pieces(owner, gotCaptured) {}
+King::King(int owner, bool captured, int id): Pieces(owner, captured, id) {}
 
 // dtor
 King::~King() {}
+
+bool King::getCastlingDone() const {
+    return castlingDone;
+}
+
+void King::setCastlingDone(bool newCastling) {
+    castlingDone = newCastling;
+}
 
 int convertToABS(int toConvert) {
     if (toConvert < 0) {

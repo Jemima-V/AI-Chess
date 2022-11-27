@@ -8,10 +8,19 @@ class Pawn: public Pieces {
 
  public:
   //ctor
-  Pawn(int owner, bool gotCaptured, bool firstMove, bool possibleCapture);
+  Pawn(int owner, bool captured, int id, bool firstMove, bool possibleCapture);
 
   //dtor
   ~Pawn();
+
+  // return whether the pawn wants to capture another piece
+  bool getPossibleCapture() const;
+
+  // set whether the pawn wants to capture another piece
+  void setPossibleCapture(bool newCapture);
+
+  // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
+  void setFirstMove(bool newMove);
 
   // checks if a move is valid for the King piece
   bool validMove(Position start, Position end) const override;

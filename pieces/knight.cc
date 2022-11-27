@@ -1,7 +1,7 @@
 #include "knight.h"
 
 // ctor
-Knight::Knight(int owner, bool gotCaptured): Pieces(owner, gotCaptured) {}
+Knight::Knight(int owner, bool captured, int id): Pieces(owner, captured, id) {}
 
 // dtor
 Knight::~Knight() {}

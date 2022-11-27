@@ -1,11 +1,23 @@
 #include "pawn.h"
 
 // ctor
-Pawn::Pawn(int owner, bool gotCaptured, bool firstMove, bool possibleCapture): 
-    Pieces(owner, gotCaptured), firstMove{firstMove}, possibleCapture{possibleCapture} {}
+Pawn::Pawn(int owner, bool captured, int id, bool firstMove, bool possibleCapture): 
+    Pieces(owner, captured, id), firstMove{firstMove}, possibleCapture{possibleCapture} {}
 
 // dtor
 Pawn::~Pawn() {}
+
+bool Pawn::getPossibleCapture() const {
+    return possibleCapture;
+}
+
+void Pawn::setPossibleCapture(bool newCapture) {
+    possibleCapture = newCapture;
+}
+
+void Pawn::setFirstMove(bool newMove) {
+    firstMove = newMove;
+}
 
 bool Pawn::validMove(Position start, Position end) const {
     if (owner == 1) {

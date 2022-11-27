@@ -13,24 +13,44 @@ struct Position {
 class Pieces {
  protected:
   // change this to Player owner once Malvika makes the Player class!!
-  int owner; // 1 for player 1 (moves up the board) and 2 for player 2 (moves down the board)
-  bool gotCaptured;
+  int owner; // 1 for player 1 (white) (moves up the board) and 2 for player 2 (black) (moves down the board)
+  bool captured;
+  int id; // up to board init to set these values to distinguish the pieces
 
  public:
   //ctor
-  Pieces(int owner, bool gotCaptured);
+  Pieces(int owner, bool captured, int id);
 
   //dtor
   virtual ~Pieces();
 
-  // return the owner of the specfied piece
-  int getowner() const;
+  // return the owner of the specified piece
+  int getOwner() const;
+
+  // return the id of the specified piece
+  int getId() const;
+
+  // return whether the specific piece is captured or not
+  bool getCaptured() const;
+
+  // set whether the specific piece is captured or not
+  void setCaptured(bool newCapture);
 
   // checks if a move is valid, this is overridden by each derived piece
   virtual bool validMove(Position start, Position end) const = 0;
 
+  // returns true if there is a piece of the same colour at the end position
+  bool samePieceCheck(Position start, Position end) const;
+
+  // this will be overridden in the King derived class -> TO IMPLEMENT STILLL!!!!
+  virtual bool isValidCastling(Position start, Position end, const Board& board) const = 0;
+
+   // this will be overridden in the King derived class -> TO IMPLEMENT STILLL!!!! 
+   //   need to store both player pieces in a vector!!???
+  virtual bool kingInCheck(Position start, Position end, const Board& board) const = 0;
+
   // checks if a potential move is blocked by other pieces in the way
-  // potential change to checkRow, checkPos, and checkCol?
+  // potential change to checkRow, checkPos, and checkCol? -> TO IMPLEMENT STILLL!!!!
   bool checkBlock(Position start, Position end, const Board& board) const;
 
   // discuss implementaion of these vs paper methods 

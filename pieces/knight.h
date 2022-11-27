@@ -5,7 +5,7 @@
 class Knight: public Pieces {
  public:
   //ctor
-  Knight(int owner, bool gotCaptured);
+  Knight(int owner, bool captured, int id);
 
   //dtor
   ~Knight();
