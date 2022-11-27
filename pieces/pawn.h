@@ -4,16 +4,17 @@
 
 class Pawn: public Pieces {
   bool firstMove; // stores whether it is the first move for the pawn
-  bool capture; // stores whether the pawn wants to capture another piece
+  bool possibleCapture; // stores whether the pawn wants to capture another piece
+
  public:
   //ctor
-  Pawn(int owner, int id, bool firstMove, bool capture);
+  Pawn(int owner, bool gotCaptured, bool firstMove, bool possibleCapture);
 
   //dtor
   ~Pawn();
 
   // checks if a move is valid for the King piece
-  bool validMove(Position start, Position end, const Board& board) const override;
+  bool validMove(Position start, Position end) const override;
 
 };
 #endif

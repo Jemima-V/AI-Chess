@@ -12,12 +12,13 @@ struct Position {
 
 class Pieces {
  protected:
+  // change this to Player owner once Malvika makes the Player class!!
   int owner; // 1 for player 1 (moves up the board) and 2 for player 2 (moves down the board)
-  int id;
+  bool gotCaptured;
 
  public:
   //ctor
-  Pieces(int owner, int id);
+  Pieces(int owner, bool gotCaptured);
 
   //dtor
   virtual ~Pieces();
@@ -25,16 +26,11 @@ class Pieces {
   // return the owner of the specfied piece
   int getowner() const;
 
-  // We can give each piece an id from 0-15 -this would be done in the Player class when we create the respective
-  //   pieces for each player
-  int getid() const;
-
   // checks if a move is valid, this is overridden by each derived piece
-  virtual bool validMove(Position start, Position end, const Board& board) const = 0;
+  virtual bool validMove(Position start, Position end) const = 0;
 
-  // it would be better to implement this here instead of in the Board class since checkRow, checkPos, and checkCol 
-  //   are more related to pieces than the board
   // checks if a potential move is blocked by other pieces in the way
+  // potential change to checkRow, checkPos, and checkCol?
   bool checkBlock(Position start, Position end, const Board& board) const;
 
   // discuss implementaion of these vs paper methods 

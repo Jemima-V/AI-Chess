@@ -5,13 +5,13 @@
 class Knight: public Pieces {
  public:
   //ctor
-  Knight(int owner, int id);
+  Knight(int owner, bool gotCaptured);
 
   //dtor
   ~Knight();
 
   // checks if a move is valid for the King piece
-  bool validMove(Position start, Position end, const Board& board) const override;
+  bool validMove(Position start, Position end) const override;
 
 };
 #endif
