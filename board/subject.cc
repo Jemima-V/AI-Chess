@@ -1,9 +1,6 @@
 #include "subject.h"
 #include "observer.h"
 
-//Subject::Subject() {}
-//Subject::~Subject() {delete ob}
-
 void Subject::attach(Observer *o) {
   observers.emplace_back(o);
 }
