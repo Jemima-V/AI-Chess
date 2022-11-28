@@ -2,24 +2,26 @@
 
 // ctor
 Pawn::Pawn(int owner, bool captured, char id, bool firstMove, bool possibleCapture): 
-    Pieces(owner, captured, id), firstMove{firstMove}, possibleCapture{possibleCapture} {}
+    Pieces(owner, captured, id), firstMove{firstMove} {}
 
 // dtor
 Pawn::~Pawn() {}
-
-bool Pawn::getPossibleCapture() const {
-    return possibleCapture;
-}
-
-void Pawn::setPossibleCapture(bool newCapture) {
-    possibleCapture = newCapture;
-}
 
 void Pawn::setFirstMove(bool newMove) {
     firstMove = newMove;
 }
 
-bool Pawn::validMove(Position start, Position end) const {
+// checks if there is a piece of the other player diagonal to the pawn
+bool Pawn::potentialCapture(Position start, Position end, const Board& board) const {
+    Pieces* pieceToKill = board.pieceAt(end);
+    if (pieceToKill != nullptr && (pieceToKill->getOwner() != (board.pieceAt(start)->getOwner()))) {
+        // there is another player's piece there and the pawn can now capture 
+        return true;
+    }
+    return false;
+}
+
+bool Pawn::validMove(Position start, Position end, const Board& board) const {
     if (owner == 1) {
         if (firstMove == true) { // move forward 2 squares only at starting position
             // rank changes by +1 or +2, file must stay the same
@@ -29,7 +31,7 @@ bool Pawn::validMove(Position start, Position end) const {
             } else {
                 return false;
             }
-        } else if (possibleCapture == true) { // move diagonally forward only to capture
+        } else if (potentialCapture(start, end, board) == true) { // move diagonally forward only to capture
             // can be the left diagonal or the right diagonal
             // rank must be +1, file must be one of +1 or -1
             int rankChange = end.rank - start.rank;
@@ -57,7 +59,7 @@ bool Pawn::validMove(Position start, Position end) const {
             } else {
                 return false;
             }
-        } else if (possibleCapture == true) { // move diagonally forward only to capture
+        } else if (potentialCapture(start, end, board) == true) { // move diagonally forward only to capture
             // can be the left diagonal or the right diagonal
             // rank must be -1, file must be one of +1 or -1
             int rankChange = end.rank - start.rank;

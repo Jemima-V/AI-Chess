@@ -6,7 +6,7 @@ Queen::Queen(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 // dtor
 Queen::~Queen() {}
 
-bool Queen::validMove(Position start, Position end) const {
+bool Queen::validMove(Position start, Position end, const Board& board) const {
     // combination of Rook's and Bishop's rules
     int rankChange = end.rank - start.rank;
     int fileChange = end.file - start.file;

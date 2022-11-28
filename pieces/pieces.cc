@@ -38,8 +38,7 @@ bool Pieces::samePieceCheck(Position start, Position end, const Board& board) co
     }
 }
 
-// implement checkBlock()
+// implement checkBlock() -> TODOOO!!!
 // if theres smtg there, what is it and which player owns it?
-
 // new function for Position of whats blocking!!!!
 

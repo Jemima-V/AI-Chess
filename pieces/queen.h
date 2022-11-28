@@ -10,8 +10,8 @@ class Queen: public Pieces {
   //dtor
   ~Queen();
 
-  // checks if a move is valid for the King piece
-  bool validMove(Position start, Position end) const override;
+  // checks if a move is valid for the Queen piece
+  bool validMove(Position start, Position end, const Board& board) const override;
 
 };
 #endif

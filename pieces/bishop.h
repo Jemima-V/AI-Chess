@@ -10,8 +10,8 @@ class Bishop: public Pieces {
   //dtor
   ~Bishop();
 
-  // checks if a move is valid for the King piece
-  bool validMove(Position start, Position end) const override;
+  // checks if a move is valid for the Bishop piece
+  bool validMove(Position start, Position end, const Board& board) const override;
 
 };
 #endif

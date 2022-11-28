@@ -37,7 +37,7 @@ class Pieces {
   void setCaptured(bool newCapture);
 
   // checks if a move is valid, this is overridden by each derived piece
-  virtual bool validMove(Position start, Position end) const = 0;
+  virtual bool validMove(Position start, Position end, const Board& board) const = 0;
 
   // returns true if there is a piece of the same colour at the end position
   bool samePieceCheck(Position start, Position end, const Board& board) const;
@@ -45,16 +45,5 @@ class Pieces {
   // checks if a potential move is blocked by other pieces in the way
   // potential change to checkRow, checkPos, and checkCol? -> TO IMPLEMENT STILLL!!!!
   bool checkBlock(Position start, Position end, const Board& board) const;
-
-  // discuss implementaion of these vs paper methods 
-  /*
-  virtual int getColour(); // this should be up to the player class
-  virtual std::string getPos(); // this should kept track of by the player class
-  virtual void setPos(Board b, int rank, int file); // difference between setPos and moveTo??? - shd be done by the board class
-  virtual bool onBoard(); // boad class
-  virtual void moveTo(int rank, int file, Player p); // board class
-  virtual void validMove(Board b, int rank, int file); // made this different from the UML - must update
-  virtual void attack(int rank, int file); // board class
-  */
 };
 #endif

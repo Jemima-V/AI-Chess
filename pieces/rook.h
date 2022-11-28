@@ -3,6 +3,8 @@
 #include "pieces.h"
 
 class Rook: public Pieces {
+  bool moved = false; // stores whether the rook has moved in the game yet
+
  public:
   //ctor
   Rook(int owner, bool captured, char id);
@@ -10,8 +12,14 @@ class Rook: public Pieces {
   //dtor
   ~Rook();
 
-  // checks if a move is valid for the King piece
-  bool validMove(Position start, Position end) const override;
+  // return whether the rook has moved
+  bool getMoved() const;
+
+  // set whether the rook has moved
+  void setMoved(bool newMoved);
+
+  // checks if a move is valid for the Rook piece
+  bool validMove(Position start, Position end, const Board& board) const override;
 
 };
 #endif

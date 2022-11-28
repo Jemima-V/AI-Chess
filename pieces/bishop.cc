@@ -6,7 +6,7 @@ Bishop::Bishop(int owner, bool captured, char id): Pieces(owner, captured, id) {
 // dtor
 Bishop::~Bishop() {}
 
-bool Bishop::validMove(Position start, Position end) const {
+bool Bishop::validMove(Position start, Position end, const Board& board) const {
     // a move is only diagonal if the ABSOLUTE change in rank is equal to the ABSOLUTE change in file
     int rankChange = end.rank - start.rank;
     int fileChange = end.file - start.file;

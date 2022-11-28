@@ -4,7 +4,6 @@
 
 class Pawn: public Pieces {
   bool firstMove; // stores whether it is the first move for the pawn
-  bool possibleCapture; // stores whether the pawn wants to capture another piece
 
  public:
   //ctor
@@ -13,17 +12,14 @@ class Pawn: public Pieces {
   //dtor
   ~Pawn();
 
-  // return whether the pawn wants to capture another piece
-  bool getPossibleCapture() const;
-
-  // set whether the pawn wants to capture another piece
-  void setPossibleCapture(bool newCapture);
-
   // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
   void setFirstMove(bool newMove);
 
-  // checks if a move is valid for the King piece
-  bool validMove(Position start, Position end) const override;
+  // checks if there is a piece of the other player diagonal to the pawn
+  bool potentialCapture(Position start, Position end, const Board& board) const;
+
+  // checks if a move is valid for the pawn piece
+  bool validMove(Position start, Position end, const Board& board) const override;
 
 };
 #endif
