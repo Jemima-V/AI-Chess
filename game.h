@@ -11,8 +11,8 @@ class Game {
     Player turn;
 
     //to track the number of wins, loses and ties when several games are played 
-    int wins;
-    int loses;
+    int black;
+    int white;
     int ties;
 
     public:
@@ -20,11 +20,11 @@ class Game {
         Game(Board *gameBoard, Player turn);
 
         //initializes the gameboard
-        void initializeBoard(Board *gameBoard);
+        void initializeBoard(Board *gameBoard); //call initializeBoard in Board class
         //gets the players turn
         Player getTurn(); 
         //gets final game result 
-        int gameResult(int wins, int loses, int ties);
+        int gameResult(int black, int white, int ties);
         
         //destructor
         ~Game();

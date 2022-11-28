@@ -4,7 +4,6 @@
 #include <vector.h>
 #include "game.h"
 #include "pieces.h"
-#include "square.h"
 
 using namespace std; 
 
@@ -13,13 +12,13 @@ class Player : public Game {
     string name; 
 
     //player score
-    int capturedScore; 
+    //int capturedScore; 
 
     //player's captures pieces
-    vector <Pieces*> capturedPieces; 
+    //vector <Pieces*> capturedPieces; 
 
     //if the king is on the board
-    bool kingExists; 
+    bool kingExists; //maybe
 
     public:
         //constructor 
@@ -34,11 +33,11 @@ class Player : public Game {
         //allows the player to make a valid move
         virtual void makeMove() = 0; 
         //gets the score of the player
-        virtual int score() = 0;
+        //virtual int score() = 0;
         //captures opponent's piece
         virtual void capture(Piece *p) = 0; 
-        //moves to a valid square on the board
-        virtual Square moveTo() = 0;
+        //moves to a valid position on the board
+        virtual Position moveTo() = 0;
         //reverses a player's move
         virtual void reverseMove() = 0;
 

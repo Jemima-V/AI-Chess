@@ -1,8 +1,7 @@
-#ifndef HUMAN_H
-#define HUMAN_H
+#ifndef COMPUTER_H
+#define COMPUTER_H
 #include <string.h>
 #include "player.h"
-#include "square.h"
 
 using namespace std;
 

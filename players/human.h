@@ -2,7 +2,6 @@
 #define HUMAN_H
 #include <string.h>
 #include "player.h"
-#include "square.h"
 
 using namespace std;
 

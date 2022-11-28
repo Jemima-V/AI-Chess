@@ -1,7 +1,6 @@
 #include <string.h>
 #include "player.h"
 #include "computer.h"
-#include "square.h"
 #include "leveltwo.h"
 
 //constructor 

@@ -1,9 +1,8 @@
-#ifndef HUMAN_H
-#define HUMAN_H
+#ifndef LEVELONE_H
+#define LEVELONE_H
 #include <string.h>
 #include "player.h"
 #include "computer.h"
-#include "square.h"
 
 class LevelOne : public Computer {
     //checks if the player has moved yet

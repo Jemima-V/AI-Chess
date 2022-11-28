@@ -1,6 +1,5 @@
 #include <string.h>
 #include "player.h"
-#include "square.h"
 #include "human.h"
 
 using namespace std;
