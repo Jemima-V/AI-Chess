@@ -1,7 +1,7 @@
 #include "king.h"
 
 // ctor
-King::King(int owner, bool captured, int id): Pieces(owner, captured, id) {}
+King::King(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 
 // dtor
 King::~King() {}

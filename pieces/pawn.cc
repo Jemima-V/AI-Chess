@@ -1,7 +1,7 @@
 #include "pawn.h"
 
 // ctor
-Pawn::Pawn(int owner, bool captured, int id, bool firstMove, bool possibleCapture): 
+Pawn::Pawn(int owner, bool captured, char id, bool firstMove, bool possibleCapture): 
     Pieces(owner, captured, id), firstMove{firstMove}, possibleCapture{possibleCapture} {}
 
 // dtor

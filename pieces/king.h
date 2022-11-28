@@ -7,7 +7,7 @@ class King: public Pieces {
  
  public:
   //ctor
-  King(int owner, bool captured, int id);
+  King(int owner, bool captured, char id);
 
   //dtor
   ~King();

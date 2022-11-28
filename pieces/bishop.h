@@ -5,7 +5,7 @@
 class Bishop: public Pieces {
  public:
   //ctor
-  Bishop(int owner, bool captured, int id);
+  Bishop(int owner, bool captured, char id);
 
   //dtor
   ~Bishop();

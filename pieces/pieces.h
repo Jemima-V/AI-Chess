@@ -15,11 +15,11 @@ class Pieces {
   // change this to Player owner once Malvika makes the Player class!!
   int owner; // 1 for player 1 (white) (moves up the board) and 2 for player 2 (black) (moves down the board)
   bool captured;
-  int id; // up to board init to set these values to distinguish the pieces
+  char id; // up to board init to set these values to distinguish the pieces
 
  public:
   //ctor
-  Pieces(int owner, bool captured, int id);
+  Pieces(int owner, bool captured, char id);
 
   //dtor
   virtual ~Pieces();
@@ -28,7 +28,7 @@ class Pieces {
   int getOwner() const;
 
   // return the id of the specified piece
-  int getId() const;
+  char getId() const;
 
   // return whether the specific piece is captured or not
   bool getCaptured() const;
@@ -40,7 +40,7 @@ class Pieces {
   virtual bool validMove(Position start, Position end) const = 0;
 
   // returns true if there is a piece of the same colour at the end position
-  bool samePieceCheck(Position start, Position end) const;
+  bool samePieceCheck(Position start, Position end, const Board& board) const;
 
   // this will be overridden in the King derived class -> TO IMPLEMENT STILLL!!!!
   virtual bool isValidCastling(Position start, Position end, const Board& board) const = 0;

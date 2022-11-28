@@ -1,7 +1,7 @@
 #include "queen.h"
 
 // ctor
-Queen::Queen(int owner, bool captured, int id): Pieces(owner, captured, id) {}
+Queen::Queen(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 
 // dtor
 Queen::~Queen() {}

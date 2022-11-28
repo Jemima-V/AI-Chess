@@ -1,7 +1,7 @@
 #include "pieces.h"
 
 // ctor
-Pieces::Pieces(int owner, bool captured, int id): owner{owner}, captured{captured}, id{id} {}
+Pieces::Pieces(int owner, bool captured, char id): owner{owner}, captured{captured}, id{id} {}
 
 // dtor
 Pieces::~Pieces() {}
@@ -10,7 +10,7 @@ int Pieces::getOwner() const {
     return owner;
 }
 
-int Pieces::getId() const {
+char Pieces::getId() const {
     return id;
 }
 
@@ -22,8 +22,8 @@ void Pieces::setCaptured(bool newCapture) {
     captured = newCapture;
 }
 
-bool Pieces::samePieceCheck(Position start, Position end) const {
-    if (pieceAt(start) == pieceAt(end)) {
+bool Pieces::samePieceCheck(Position start, Position end, const Board& board) const {
+    if (board.pieceAt(start) == board.pieceAt(end)) {
         return true;
     } else {
         return false;

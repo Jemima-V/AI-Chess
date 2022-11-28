@@ -1,7 +1,7 @@
 #include "rook.h"
 
 // ctor
-Rook::Rook(int owner, bool captured, int id): Pieces(owner, captured, id) {}
+Rook::Rook(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 
 // dtor
 Rook::~Rook() {}
