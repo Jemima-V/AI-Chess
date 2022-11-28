@@ -6,14 +6,6 @@ Queen::Queen(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 // dtor
 Queen::~Queen() {}
 
-int convertToABS(int toConvert) {
-    if (toConvert < 0) {
-        return (-1 * toConvert);
-    } else {
-        return toConvert;
-    }
-}
-
 bool Queen::validMove(Position start, Position end) const {
     // combination of Rook's and Bishop's rules
     int rankChange = end.rank - start.rank;

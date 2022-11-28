@@ -1,9 +1,8 @@
 #ifndef _PIECES_H_
 #define _PIECES_H_
-//forward declaration (only if we have ptrs) so we know that Board and Player exist OR include board and player class directly
+#include "board.h"
 
-
-// to discuss - having a position struct that stores the rank and file of each piece 
+// A position struct that stores the rank and file of each piece 
 struct Position {
   // e.g h5 -> file = h(8) and rank = 5
   int file; // cols
@@ -14,8 +13,9 @@ class Pieces {
  protected:
   // change this to Player owner once Malvika makes the Player class!!
   int owner; // 1 for player 1 (white) (moves up the board) and 2 for player 2 (black) (moves down the board)
-  bool captured;
+  bool captured; // has this piece been captured
   char id; // up to board init to set these values to distinguish the pieces
+  int convertToABS(int toConvert) const; // helper function for the pieces arithmetic
 
  public:
   //ctor
@@ -41,13 +41,6 @@ class Pieces {
 
   // returns true if there is a piece of the same colour at the end position
   bool samePieceCheck(Position start, Position end, const Board& board) const;
-
-  // this will be overridden in the King derived class -> TO IMPLEMENT STILLL!!!!
-  virtual bool isValidCastling(Position start, Position end, const Board& board) const = 0;
-
-   // this will be overridden in the King derived class -> TO IMPLEMENT STILLL!!!! 
-   //   need to store both player pieces in a vector!!???
-  virtual bool kingInCheck(Position start, Position end, const Board& board) const = 0;
 
   // checks if a potential move is blocked by other pieces in the way
   // potential change to checkRow, checkPos, and checkCol? -> TO IMPLEMENT STILLL!!!!

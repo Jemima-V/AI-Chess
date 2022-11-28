@@ -22,6 +22,14 @@ void Pieces::setCaptured(bool newCapture) {
     captured = newCapture;
 }
 
+int Pieces::convertToABS(int toConvert) const {
+    if (toConvert < 0) {
+        return (-1 * toConvert);
+    } else {
+        return toConvert;
+    }
+}
+
 bool Pieces::samePieceCheck(Position start, Position end, const Board& board) const {
     if (board.pieceAt(start) == board.pieceAt(end)) {
         return true;

@@ -14,14 +14,6 @@ void King::setCastlingDone(bool newCastling) {
     castlingDone = newCastling;
 }
 
-int convertToABS(int toConvert) {
-    if (toConvert < 0) {
-        return (-1 * toConvert);
-    } else {
-        return toConvert;
-    }
-}
-
 bool King::validMove(Position start, Position end) const {
     // moves the same as the Queen but only one block at a time
     int rankChange = end.rank - start.rank;
