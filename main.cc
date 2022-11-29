@@ -145,6 +145,9 @@ int main() {
     //black wins
     int black;
 
+    //for tie games
+    int ties;
+
     //string to input player types 
     string s;
     while (true) {
@@ -165,7 +168,7 @@ int main() {
                 Player *w = create(player1);
                 Player *b = create(player2);
                 //creates a new game 
-                Game *g = new Game(w, b);
+                Game *g = new Game(gameboard, w, b, "white");
             }
             else if (s == "resign") {
                 if (w.hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point

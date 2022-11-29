@@ -3,22 +3,17 @@
 #include "game.h"
 
 //constructor 
-Game::Game(Board *gameBoard, Player turn);
-
-//initializes the gameboard
-void Game::initializeBoard(Board *gameBoard) {
-
-}
+Game::Game(Board *gameBoard, Player *white, Player *black, string turn) : gameBoard{gameBoard}, white{white},
+                                                                          black{black}, turn{turn} {}
 
 //gets the players turn
-Player Game::getTurn() {
-
-}
-
-//gets final game result 
-int Game::gameResult(int wins, int loses, int ties) {
-    
+string Game::getTurn() {
+    return turn;
 }
 
 //destructor
-Game::~Game();
+Game::~Game() {
+    delete gameBoard;
+    delete white;
+    delete black;
+}

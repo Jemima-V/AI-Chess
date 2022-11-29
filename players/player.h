@@ -35,7 +35,7 @@ class Player : public Game {
         //gets the score of the player
         //virtual int score() = 0;
         //captures opponent's piece
-        virtual void capture(Piece *p) = 0; 
+        virtual void capture(Pieces *p) = 0; 
         //moves to a valid position on the board
         virtual Position moveTo() = 0;
         //reverses a player's move

@@ -1,30 +1,30 @@
 #ifndef GAME_H
 #define GAME_H
+#include <string>
 #include "board.h"
 #include "player.h"
+
+using namespace std;
 
 class Game {
     //the entire gameboard
     Board *gameBoard; 
 
-    //to track which player's turn it is
-    Player turn;
+    //Player 1
+    Player *white;
 
-    //to track the number of wins, loses and ties when several games are played 
-    int black;
-    int white;
-    int ties;
+    //Player 2
+    Player *black;
+
+    //to track which player's turn it is
+    string turn;
 
     public:
         //constructor 
-        Game(Board *gameBoard, Player turn);
+        Game(Board *gameBoard, Player *white, Player *black, string turn);
 
-        //initializes the gameboard
-        void initializeBoard(Board *gameBoard); //call initializeBoard in Board class
         //gets the players turn
-        Player getTurn(); 
-        //gets final game result 
-        int gameResult(int black, int white, int ties);
+        string getTurn(); 
         
         //destructor
         ~Game();

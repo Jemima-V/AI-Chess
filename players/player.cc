@@ -5,9 +5,7 @@
 #include "player.h"
 
  //constructor 
-Player::Player(string name) {}
+Player::Player(string name) : name{name} {}
 
 //destructor 
-Player::~Player() {
-
-}
+Player::~Player() {}
