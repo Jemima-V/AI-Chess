@@ -13,10 +13,10 @@ class Rook: public Pieces {
   ~Rook();
 
   // return whether the rook has moved
-  bool getMoved() const;
+  bool getMoved() const override;
 
   // set whether the rook has moved
-  void setMoved(bool newMoved);
+  void setMoved(bool newMoved) override;
 
   // checks if a move is valid for the Rook piece
   bool validMove(Position start, Position end, Board* board) const override;

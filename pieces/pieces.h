@@ -55,5 +55,30 @@ class Pieces {
   // checks if the move for the player's piece places the Opponent's King in checkmate
   bool opponentKingCheckmate(Position start, Position end, Board* board) const;
 
+  // specific methods for pieces that are set to empty and get overridden
+  // return whether the king, rook has moved
+  virtual bool getMoved() const;
+
+  // set whether the king, rook has moved
+  virtual void setMoved(bool newMoved);
+
+  // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
+  virtual void setFirstMove(bool newMove);
+
+  // checks if there is a piece of the other player diagonal to the pawn
+  virtual bool potentialCapture(Position start, Position end, Board* board) const;
+
+  // return whether castling was done
+  virtual bool getCastlingDone() const;
+
+  // set whether castling was done
+  virtual void setCastlingDone(bool newCastling);
+
+  // return whether the king is in check
+  virtual bool getInCheck() const;
+
+  // set whether the king is in check
+  virtual void setInCheck(bool newCheck);
+
 };
 #endif

@@ -142,10 +142,18 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
         }
     }
     // check the diagonals of the king to make sure the opponent's pieces potentially at these places can't harm the king
-    // up left must have file = 0
-    // up right must have file = 7
-    // down left must have file = 0
-    // down right must have file = 7
+    /*
+    int changeLeft = KingLoc.file;
+    // left up must have file = 0
+    Position leftup{0, KingLoc.rank + changeLeft};
+    // left down must have file = 0
+    Position leftdown{0, oppKingLoc.rank - 1};
+    int changeRight = 7 - KingLoc.file;
+    // right up must have file = 7
+    Position rightup{7, oppKingLoc.rank + 1};
+    // right down must have file = 7
+    Position rightdown{7, oppKingLoc.rank - 1};
+    */
 }
 
 // checks if the move for the player's piece places the Opponent's King in check
@@ -169,6 +177,8 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
         return potentialKill;
     }
 }
+
+bool Pieces::getInCheck() const {}
 
 // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
@@ -208,4 +218,28 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     }
     return false;
 }
+
+// return whether the king, rook has moved
+bool Pieces::getMoved() const {}
+
+// set whether the king, rook has moved
+void Pieces::setMoved(bool newMoved) {}
+
+// set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
+void Pieces::setFirstMove(bool newMove) {}
+
+// checks if there is a piece of the other player diagonal to the pawn
+bool Pieces::potentialCapture(Position start, Position end, Board* board) const {}
+
+// return whether castling was done
+bool Pieces::getCastlingDone() const {}
+
+// set whether castling was done
+void Pieces::setCastlingDone(bool newCastling) {}
+
+// return whether the king is in check
+bool Pieces::getInCheck() const{}
+
+// set whether the king is in check
+void Pieces::setInCheck(bool newCheck) {}
 

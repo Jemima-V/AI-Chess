@@ -13,10 +13,10 @@ class Pawn: public Pieces {
   ~Pawn();
 
   // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
-  void setFirstMove(bool newMove);
+  void setFirstMove(bool newMove) override;
 
   // checks if there is a piece of the other player diagonal to the pawn
-  bool potentialCapture(Position start, Position end, Board* board) const;
+  bool potentialCapture(Position start, Position end, Board* board) const override;
 
   // checks if a move is valid for the pawn piece
   bool validMove(Position start, Position end, Board* board) const override;

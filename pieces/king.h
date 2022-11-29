@@ -15,22 +15,22 @@ class King: public Pieces {
   ~King();
 
   // return whether castling was done
-  bool getCastlingDone() const;
+  bool getCastlingDone() const override;
 
   // set whether castling was done
-  void setCastlingDone(bool newCastling);
+  void setCastlingDone(bool newCastling) override;
 
   // return whether the king has moved
-  bool getMoved() const;
+  bool getMoved() const override;
 
   // set whether the king has moved
-  void setMoved(bool newMoved);
+  void setMoved(bool newMoved) override;
 
   // return whether the king is in check
-  bool getInCheck() const;
+  bool getInCheck() const override;
 
   // set whether the king is in check
-  void setInCheck(bool newCheck);
+  void setInCheck(bool newCheck) override;
 
   // checks if a move is valid for the King piece
   bool validMove(Position start, Position end, Board* board) const override;
