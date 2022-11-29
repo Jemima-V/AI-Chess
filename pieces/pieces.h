@@ -5,8 +5,8 @@
 // A position struct that stores the rank and file of each piece 
 struct Position {
   // e.g h5 -> file = h(8) and rank = 5
-  int file; // cols
-  int rank; // rows
+  int file; // cols (goes from 0-7)
+  int rank; // rows (goes from 0-7)
 };
 
 class Pieces {
@@ -37,22 +37,22 @@ class Pieces {
   void setCaptured(bool newCapture);
 
   // checks if a move is valid, this is overridden by each derived piece
-  virtual bool validMove(Position start, Position end, const Board& board) const = 0;
+  virtual bool validMove(Position start, Position end, Board* board) const = 0;
 
   // returns true if there is a piece of the same colour at the end position
-  bool samePieceCheck(Position start, Position end, const Board& board) const;
+  bool samePieceCheck(Position start, Position end, Board* board) const;
 
   // checks if castling is allowed for the King -> TO IMPLEMENT STILLL!!!!
-  bool isValidCastling(Position start, Position end, const Board& board, Pieces* p) const;
+  bool isValidCastling(Position start, Position end, Board* board, Pieces* p) const;
 
   // checks if the move for the player's piece places the player's King in check -> TO IMPLEMENT STILLL!!!!
-  bool myKingInCheck(Position start, Position end, const Board& board) const;
+  bool myKingInCheck(Position start, Position end, Board* board) const;
 
   // checks if the move for the player's piece places the Opponent's King in check
-  bool opponentKingInCheck(Position start, Position end, const Board& board) const;
+  bool opponentKingInCheck(Position start, Position end, Board* board) const;
 
   // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
-  bool opponentKingCheckmate(Position start, Position end, const Board& board) const;
+  bool opponentKingCheckmate(Position start, Position end, Board* board) const;
 
 };
 #endif

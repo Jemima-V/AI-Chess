@@ -12,16 +12,16 @@ void Pawn::setFirstMove(bool newMove) {
 }
 
 // checks if there is a piece of the other player diagonal to the pawn
-bool Pawn::potentialCapture(Position start, Position end, const Board& board) const {
-    Pieces* pieceToKill = board.pieceAt(end);
-    if (pieceToKill != nullptr && (pieceToKill->getOwner() != (board.pieceAt(start)->getOwner()))) {
+bool Pawn::potentialCapture(Position start, Position end, Board* board) const {
+    Pieces* pieceToKill = board->pieceAt(end);
+    if (pieceToKill != nullptr && (pieceToKill->getOwner() != (board->pieceAt(start)->getOwner()))) {
         // there is another player's piece there and the pawn can now capture 
         return true;
     }
     return false;
 }
 
-bool Pawn::validMove(Position start, Position end, const Board& board) const {
+bool Pawn::validMove(Position start, Position end, Board* board) const {
     if (owner == 1) {
         if (firstMove == true) { // move forward 2 squares only at starting position
             // rank changes by +1 or +2, file must stay the same

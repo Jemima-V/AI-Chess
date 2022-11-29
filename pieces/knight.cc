@@ -6,7 +6,7 @@ Knight::Knight(int owner, bool captured, char id): Pieces(owner, captured, id) {
 // dtor
 Knight::~Knight() {}
 
-bool Knight::validMove(Position start, Position end, const Board& board) const {
+bool Knight::validMove(Position start, Position end, Board* board) const {
     int rankChange = end.rank - start.rank;
     int fileChange = end.file - start.file;
     // 4 possible moves:

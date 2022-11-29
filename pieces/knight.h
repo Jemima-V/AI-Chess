@@ -11,7 +11,7 @@ class Knight: public Pieces {
   ~Knight();
 
   // checks if a move is valid for the Knight piece
-  bool validMove(Position start, Position end, const Board& board) const override;
+  bool validMove(Position start, Position end, Board* board) const override;
 
 };
 #endif

@@ -24,7 +24,7 @@ void King::setMoved(bool newMoved) {
     moved = newMoved;
 }
 
-bool King::validMove(Position start, Position end, const Board& board) const {
+bool King::validMove(Position start, Position end, Board* board) const {
     // moves the same as the Queen but only one block at a time
     int rankChange = end.rank - start.rank;
     int fileChange = end.file - start.file;
