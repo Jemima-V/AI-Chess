@@ -175,6 +175,7 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
     }
 }
 
+// return whether the king is in check
 bool Pieces::getInCheck() const {}
 
 // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
@@ -233,9 +234,6 @@ bool Pieces::getCastlingDone() const {}
 
 // set whether castling was done
 void Pieces::setCastlingDone(bool newCastling) {}
-
-// return whether the king is in check
-bool Pieces::getInCheck() const{}
 
 // set whether the king is in check
 void Pieces::setInCheck(bool newCheck) {}
