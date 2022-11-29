@@ -6,6 +6,8 @@
 
 using namespace std;
 
+class Player;
+
 class Game {
     //the entire gameboard
     Board *gameBoard; 
