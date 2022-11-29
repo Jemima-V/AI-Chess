@@ -29,6 +29,7 @@ using namespace std;
 Position convert(string square) {
     char file = square[0];
     char rank = square[1];
+    //cout << file << endl << rank << endl;
     int f;
     int r;
     if (file == 'a') {
@@ -55,9 +56,10 @@ Position convert(string square) {
     else if (file == 'h') {
         f = 7;
     }
-    rank >> r;
+    r = rank - '0';
     --r;
     Position p{f, r};
+    //cout << p.file << endl << p.rank << endl;
     return p;
 }
 
