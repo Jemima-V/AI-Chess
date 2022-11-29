@@ -1,4 +1,5 @@
 #include "rook.h"
+#include "board.h"
 
 // ctor
 Rook::Rook(int owner, bool captured, char id): Pieces(owner, captured, id) {}

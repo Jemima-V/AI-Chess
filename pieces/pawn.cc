@@ -1,4 +1,5 @@
 #include "pawn.h"
+#include "board.h"
 
 // ctor
 Pawn::Pawn(int owner, bool captured, char id, bool firstMove): 

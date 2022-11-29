@@ -1,4 +1,5 @@
 #include "king.h"
+#include "board.h"
 
 // ctor
 King::King(int owner, bool captured, char id): Pieces(owner, captured, id) {}

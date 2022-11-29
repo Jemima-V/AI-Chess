@@ -1,4 +1,5 @@
 #include "knight.h"
+#include "board.h"
 
 // ctor
 Knight::Knight(int owner, bool captured, char id): Pieces(owner, captured, id) {}

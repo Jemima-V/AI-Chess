@@ -1,4 +1,5 @@
 #include "pieces.h"
+#include "board.h"
 
 // ctor
 Pieces::Pieces(int owner, bool captured, char id): owner{owner}, captured{captured}, id{id} {}

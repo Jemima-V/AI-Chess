@@ -1,6 +1,7 @@
 #ifndef _PIECES_H_
 #define _PIECES_H_
-#include "board.h"
+// forward declare to avoid circular dependency
+class Board;
 
 // A position struct that stores the rank and file of each piece 
 struct Position {

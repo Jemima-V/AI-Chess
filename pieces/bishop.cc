@@ -1,4 +1,5 @@
 #include "bishop.h"
+#include "board.h"
 
 // ctor
 Bishop::Bishop(int owner, bool captured, char id): Pieces(owner, captured, id) {}

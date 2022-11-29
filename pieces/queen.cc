@@ -1,4 +1,5 @@
 #include "queen.h"
+#include "board.h"
 
 // ctor
 Queen::Queen(int owner, bool captured, char id): Pieces(owner, captured, id) {}
