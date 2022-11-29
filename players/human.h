@@ -20,7 +20,7 @@ class Human : public Player {
 
     public:
         //constructor 
-        Human(Player *p);
+        Human(string name);
 
         //gets the player's name
         string getName() override; 

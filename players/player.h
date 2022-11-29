@@ -1,13 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <string.h>
-#include <vector.h>
+//#include <vector.h>
 #include "game.h"
 #include "pieces.h"
 
 using namespace std; 
 
-class Player : public Game {
+class Player {
     //player name
     string name; 
 

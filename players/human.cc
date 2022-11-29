@@ -5,7 +5,7 @@
 using namespace std;
 
 //constructor 
-Human::Human(Player *p) : p{p} {}
+Human::Human(string name) : Player(name) {}
 
 //gets the player's name
 string Human::getName() {

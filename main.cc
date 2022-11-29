@@ -2,12 +2,12 @@
 #include <string.h>
 #include <sstream>
 #include "game.h"
-#include "computer.h"
+//#include "computer.h"
 #include "human.h"
-#include "levelfour.h"
-#include "levelone.h"
-#include "leveltwo.h"
-#include "levelthree.h"
+//#include "levelfour.h"
+//#include "levelone.h"
+//#include "leveltwo.h"
+//#include "levelthree.h"
 #include "player.h"
 #include "bishop.h"
 #include "king.h"
@@ -17,10 +17,11 @@
 #include "queen.h"
 #include "rook.h"
 #include "board.h"
-#include "graphicsObserver.h"
+//#include "graphicsObserver.h"
 #include "textObserver.h"
 #include "observer.h"
 #include "subject.h"
+#include "window.h"
 
 using namespace std;
 
@@ -55,41 +56,56 @@ Position convert(string square) {
         f = 8;
     }
     rank >> r;
-    return new Position{f, r};
+    Position p{f, r};
+    return p;
 }
 
 //returns the Promotion piece for pawn promotion
-Pieces promo(string player, char promoChar) {
+Pieces* promo(string player, char promoChar) {
+    int id;
+    if (player == "white") {
+        id = 1;
+    } else {
+        id = 2;
+    }
     if (promoChar == 'Q') {
         if (player == "white") {
-            return new Queen{player, false, 'Q'};
+            Pieces *q = new Queen{id, false, 'Q'};
+            return q;
         }
         else {
-            return new Queen{player, false, 'q'};
+            Pieces *q = new Queen{id, false, 'q'};
+            return q;
         }
     }
     else if (promoChar == 'R') {
         if (player == "white") {
-            return new Rook{player, false, 'R'};
+            Pieces *r = new Rook{id, false, 'R'};
+            return r;
         }
         else {
-            return new Rook{player, false, 'r'};
+            Pieces *r = new Rook{id, false, 'r'};
+            return r;
         }
     }
     else if (promoChar == 'K') {
         if (player == "white") {
-            return new Knight{player, false, 'K'};
+            Pieces *k = new Knight{id, false, 'K'};
+            return k;
         }
         else {
-            return new Knight{player, false, 'k'};
+            Pieces *k = new Knight{id, false, 'k'};
+            return k;
         }
     }
     else if (promoChar == 'B') {
         if (player == "white") {
-            return new Bishop{player, false, 'B'};
+            Pieces *b = new Bishop{id, false, 'B'};
+            return b;
         }
         else {
-            return new Bishop{player, false, 'b'};
+            Pieces *b = new Bishop{id, false, 'b'};
+            return b;
         }
     }
     //try catch?
@@ -98,19 +114,24 @@ Pieces promo(string player, char promoChar) {
 //creates a player
 Player* create(string player) {
     if (player == "human") {
-        return new Human(player);
+        Player *h = new Human{player};
+        return h;
     } 
     else if (player == "computer1") {
-        return new LevelOne(player);
+        Player *h = new Human{player}; //
+        return h;
     } 
     else if (player == "computer2") {
-        return new LevelTwo(player);
+        Player *h = new Human{player}; //
+        return h;
     } 
     else if (player == "computer3") {
-        return new LevelThree(player);
+        Player *h = new Human{player}; //
+        return h;
     }
     else if (player == "computer4") {
-        return new LevelFour(player);
+        Player *h = new Human{player}; //
+        return h;
     }
 }
 
@@ -135,6 +156,9 @@ int main() {
 
     //string to input player types 
     string s;
+
+    Game *g = nullptr;
+    
     while (true) {
         if (cin.eof()) {
             string w = to_string(white);
@@ -146,6 +170,8 @@ int main() {
         }
         else {
             cin >> s;
+            Player *w = nullptr;
+            Player *b = nullptr;
             if (s == "game") {
                 string player1;
                 string player2;
@@ -182,10 +208,10 @@ int main() {
                     if (p->getOwner() == white) {
                         if (((s1.file == 5) && (s1.rank == 1)) &&
                             ((s2.file == 7) && (s2.rank == 1))) {
-                                if (p->isValidCastling(p, s1, s2) == true) {
+                                if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                     gameboard->makeMove(p, s1, s2); 
-                                    Position rpos = new Position{8, 1};
-                                    Position rnew = new Position{6, 1};
+                                    Position rpos{8, 1};
+                                    Position rnew{6, 1};
                                     Pieces *rook = gameboard->pieceAt(rpos);
                                     gameboard->makeMove(rook, rpos, rnew);
                                     if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -198,10 +224,10 @@ int main() {
                         }
                         else if (((s1.file == 5) && (s1.rank == 1)) &&
                                 ((s2.file == 3) && (s2.rank == 1))) {
-                                    if (p->isValidCastling(p, s1, s2) == true) {
+                                    if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                         gameboard->makeMove(p, s1, s2); 
-                                        Position rpos = new Position{1, 1};
-                                        Position rnew = new Position{4, 1};
+                                        Position rpos{1, 1};
+                                        Position rnew{4, 1};
                                         Pieces *rook = gameboard->pieceAt(rpos);
                                         gameboard->makeMove(rook, rpos, rnew);
                                         if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -243,10 +269,10 @@ int main() {
                     else if (p->getOwner() == black) {
                         if (((s1.file == 5) && (s1.rank == 8)) &&
                             ((s2.file == 7) && (s2.rank == 8))) {
-                                if (p->isValidCastling(p, s1, s2) == true) {
+                                if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                     gameboard->makeMove(p, s1, s2); 
-                                    Position rpos = new Position{8, 8};
-                                    Position rnew = new Position{6, 8};
+                                    Position rpos{8, 8};
+                                    Position rnew{6, 8};
                                     Pieces *rook = gameboard->pieceAt(rpos);
                                     gameboard->makeMove(rook, rpos, rnew);
                                     if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -259,11 +285,11 @@ int main() {
                         }
                         else if (((s1.file == 5) && (s1.rank == 8)) &&
                                 ((s2.file == 3) && (s2.rank == 8))) {
-                                    if (p->isValidCastling(p, s1, s2) == true) {
+                                    if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                         gameboard->makeMove(p, s1, s2); 
-                                        Position rpos = new Position{1, 8};
-                                        Position rnew = new Position{4, 8};
-                                        Pieces *rook = pieceAt(rpos);
+                                        Position rpos{1, 8};
+                                        Position rnew{4, 8};
+                                        Pieces *rook = gameboard->pieceAt(rpos);
                                         gameboard->makeMove(rook, rpos, rnew);
                                         if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                             cout << "White is in check." << endl;
@@ -318,29 +344,48 @@ int main() {
                             break;
                         }
                         else if (command == "+") {
-                            string piece;
+                            char piece;
                             string square;
                             cin >> piece >> square;
+                            Pieces *piecePlace = nullptr;
+                            if (piece == 'P') {
+                                piecePlace = new Pawn{1, false, 'P', true}; //
+                            }
+                            else if (piece == 'K') {
+                                piecePlace = new King{1, false, 'K'}; //
+                            }
+                            else if (piece == 'Q') {
+                                piecePlace = new Queen{1, false, 'Q'}; //
+                            }
+                            else if (piece == 'B') {
+                                piecePlace = new Bishop{1, false, 'B'}; //
+                            }
+                            else if (piece == 'R') {
+                                piecePlace = new Rook{1, false, 'R'}; //
+                            }
+                            else if (piece == 'N') {
+                                piecePlace = new Knight{1, false, 'P'}; //
+                            }
                             //converting square into a position struct
                             Position p = convert(square); 
                             //if there is an exisiting piece at that position
-                            if (gameboard->pieceAt(p) == true) {
-                                gameboard->place(piece, p); //board handles case for replacing 
+                            if (gameboard->pieceAt(p) != nullptr) {
+                                gameboard->place(piecePlace, p); //board handles case for replacing 
                             }
                             //if the position is a null pointer 
                             else {
-                                gameboard->place(piece, p);
+                                gameboard->place(piecePlace, p);
                             }
-                            gameboard->display(); // how to display board
+                            //gameboard->display(); // how to display board
                         }
                         else if (command == "-") {
                             string square;
                             cin >> square;
                             //converting square into a position struct
                             Position p = convert(square);
-                            if (gameboard->pieceAt(p) == true) {
+                            if (gameboard->pieceAt(p) != nullptr) {
                                 gameboard->removePiece(p); //board handles case for removing piece at position
-                                gameboard->display();
+                                //gameboard->display();
                             } 
                             else {
                                 continue;
@@ -349,7 +394,7 @@ int main() {
                         else if (command == "=") {
                             string colour;
                             cin >> colour;
-                            setPlayerTurn(colour); //implement this function in player class
+                            //setPlayerTurn(colour); //implement this function in player class
                         } 
                         else {
                             continue; //continues with command loop if any command is misspelled
@@ -363,3 +408,5 @@ int main() {
         }
     }
 }
+
+//delete pointers
