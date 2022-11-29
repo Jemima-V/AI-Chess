@@ -263,7 +263,8 @@ bool Board:: checkDiagonal(Position from, Position to){
     }
 }
 
-Pieces* Board:: checkRowOpp(int owner, Position from, Position to){
+Position Board:: checkRowOpp(int owner, Position from, Position to){
+    Position p{-1, -1};
 
     //rightward direction
     if (from.file < to.file){
@@ -271,13 +272,18 @@ Pieces* Board:: checkRowOpp(int owner, Position from, Position to){
         //Loop through the row and check for any pieces in the way
         for(int i = from.file; i <= to.file; i++){
             if (currBoard[from.rank][i] != nullptr && currBoard[from.rank][i]->getOwner() != owner){
-                return currBoard[from.rank][i];
+                //return currBoard[from.rank][i];
+                p.rank = from.rank;
+                p.file = i;
+                return p;
             }
         }
 
         //if this line is reached there is no piece blocking the path
-        //woulds this be dangling????
-        return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
+        //return nullptr;
     
     //case where from.file > to.file
     //leftward direction
@@ -286,16 +292,23 @@ Pieces* Board:: checkRowOpp(int owner, Position from, Position to){
         //Loop through the row and check for any pieces in the way
         for(int i = from.file; i >= to.file; i--){
             if (currBoard[from.rank][i] != nullptr && currBoard[from.rank][i]->getOwner() != owner){
-                return currBoard[from.rank][i];
+                //return currBoard[from.rank][i];
+                p.rank = from.rank;
+                p.file = i;
+                return p;
             }
         }
 
         //if this line is reached there is no piece blocking the path
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
     }
 }
 
-Pieces* Board:: checkColOpp(int owner, Position from, Position to){
+Position Board:: checkColOpp(int owner, Position from, Position to){
+    Position p{-1, -1};
 
     //Upwards direction
     if (from.rank < to.rank){
@@ -303,12 +316,19 @@ Pieces* Board:: checkColOpp(int owner, Position from, Position to){
         //Loop through the column and check for any pieces in the way
         for(int i = from.rank; i <= to.rank; i++){
             if (currBoard[i][from.file] != nullptr && currBoard[i][from.file]->getOwner() != owner){
-                return currBoard[i][from.file];
+                //return currBoard[i][from.file];
+                p.rank = i;
+                p.file = from.file;
+                return p;
+                
             }
         }
 
         //if this line is reached there is no piece blocking the path
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
     
     //case where from.rank > to.rank => downwards direction
     } else {
@@ -316,28 +336,42 @@ Pieces* Board:: checkColOpp(int owner, Position from, Position to){
         //Loop through the row and check for any pieces in the way
         for(int i = from.rank; i >= to.rank; i--){
             if (currBoard[i][from.file] != nullptr && currBoard[i][from.file]->getOwner() != owner){
-                return currBoard[i][from.file];
+                //return currBoard[i][from.file];
+                p.rank = i;
+                p.file = from.file;
+                return p;
             }
         }
 
         //if this line is reached there is no piece blocking the path
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
     }
 }
 
-Pieces* Board:: checkDiagOpp(int owner, Position from, Position to){
+Postion Board:: checkDiagOpp(int owner, Position from, Position to){
+    Position p{-1, -1};
+
     //Direction => Upwards to the right
     if(from.rank < to.rank && from.file < to.file){
         
         for(int i = from.rank, j = from.file; i <= to.rank && j <= to.file; i++, j++){
 
             if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
-                return currBoard[i][j];
+                //return currBoard[i][j];
+                p.rank = i;
+                p.file = j;
+                return p;
             }
 
         }
 
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
 
     //Direction => Upwards to the left
     } else if (from.rank < to.rank && from.file > to.file){
@@ -345,12 +379,18 @@ Pieces* Board:: checkDiagOpp(int owner, Position from, Position to){
         for(int i = from.rank, j = from.file; i <= to.rank && j >= to.file; i++, j--){
 
             if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
-                return currBoard[i][j];
+                //return currBoard[i][j];
+                p.rank = i;
+                p.file = j;
+                return p;
             }
 
         }
 
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
 
     //Direction => Downwards to right
     } else if (from.rank > to.rank && from.file < to.file){
@@ -358,12 +398,18 @@ Pieces* Board:: checkDiagOpp(int owner, Position from, Position to){
          for(int i = from.rank, j = from.file; i >= to.rank && j <= to.file; i--, j++){
 
             if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
-                return currBoard[i][j];
+                //return currBoard[i][j];
+                p.rank = i;
+                p.file = j;
+                return p;
             }
 
         }
 
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
 
     //Direction => downwards to the left
     //from.rank > to.rank && from.file > to.file
@@ -372,12 +418,18 @@ Pieces* Board:: checkDiagOpp(int owner, Position from, Position to){
          for(int i = from.rank, j = from.file; i >= to.rank && j >= to.file; i--, j--){
 
             if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
-                return currBoard[i][j];
+                //return currBoard[i][j];
+                p.rank = i;
+                p.file = j;
+                return p;
             }
 
         }
 
-        return nullptr;
+        //return nullptr;
+        p.rank = -1;
+        p.file = -1;
+        return p;
 
     }
 }

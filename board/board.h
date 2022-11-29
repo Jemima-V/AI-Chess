@@ -49,11 +49,11 @@ class Board: public Subject{
 
   bool checkDiagonal(Position from, Position to);
 
-  Pieces* checkRowOpp(int owner, Position from, Position to);
+  Position checkRowOpp(int owner, Position from, Position to);
 
-  Pieces* checkColOpp(int owner, Position from, Position to);
+  Position checkColOpp(int owner, Position from, Position to);
 
-  Pieces* checkDiagOpp(int owner, Position from, Position to);
+  Position checkDiagOpp(int owner, Position from, Position to);
 
   //need to be carefull with this --> what is the difference btwn this and make move
   void place(Pieces* addPiece, Position pos);
