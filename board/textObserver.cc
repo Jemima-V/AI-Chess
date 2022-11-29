@@ -17,12 +17,13 @@ addText::~addText() {
 void addText::notify() {
   int row = 8;
 
-  for (int i = 0; i < 8; ++i) {
+  for (int i = 7; i >= 0; --i) {
     cout << row << ' ';
     row--;
 
-    for (int j = 0; j < 8; ++j) {
+    for (int j = 7; j >= 0; --j) {
       char letter = subject->getState(i,j);
+      //cout << "Check: "<< letter << endl;
 
       //null pointer at the location
       if(letter == 'X'){
@@ -44,6 +45,6 @@ void addText::notify() {
     cout << '\n';
   }
 
-  cout << "  abcdefgh" << endl;
+  cout << "\n  abcdefgh" << endl;
 
 }
