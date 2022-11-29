@@ -143,7 +143,7 @@ int main() {
     gameboard->initBoard();
 
     //checks if the game is running
-    bool grunning;
+    bool grunning = false;
 
     //white wins
     int white = 0;
@@ -152,12 +152,14 @@ int main() {
     int black = 0;
 
     //for tie games
-    int ties;
+    int ties = 0;
 
     //string to input player types 
     string s;
 
     Game *g = nullptr;
+
+    std::vector<Observer*> stack;
     
     while (true) {
         if (cin.eof()) {
@@ -180,8 +182,9 @@ int main() {
                 Player *b = create(player2);
                 //creates a new game 
                 Game *g = new Game(gameboard, w, b, "white");
-                gameboard->render();
-            }
+                Observer *t = new addText{gameboard};
+                stack.push_back(t);
+                gameboard->render();           }
             else if (s == "resign") {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
                     ++black; 
