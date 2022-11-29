@@ -25,6 +25,16 @@ void King::setMoved(bool newMoved) {
     moved = newMoved;
 }
 
+// return whether the king is in check
+bool King::getInCheck() const {
+    return inCheck;
+}
+
+// set whether the king is in check
+void King::setInCheck(bool newCheck) {
+    inCheck = newCheck;
+}
+
 bool King::validMove(Position start, Position end, Board* board) const {
     // moves the same as the Queen but only one block at a time
     int rankChange = end.rank - start.rank;

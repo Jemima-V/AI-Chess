@@ -5,6 +5,7 @@
 class King: public Pieces {
    bool castlingDone = false; // castling initially set to false, a player can only do this once in a game
    bool moved = false; // stores whether the king has moved in the game yet
+   bool inCheck = false; // stores whether the king is in check or not
  
  public:
   //ctor
@@ -24,6 +25,12 @@ class King: public Pieces {
 
   // set whether the king has moved
   void setMoved(bool newMoved);
+
+  // return whether the king is in check
+  bool getInCheck() const;
+
+  // set whether the king is in check
+  void setInCheck(bool newCheck);
 
   // checks if a move is valid for the King piece
   bool validMove(Position start, Position end, Board* board) const override;
