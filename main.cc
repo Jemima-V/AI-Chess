@@ -131,7 +131,7 @@ Player* create(string player) {
 
 int main() {
     //creates the game board
-    Board *gameboard; 
+    Board *gameboard = new Board(); 
 
     //initializes the gameboard
     gameboard->initBoard();
