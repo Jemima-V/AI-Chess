@@ -351,7 +351,7 @@ Position Board:: checkColOpp(int owner, Position from, Position to){
     }
 }
 
-Postion Board:: checkDiagOpp(int owner, Position from, Position to){
+Position Board:: checkDiagOpp(int owner, Position from, Position to){
     Position p{-1, -1};
 
     //Direction => Upwards to the right
