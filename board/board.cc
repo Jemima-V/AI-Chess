@@ -44,7 +44,7 @@ void Board:: initBoard(){
     int black = 2; //player 2
     
     //WHITE SIDE
-    for(int i = 0; i < 7; i++){
+    for(int i = 0; i < 8; i++){
 
         //Rooks
         if(i == 0 || i == 7){
@@ -61,8 +61,8 @@ void Board:: initBoard(){
         //King
         } else if (i == 4){
             currBoard[0][i]= new King{white, false, 'K'};
-            whiteKing.rank = 7;
-            whiteKing.file = i;
+            //whiteKing.rank = 7;
+            //whiteKing.file = i;
         
         //Queen
         } else {
@@ -76,7 +76,7 @@ void Board:: initBoard(){
     }
 
     //BLACK SIDE
-    for(int i = 0; i < 7; i++){
+    for(int i = 0; i < 8; i++){
 
         //Rooks
         if(i == 0 || i == 7){
@@ -91,10 +91,10 @@ void Board:: initBoard(){
             currBoard[7][i]= new Bishop{black, false, 'b'};
         
         //King
-        } else if (i == 3){
+        } else if (i == 4){
             currBoard[7][i]= new King{black, false, 'k'};
-            blackKing.rank = 0;
-            blackKing.file = i;
+            //blackKing.rank = 0;
+            //blackKing.file = i; //initialed in ctor
 
         //Queen
         } else {
