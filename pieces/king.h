@@ -28,15 +28,6 @@ class King: public Pieces {
   // checks if a move is valid for the King piece
   bool validMove(Position start, Position end, const Board& board) const override;
 
-  // checks if castling is allowed for the King -> TO IMPLEMENT STILLL!!!!
-  bool isValidCastling(Position start, Position end, const Board& board, Pieces* p) const;
-
-  // checks if the move for the player's piece places the player's King in check -> TO IMPLEMENT STILLL!!!!
-  bool myKingInCheck(Position start, Position end, const Board& board) const;
-
-  // checks if the move for the player's piece places the Opponent's King in check -> TO IMPLEMENT STILLL!!!!
-  bool opponentKingInCheck(Position start, Position end, const Board& board) const;
-
 };
 #endif
 

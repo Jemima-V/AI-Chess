@@ -42,8 +42,17 @@ class Pieces {
   // returns true if there is a piece of the same colour at the end position
   bool samePieceCheck(Position start, Position end, const Board& board) const;
 
-  // checks if a potential move is blocked by other pieces in the way
-  // potential change to checkRow, checkPos, and checkCol? -> TO IMPLEMENT STILLL!!!!
-  bool checkBlock(Position start, Position end, const Board& board) const;
+  // checks if castling is allowed for the King -> TO IMPLEMENT STILLL!!!!
+  bool isValidCastling(Position start, Position end, const Board& board, Pieces* p) const;
+
+  // checks if the move for the player's piece places the player's King in check -> TO IMPLEMENT STILLL!!!!
+  bool myKingInCheck(Position start, Position end, const Board& board) const;
+
+  // checks if the move for the player's piece places the Opponent's King in check
+  bool opponentKingInCheck(Position start, Position end, const Board& board) const;
+
+  // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
+  bool opponentKingCheckmate(Position start, Position end, const Board& board) const;
+
 };
 #endif
