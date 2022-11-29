@@ -134,7 +134,7 @@ int main() {
     Board *gameboard; 
 
     //initializes the gameboard
-    gameboard.initBoard();
+    gameboard->initBoard();
 
     //checks if the game is running
     bool grunning;
@@ -171,7 +171,7 @@ int main() {
                 Game *g = new Game(gameboard, w, b, "white");
             }
             else if (s == "resign") {
-                if (w.hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
+                if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
                     ++black; 
                     cout << "Black Wins!" << endl;
                 } 
@@ -187,25 +187,25 @@ int main() {
                 cin >> square1 >> square2 >> promotionChar;
                 Position s1 = convert(square1);
                 Position s2 = convert(square2);
-                if ((pieceAt(s1) != nullptr) && 
+                if ((gameboard->pieceAt(s1) != nullptr) && 
                     ((s1.file >= 1) && (s1.file <= 8)) && 
                     ((s1.rank >= 1) && (s1.rank <= 8)) && 
                     ((s2.file >= 1) && (s2.file <= 8)) &&
                     ((s2.rank >= 1) && (s2.rank <= 8)) && 
                     (s1.rank != s2.rank) && (s1.file != s2.file)) {
-                    Pieces *p = pieceAt(s1);
-                    if (p.getOwner() == white) {
+                    Pieces *p = gameboard->pieceAt(s1);
+                    if (p->getOwner() == white) {
                         if (((s1.file == 5) && (s1.rank == 1)) &&
                             ((s2.file == 7) && (s2.rank == 1))) {
                                 if (p->isValidCastling(p, s1, s2) == true) {
-                                    makeMove(p, s1, s2); 
+                                    gameboard->makeMove(p, s1, s2); 
                                     Position rpos = new Position{8, 1};
                                     Position rnew = new Position{6, 1};
-                                    Pieces *rook = pieceAt(rpos);
-                                    makeMove(rook, rpos, rnew);
-                                    if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                                    Pieces *rook = gameboard->pieceAt(rpos);
+                                    gameboard->makeMove(rook, rpos, rnew);
+                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                         cout << "Black is in check." << endl;
-                                        if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                             cout << "Checkmate! White wins!" << endl;
                                         }
                                     }
@@ -214,14 +214,14 @@ int main() {
                         else if (((s1.file == 5) && (s1.rank == 1)) &&
                                 ((s2.file == 3) && (s2.rank == 1))) {
                                     if (p->isValidCastling(p, s1, s2) == true) {
-                                        makeMove(p, s1, s2); 
+                                        gameboard->makeMove(p, s1, s2); 
                                         Position rpos = new Position{1, 1};
                                         Position rnew = new Position{4, 1};
-                                        Pieces *rook = pieceAt(rpos);
-                                        makeMove(rook, rpos, rnew);
-                                        if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                                        Pieces *rook = gameboard->pieceAt(rpos);
+                                        gameboard->makeMove(rook, rpos, rnew);
+                                        if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                             cout << "Black is in check." << endl;
-                                            if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                            if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                                 cout << "Checkmate! White wins!" << endl;
                                             }
                                         }
@@ -230,12 +230,12 @@ int main() {
                         else if (p->getId() == 'P') {
                             if (s1.rank == 7) {
                                 if (p->validMove(s1, s2, gameboard) == true) {
-                                    makeMove(p, s1, s2); 
-                                    Pieces promoPiece = promo("white", promotionChar);
-                                    place(promoPiece, s2); //replace pawn with new promoPiece
-                                    if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                                    gameboard->makeMove(p, s1, s2); 
+                                    Pieces *promoPiece = promo("white", promotionChar);
+                                    gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
+                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                         cout << "Black is in check." << endl;
-                                        if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                             cout << "Checkmate! White wins!" << endl;
                                         }
                                     }
@@ -243,10 +243,10 @@ int main() {
                             }
                         }
                         else if (p->validMove(s1, s2, gameboard) == true) {
-                            makeMove(p, s1, s2); 
-                            if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                            gameboard->makeMove(p, s1, s2); 
+                            if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                 cout << "Black is in check." << endl;
-                                if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                     cout << "Checkmate! White wins!" << endl;
                                 }
                             }
@@ -259,14 +259,14 @@ int main() {
                         if (((s1.file == 5) && (s1.rank == 8)) &&
                             ((s2.file == 7) && (s2.rank == 8))) {
                                 if (p->isValidCastling(p, s1, s2) == true) {
-                                    makeMove(p, s1, s2); 
+                                    gameboard->makeMove(p, s1, s2); 
                                     Position rpos = new Position{8, 8};
                                     Position rnew = new Position{6, 8};
-                                    Pieces *rook = pieceAt(rpos);
-                                    makeMove(rook, rpos, rnew);
-                                    if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                                    Pieces *rook = gameboard->pieceAt(rpos);
+                                    gameboard->makeMove(rook, rpos, rnew);
+                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                         cout << "White is in check." << endl;
-                                        if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                             cout << "Checkmate! Black wins!" << endl;
                                         }
                                     }
@@ -275,14 +275,14 @@ int main() {
                         else if (((s1.file == 5) && (s1.rank == 8)) &&
                                 ((s2.file == 3) && (s2.rank == 8))) {
                                     if (p->isValidCastling(p, s1, s2) == true) {
-                                        makeMove(p, s1, s2); 
+                                        gameboard->makeMove(p, s1, s2); 
                                         Position rpos = new Position{1, 8};
                                         Position rnew = new Position{4, 8};
                                         Pieces *rook = pieceAt(rpos);
-                                        makeMove(rook, rpos, rnew);
-                                        if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                                        gameboard->makeMove(rook, rpos, rnew);
+                                        if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                             cout << "White is in check." << endl;
-                                            if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                            if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                                 cout << "Checkmate! Black wins!" << endl;
                                             }
                                         }
@@ -291,12 +291,12 @@ int main() {
                         else if (p->getId() == 'p') {
                             if (s1.rank == 2) {
                                 if (p->validMove(s1, s2, gameboard) == true) {
-                                    makeMove(p, s1, s2); 
-                                    Pieces promoPiece = promo("black", promotionChar);
-                                    place(promoPiece, s2); //replace pawn with new promoPiece
-                                    if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                                    gameboard->makeMove(p, s1, s2); 
+                                    Pieces *promoPiece = promo("black", promotionChar);
+                                    gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
+                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                         cout << "White is in check." << endl;
-                                        if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                             cout << "Checkmate! Black wins!" << endl;
                                         }
                                     }
@@ -304,10 +304,10 @@ int main() {
                             }
                         }
                         else if (p->validMove(s1, s2, gameboard) == true) {
-                            makeMove(p, s1, s2); 
-                            if (opponentKingInCheck(s1, s2, gameboard) == true) {
+                            gameboard->makeMove(p, s1, s2); 
+                            if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                 cout << "White is in check." << endl;
-                                if (opponentKingCheckmate(s1, s2, gameboard) == true) {
+                                if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                     cout << "Checkmate! Black wins!" << endl;
                                 }
                             }
@@ -339,23 +339,23 @@ int main() {
                             //converting square into a position struct
                             Position p = convert(square); 
                             //if there is an exisiting piece at that position
-                            if (gameboard.pieceAt(p) == true) {
-                                place(piece, p); //board handles case for replacing 
+                            if (gameboard->pieceAt(p) == true) {
+                                gameboard->place(piece, p); //board handles case for replacing 
                             }
                             //if the position is a null pointer 
                             else {
-                                place(piece, p);
+                                gameboard->place(piece, p);
                             }
-                            gameboard.display(); // how to display board
+                            gameboard->display(); // how to display board
                         }
                         else if (command == "-") {
                             string square;
                             cin >> square;
                             //converting square into a position struct
                             Position p = convert(square);
-                            if (gameboard.pieceAt(p) == true) {
-                                removePiece(p); //board handles case for removing piece at position
-                                gameboard.display();
+                            if (gameboard->pieceAt(p) == true) {
+                                gameboard->removePiece(p); //board handles case for removing piece at position
+                                gameboard->display();
                             } 
                             else {
                                 continue;

@@ -19,15 +19,15 @@ class LevelTwo : public Computer {
         //checks if the player has moved
         bool hasMoved() override;
         //allows the player to make a valid move
-        void makeMove() override; 
+        //void makeMove() override; 
         //gets the score of the player
-        int score() override;
+        //int score() override;
         //captures opponent's piece
-        void capture(Piece *p) override; 
+        //void capture(Piece *p) override; 
         //moves to a valid square on the board
-        Square moveTo() override;
+        //Square moveTo() override;
         //reverses a player's move
-        void reverseMove() override;
+        //void reverseMove() override;
 
         //destructor
         ~LevelTwo();

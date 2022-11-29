@@ -4,6 +4,7 @@
 
 using namespace std;
 
+/*
 //constructor 
 Computer::Computer(string name) {}
 
@@ -11,3 +12,4 @@ Computer::Computer(string name) {}
 Computer::~Computer() {
 
 }
+*/

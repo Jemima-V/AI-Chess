@@ -31,15 +31,15 @@ class Player : public Game {
         //checks if the player has moved
         virtual bool hasMoved() = 0;
         //allows the player to make a valid move
-        virtual void makeMove() = 0; 
+        //virtual void makeMove() = 0; 
         //gets the score of the player
         //virtual int score() = 0;
         //captures opponent's piece
-        virtual void capture(Pieces *p) = 0; 
+        //virtual void capture(Pieces *p) = 0; 
         //moves to a valid position on the board
-        virtual Position moveTo() = 0;
+        //virtual Position moveTo() = 0;
         //reverses a player's move
-        virtual void reverseMove() = 0;
+        //virtual void reverseMove() = 0;
 
         //destructor 
         ~Player();

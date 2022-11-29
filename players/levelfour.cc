@@ -2,7 +2,7 @@
 #include "player.h"
 #include "computer.h"
 #include "levelfour.h"
-
+/*
 //constructor 
 LevelFour::LevelFour(string name) {}
 
@@ -50,3 +50,4 @@ void LevelFour::reverseMove() {
 LevelFour::~LevelFour() {
 
 }
+*/
