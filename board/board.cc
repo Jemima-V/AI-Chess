@@ -20,6 +20,11 @@ Board:: Board(){
             //currBoard.emplace_back(nullptr)
         }
     }
+
+    whiteKing.rank = 0;
+    whiteKing.file = 4;
+    blackKing.rank = 7;
+    blackKing.file = 4;
 }
 
   //dtor 
@@ -397,4 +402,7 @@ void Board::removePiece(Position pos){
 }
 
   
+void Board::render(){
+    notifyObservers();
+}
 

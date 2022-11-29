@@ -65,6 +65,8 @@ class Board: public Subject{
   void Display();
 
   */
+
+  void render();
   
 
 };
