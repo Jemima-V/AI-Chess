@@ -26,23 +26,8 @@ using namespace std;
 
 //converting a square into a position struct
 Position convert(string square) {
-    //length of the string square
-    int n = square.length();
-    //new char array
-    char arr[n + 1];
-    //copying individual chars from the string into the char arr
-    strcpy(arr, s.c_str); // dont know if we are allowed to use this 
-    char file;
-    char rank;
-    //extracting the file and rank
-    for (int i = 0; i < n; ++i) {
-        if (i == 0) {
-            file = arr[i];
-        }
-        else if (i == 1) {
-            rank = arr[i];
-        }
-    }
+    char file = square[0];
+    char rank = square[1];
     int f;
     int r;
     if (file == 'a') {
