@@ -146,10 +146,10 @@ int main() {
     bool grunning;
 
     //white wins
-    int white;
+    int white = 0;
 
     //black wins
-    int black;
+    int black = 0;
 
     //for tie games
     int ties;
@@ -164,8 +164,8 @@ int main() {
             string w = to_string(white);
             string b = to_string(black);
             cout << "Final Score:" << endl;
-            cout << "White" + w << endl;
-            cout << "Black" + b << endl;
+            cout << "White " + w << endl;
+            cout << "Black " + b << endl;
             break; 
         }
         else {
@@ -180,6 +180,7 @@ int main() {
                 Player *b = create(player2);
                 //creates a new game 
                 Game *g = new Game(gameboard, w, b, "white");
+                gameboard->render();
             }
             else if (s == "resign") {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
@@ -376,7 +377,7 @@ int main() {
                             else {
                                 gameboard->place(piecePlace, p);
                             }
-                            //gameboard->display(); // how to display board
+                            gameboard->render(); // how to display board
                         }
                         else if (command == "-") {
                             string square;
@@ -385,7 +386,7 @@ int main() {
                             Position p = convert(square);
                             if (gameboard->pieceAt(p) != nullptr) {
                                 gameboard->removePiece(p); //board handles case for removing piece at position
-                                //gameboard->display();
+                                gameboard->render(); // how to display board
                             } 
                             else {
                                 continue;
