@@ -7,7 +7,7 @@ class Pawn: public Pieces {
 
  public:
   //ctor
-  Pawn(int owner, bool captured, char id, bool firstMove, bool possibleCapture);
+  Pawn(int owner, bool captured, char id, bool firstMove);
 
   //dtor
   ~Pawn();
