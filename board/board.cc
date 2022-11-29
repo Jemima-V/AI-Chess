@@ -67,7 +67,7 @@ void Board:: initBoard(){
 
     //Pawns
     for(int i = 0; i < 8; i++){
-        currBoard[1][i]= new Pawn{white, false, 'P', true, false};
+        currBoard[1][i]= new Pawn{white, false, 'P', true};
     }
 
     //BLACK SIDE
@@ -99,7 +99,7 @@ void Board:: initBoard(){
 
     //Pawns
     for (int i = 0; i < 8; i++){
-        currBoard[6][i]= new Pawn{black, false, 'p', true, false};
+        currBoard[6][i]= new Pawn{black, false, 'p', true};
     }
 
     
