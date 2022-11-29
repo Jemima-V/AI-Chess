@@ -32,30 +32,31 @@ Position convert(string square) {
     int f;
     int r;
     if (file == 'a') {
-        f = 1;
+        f = 0;
     }
     else if (file == 'b') {
-        f = 2;
+        f = 1;
     }
     else if (file == 'c') {
-        f = 3;
+        f = 2;
     }
     else if (file == 'd') {
-        f = 4;
+        f = 3;
     }
     else if (file == 'e') {
-        f = 5;
+        f = 4;
     }
     else if (file == 'f') {
-        f = 6;
+        f = 5;
     }
     else if (file == 'g') {
-        f = 7;
+        f = 6;
     }
     else if (file == 'h') {
-        f = 8;
+        f = 7;
     }
     rank >> r;
+    --r;
     Position p{f, r};
     return p;
 }
@@ -159,6 +160,8 @@ int main() {
 
     Game *g = nullptr;
 
+    Observer *t = nullptr;
+
     std::vector<Observer*> stack;
     
     while (true) {
@@ -199,23 +202,26 @@ int main() {
                 string square1;
                 string square2;
                 char promotionChar;
-                cin >> square1 >> square2 >> promotionChar;
+                cin >> square1 >> square2;
+                //converts square into a position struct 
                 Position s1 = convert(square1);
                 Position s2 = convert(square2);
+                //checks if there is a piece at square 1
                 if ((gameboard->pieceAt(s1) != nullptr) && 
-                    ((s1.file >= 1) && (s1.file <= 8)) && 
-                    ((s1.rank >= 1) && (s1.rank <= 8)) && 
-                    ((s2.file >= 1) && (s2.file <= 8)) &&
-                    ((s2.rank >= 1) && (s2.rank <= 8)) && 
-                    (s1.rank != s2.rank) && (s1.file != s2.file)) {
+                    ((s1.file >= 0) && (s1.file <= 7)) && //checks if s1 file is within the bounds 1-8 
+                    ((s1.rank >= 0) && (s1.rank <= 7)) && //checks if s1 rank is within the bounds 1-8 
+                    ((s2.file >= 0) && (s2.file <= 7)) && //checks if s2 file is within the bounds 1-8
+                    ((s2.rank >= 0) && (s2.rank <= 7)) && //checks if s2 rank is within the bounds 1-8
+                    //checks if s1 does not equal to s2
+                    (s1.rank != s2.rank) && (s1.file != s2.file)) { 
                     Pieces *p = gameboard->pieceAt(s1);
-                    if (p->getOwner() == white) {
-                        if (((s1.file == 5) && (s1.rank == 1)) &&
-                            ((s2.file == 7) && (s2.rank == 1))) {
+                    if (p->getOwner() == 1) {
+                        if (((s1.file == 4) && (s1.rank == 0)) &&
+                            ((s2.file == 6) && (s2.rank == 0))) {
                                 if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                     gameboard->makeMove(p, s1, s2); 
-                                    Position rpos{8, 1};
-                                    Position rnew{6, 1};
+                                    Position rpos{7, 0};
+                                    Position rnew{5, 0};
                                     Pieces *rook = gameboard->pieceAt(rpos);
                                     gameboard->makeMove(rook, rpos, rnew);
                                     if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -226,12 +232,12 @@ int main() {
                                     }
                                 }
                         }
-                        else if (((s1.file == 5) && (s1.rank == 1)) &&
-                                ((s2.file == 3) && (s2.rank == 1))) {
+                        else if (((s1.file == 4) && (s1.rank == 0)) &&
+                                ((s2.file == 2) && (s2.rank == 0))) {
                                     if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                         gameboard->makeMove(p, s1, s2); 
-                                        Position rpos{1, 1};
-                                        Position rnew{4, 1};
+                                        Position rpos{0, 0};
+                                        Position rnew{3, 0};
                                         Pieces *rook = gameboard->pieceAt(rpos);
                                         gameboard->makeMove(rook, rpos, rnew);
                                         if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -243,7 +249,8 @@ int main() {
                                     }
                         }
                         else if (p->getId() == 'P') {
-                            if (s1.rank == 7) {
+                            if (s1.rank == 6) {
+                                cin >> promotionChar; 
                                 if (p->validMove(s1, s2, gameboard) == true) {
                                     gameboard->makeMove(p, s1, s2); 
                                     Pieces *promoPiece = promo("white", promotionChar);
@@ -259,6 +266,9 @@ int main() {
                         }
                         else if (p->validMove(s1, s2, gameboard) == true) {
                             gameboard->makeMove(p, s1, s2); 
+                            Observer *t = new addText{gameboard};
+                            stack.push_back(t);
+                            gameboard->render();
                             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                 cout << "Black is in check." << endl;
                                 if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
@@ -270,13 +280,13 @@ int main() {
                             continue;
                         }
                     }
-                    else if (p->getOwner() == black) {
-                        if (((s1.file == 5) && (s1.rank == 8)) &&
-                            ((s2.file == 7) && (s2.rank == 8))) {
+                    else if (p->getOwner() == 2) {
+                        if (((s1.file == 4) && (s1.rank == 7)) &&
+                            ((s2.file == 6) && (s2.rank == 7))) {
                                 if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                     gameboard->makeMove(p, s1, s2); 
-                                    Position rpos{8, 8};
-                                    Position rnew{6, 8};
+                                    Position rpos{7, 7};
+                                    Position rnew{5, 7};
                                     Pieces *rook = gameboard->pieceAt(rpos);
                                     gameboard->makeMove(rook, rpos, rnew);
                                     if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -287,12 +297,12 @@ int main() {
                                     }
                                 }
                         }
-                        else if (((s1.file == 5) && (s1.rank == 8)) &&
-                                ((s2.file == 3) && (s2.rank == 8))) {
+                        else if (((s1.file == 4) && (s1.rank == 7)) &&
+                                ((s2.file == 2) && (s2.rank == 7))) {
                                     if (p->isValidCastling(s1, s2, gameboard, p) == true) {
                                         gameboard->makeMove(p, s1, s2); 
-                                        Position rpos{1, 8};
-                                        Position rnew{4, 8};
+                                        Position rpos{0, 7};
+                                        Position rnew{3, 7};
                                         Pieces *rook = gameboard->pieceAt(rpos);
                                         gameboard->makeMove(rook, rpos, rnew);
                                         if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -304,7 +314,7 @@ int main() {
                                     }
                         }
                         else if (p->getId() == 'p') {
-                            if (s1.rank == 2) {
+                            if (s1.rank == 1) {
                                 if (p->validMove(s1, s2, gameboard) == true) {
                                     gameboard->makeMove(p, s1, s2); 
                                     Pieces *promoPiece = promo("black", promotionChar);
@@ -320,6 +330,9 @@ int main() {
                         }
                         else if (p->validMove(s1, s2, gameboard) == true) {
                             gameboard->makeMove(p, s1, s2); 
+                            Observer *t = new addText{gameboard};
+                            stack.push_back(t);
+                            gameboard->render();
                             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                 cout << "White is in check." << endl;
                                 if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
