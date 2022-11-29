@@ -94,7 +94,6 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
         downColPiecePos = board->checkColOpp(currPlayer, KingLoc, downCol); 
     }
     // downColPiecePos will be (-1, -1) if there is nothing in the way
-    Position nullPos{-1, -1};
     if (checkSamePos(downColPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* downColPiece = board->pieceAt(downColPiecePos);
         // check whether that piece can harm our king
@@ -113,7 +112,6 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
         leftRowPiecePos = board->checkRowOpp(currPlayer, KingLoc, leftRow); 
     }
     // leftRowPiecePos will be (-1, -1) if there is nothing in the way
-    Position nullPos{-1, -1};
     if (checkSamePos(leftRowPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* leftRowPiece = board->pieceAt(leftRowPiecePos);
         // check whether that piece can harm our king
@@ -131,7 +129,6 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
         rightRowPiecePos = board->checkRowOpp(currPlayer, KingLoc, rightRow); 
     }
     // rightRowPiecePos will be (-1, -1) if there is nothing in the way
-    Position nullPos{-1, -1};
     if (checkSamePos(rightRowPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* rightRowPiece = board->pieceAt(rightRowPiecePos);
         // check whether that piece can harm our king
