@@ -54,7 +54,7 @@ int dimen = 8;
       /*} else {
         
       }*/
-      window->fillRectangle(10*dimen, 10*dimen, 10, 10, color);
+      window->fillRectangle(10*j, 10*i, 10, 10, color);
     }
     
   }
