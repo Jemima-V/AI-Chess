@@ -3,14 +3,14 @@
 #include <string>
 #include "observer.h"
 #include "board.h"
-//#include "window.h"
+#include "window.h"
 
 class addGraphics: public Observer{
     Board *subject;
-    //Xwindow *window;
+    Xwindow *window;
 
     public:
-        addGraphics(Studio *subject);
+        addGraphics(Board *subject);
         ~addGraphics();
         void notify();
 };
