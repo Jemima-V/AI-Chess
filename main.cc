@@ -17,7 +17,7 @@
 #include "queen.h"
 #include "rook.h"
 #include "board.h"
-//#include "graphicsObserver.h"
+#include "graphicsObserver.h"
 #include "textObserver.h"
 #include "observer.h"
 #include "subject.h"
@@ -188,7 +188,9 @@ int main() {
                 //creates a new game 
                 Game *g = new Game(gameboard, w, b, "white");
                 Observer *t = new addText{gameboard};
+                Observer *gr = new addGraphics{gameboard};
                 stack.push_back(t);
+                stack.push_back(gr);
                 gameboard->render();           }
             else if (s == "resign") {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
@@ -217,6 +219,7 @@ int main() {
                     //checks if s1 does not equal to s2
                     (s1.rank != s2.rank) && (s1.file != s2.file)) { 
                     Pieces *p = gameboard->pieceAt(s1);
+                    //white moves
                     if (p->getOwner() == 1) {
                         if (((s1.file == 4) && (s1.rank == 0)) &&
                             ((s2.file == 6) && (s2.rank == 0))) {
@@ -269,7 +272,9 @@ int main() {
                         else if (p->validMove(s1, s2, gameboard) == true) {
                             gameboard->makeMove(p, s1, s2); 
                             Observer *t = new addText{gameboard};
+                            Observer *gr = new addGraphics{gameboard};
                             stack.push_back(t);
+                            stack.push_back(gr);
                             gameboard->render();
                             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                 cout << "Black is in check." << endl;
@@ -282,6 +287,7 @@ int main() {
                             continue;
                         }
                     }
+                    //black moves
                     else if (p->getOwner() == 2) {
                         if (((s1.file == 4) && (s1.rank == 7)) &&
                             ((s2.file == 6) && (s2.rank == 7))) {
@@ -333,7 +339,9 @@ int main() {
                         else if (p->validMove(s1, s2, gameboard) == true) {
                             gameboard->makeMove(p, s1, s2); 
                             Observer *t = new addText{gameboard};
+                            Observer *gr = new addGraphics{gameboard};
                             stack.push_back(t);
+                            stack.push_back(gr);
                             gameboard->render();
                             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                                 cout << "White is in check." << endl;
