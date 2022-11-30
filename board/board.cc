@@ -8,16 +8,15 @@
 #include "pieces.h"
 
 #include <vector>
-//using namespace std;
+using namespace std;
 
 Board:: Board(){
     //currBoard(8, (vector<Piece*>(8, nullptr))); 
     for (int i = 0; i < 8; i++){
-        //currBoard.push_back(std::vector<Piece*>{});
+        currBoard.push_back(std::vector<Pieces*>{});
         for(int j = 0; j < 8; j++){
-            //currBoard[1].emplace_back(nullptr);
-            currBoard[i][j] = nullptr;
-            //currBoard.emplace_back(nullptr)
+            currBoard[i].emplace_back(nullptr);
+            //currBoard[i][j] = nullptr;
         }
     }
     
@@ -28,7 +27,7 @@ Board:: Board(){
 }
 
   //dtor 
-Board:: ~Board(){
+Board:: ~Board(){/*
     //iterate over the 2D vector and delete each piece pointer it contains
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
@@ -36,7 +35,7 @@ Board:: ~Board(){
         }
     }
 
-    delete currBoard;
+    delete currBoard;*/
 }
 
 void Board:: initBoard(){

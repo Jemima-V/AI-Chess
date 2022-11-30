@@ -4,18 +4,18 @@
 #include <vector>
 #include "pieces.h"
 #include "subject.h"
-//using namespace std;
+using namespace std;
 
 class Board: public Subject{
 
   //2D vector of piece pointers to create a board
   //initalize to 8 "rows" of vectors with 8 "Columns" containing nullptrs 
   //vector<vector<Pieces*>> currBoard(8, vector<Pieces*>(8, nullptr));
-  //std::vector<vector<Piece*>> currBoard;
+  vector<vector<Pieces*>> currBoard;
   
   Position whiteKing;
   Position blackKing;
-  Pieces* currBoard[8][8];
+  //Pieces* currBoard[8][8];
 
 
  public:
