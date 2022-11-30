@@ -16,13 +16,14 @@ addText::~addText() {
 
 void addText::notify() {
   int row = 8;
+  cout << endl;
 
   for (int i = 7; i >= 0; --i) {
     cout << row << ' ';
     row--;
 
-    for (int j = 7; j >= 0; --j) {
-      char letter = subject->getState(i,j);
+    for (int j = 0; j <= 7; ++j) {
+      char letter = subject->getState(j,i);
       //cout << "Check: "<< letter << endl;
 
       //null pointer at the location
@@ -45,6 +46,6 @@ void addText::notify() {
     cout << '\n';
   }
 
-  cout << "\n  abcdefgh" << endl;
+  cout << "\n  abcdefgh\n" << endl;
 
 }

@@ -20,11 +20,11 @@ Board:: Board(){
             //currBoard.emplace_back(nullptr)
         }
     }
-
-    whiteKing.rank = 0;
+    
     whiteKing.file = 4;
-    blackKing.rank = 7;
+    whiteKing.rank = 0;
     blackKing.file = 4;
+    blackKing.rank = 7;
 }
 
   //dtor 
@@ -48,31 +48,31 @@ void Board:: initBoard(){
 
         //Rooks
         if(i == 0 || i == 7){
-            currBoard[0][i]= new Rook{white, false, 'R'};
+            currBoard[i][0]= new Rook{white, false, 'R'};
         
         //Knights
         } else if (i == 1 || i == 6){
-            currBoard[0][i]= new Knight{white, false, 'N'};
+            currBoard[i][0]= new Knight{white, false, 'N'};
 
         //Bishops
         } else if ( i == 2 || i == 5){
-            currBoard[0][i]= new Bishop{white, false, 'B'};
+            currBoard[i][0]= new Bishop{white, false, 'B'};
         
         //King
         } else if (i == 4){
-            currBoard[0][i]= new King{white, false, 'K'};
+            currBoard[i][0]= new King{white, false, 'K'};
             //whiteKing.rank = 7;
             //whiteKing.file = i;
         
         //Queen
         } else {
-            currBoard[0][i]= new Queen{white, false, 'Q'};
+            currBoard[i][0]= new Queen{white, false, 'Q'};
         }
     }
 
     //Pawns
     for(int i = 0; i < 8; i++){
-        currBoard[1][i]= new Pawn{white, false, 'P', true};
+        currBoard[i][1]= new Pawn{white, false, 'P', true};
     }
 
     //BLACK SIDE
@@ -80,40 +80,40 @@ void Board:: initBoard(){
 
         //Rooks
         if(i == 0 || i == 7){
-            currBoard[7][i]= new Rook{black, false, 'r'};
+            currBoard[i][7]= new Rook{black, false, 'r'};
         
         //Knights
         } else if (i == 1 || i == 6){
-            currBoard[7][i]= new Knight{black, false, 'n'};
+            currBoard[i][7]= new Knight{black, false, 'n'};
 
         //Bishops
         } else if ( i == 2 || i == 5){
-            currBoard[7][i]= new Bishop{black, false, 'b'};
+            currBoard[i][7]= new Bishop{black, false, 'b'};
         
         //King
         } else if (i == 4){
-            currBoard[7][i]= new King{black, false, 'k'};
+            currBoard[i][7]= new King{black, false, 'k'};
             //blackKing.rank = 0;
             //blackKing.file = i; //initialed in ctor
 
         //Queen
         } else {
-            currBoard[7][i]= new Queen{black, false, 'q'};
+            currBoard[i][7]= new Queen{black, false, 'q'};
         }
     }
 
     //Pawns
     for (int i = 0; i < 8; i++){
-        currBoard[6][i]= new Pawn{black, false, 'p', true};
+        currBoard[i][6]= new Pawn{black, false, 'p', true};
     }
 
     
 }
 
   //Get the state of each position on the board for rendering
-char Board:: getState(int rank, int file) const{
-    if(currBoard[rank][file] != nullptr){
-        char id = currBoard[rank][file]->getId();
+char Board:: getState(int file, int rank) const{
+    if(currBoard[file][rank] != nullptr){
+        char id = currBoard[file][rank]->getId();
         return id;
     } else{
         return 'X';
@@ -126,7 +126,7 @@ char Board:: getState(int rank, int file) const{
   }
   */
 Pieces* Board:: pieceAt(Position pos){
-    return currBoard[pos.rank][pos.file];
+    return currBoard[pos.file][pos.rank];
 }
 
 Position Board:: getWhiteKing(){
@@ -146,7 +146,7 @@ bool Board:: checkRow(Position from, Position to){
 
         //Loop through the row and check for any pieces in the way
         for(int i = from.file; i <= to.file; i++){
-            if (currBoard[from.rank][i] != nullptr){
+            if (currBoard[i][from.rank] != nullptr){
                 return false;
             }
         }
@@ -160,7 +160,7 @@ bool Board:: checkRow(Position from, Position to){
 
         //Loop through the row and check for any pieces in the way
         for(int i = from.file; i >= to.file; i--){
-            if (currBoard[from.rank][i] != nullptr){
+            if (currBoard[i][from.rank] != nullptr){
                 return false;
             }
         }
@@ -180,7 +180,7 @@ bool Board:: checkCol(Position from, Position to){
 
         //Loop through the column and check for any pieces in the way
         for(int i = from.rank; i <= to.rank; i++){
-            if (currBoard[i][from.file] != nullptr){
+            if (currBoard[from.file][i] != nullptr){
                 return false;
             }
         }
@@ -193,7 +193,7 @@ bool Board:: checkCol(Position from, Position to){
 
         //Loop through the row and check for any pieces in the way
         for(int i = from.rank; i >= to.rank; i--){
-            if (currBoard[i][from.file] != nullptr){
+            if (currBoard[from.file][i] != nullptr){
                 return false;
             }
         }
@@ -212,7 +212,7 @@ bool Board:: checkDiagonal(Position from, Position to){
         
         for(int i = from.rank, j = from.file; i <= to.rank && j <= to.file; i++, j++){
 
-            if(currBoard[i][j] != nullptr){
+            if(currBoard[j][i] != nullptr){
                 return false;
             }
 
@@ -225,7 +225,7 @@ bool Board:: checkDiagonal(Position from, Position to){
 
         for(int i = from.rank, j = from.file; i <= to.rank && j >= to.file; i++, j--){
 
-            if(currBoard[i][j] != nullptr){
+            if(currBoard[j][i] != nullptr){
                 return false;
             }
 
@@ -238,7 +238,7 @@ bool Board:: checkDiagonal(Position from, Position to){
 
          for(int i = from.rank, j = from.file; i >= to.rank && j <= to.file; i--, j++){
 
-            if(currBoard[i][j] != nullptr){
+            if(currBoard[j][i] != nullptr){
                 return false;
             }
 
@@ -252,7 +252,7 @@ bool Board:: checkDiagonal(Position from, Position to){
 
          for(int i = from.rank, j = from.file; i >= to.rank && j >= to.file; i--, j--){
 
-            if(currBoard[i][j] != nullptr){
+            if(currBoard[j][i] != nullptr){
                 return false;
             }
 
@@ -271,7 +271,7 @@ Position Board:: checkRowOpp(int owner, Position from, Position to){
 
         //Loop through the row and check for any pieces in the way
         for(int i = from.file; i <= to.file; i++){
-            if (currBoard[from.rank][i] != nullptr && currBoard[from.rank][i]->getOwner() != owner){
+            if (currBoard[i][from.rank] != nullptr && currBoard[i][from.rank]->getOwner() != owner){
                 //return currBoard[from.rank][i];
                 p.rank = from.rank;
                 p.file = i;
@@ -291,7 +291,7 @@ Position Board:: checkRowOpp(int owner, Position from, Position to){
 
         //Loop through the row and check for any pieces in the way
         for(int i = from.file; i >= to.file; i--){
-            if (currBoard[from.rank][i] != nullptr && currBoard[from.rank][i]->getOwner() != owner){
+            if (currBoard[i][from.rank] != nullptr && currBoard[i][from.rank]->getOwner() != owner){
                 //return currBoard[from.rank][i];
                 p.rank = from.rank;
                 p.file = i;
@@ -315,7 +315,7 @@ Position Board:: checkColOpp(int owner, Position from, Position to){
 
         //Loop through the column and check for any pieces in the way
         for(int i = from.rank; i <= to.rank; i++){
-            if (currBoard[i][from.file] != nullptr && currBoard[i][from.file]->getOwner() != owner){
+            if (currBoard[from.file][i] != nullptr && currBoard[from.file][i]->getOwner() != owner){
                 //return currBoard[i][from.file];
                 p.rank = i;
                 p.file = from.file;
@@ -335,7 +335,7 @@ Position Board:: checkColOpp(int owner, Position from, Position to){
 
         //Loop through the row and check for any pieces in the way
         for(int i = from.rank; i >= to.rank; i--){
-            if (currBoard[i][from.file] != nullptr && currBoard[i][from.file]->getOwner() != owner){
+            if (currBoard[from.file][i] != nullptr && currBoard[from.file][i]->getOwner() != owner){
                 //return currBoard[i][from.file];
                 p.rank = i;
                 p.file = from.file;
@@ -359,7 +359,7 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
         
         for(int i = from.rank, j = from.file; i <= to.rank && j <= to.file; i++, j++){
 
-            if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
+            if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
                 p.rank = i;
                 p.file = j;
@@ -378,7 +378,7 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
 
         for(int i = from.rank, j = from.file; i <= to.rank && j >= to.file; i++, j--){
 
-            if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
+            if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
                 p.rank = i;
                 p.file = j;
@@ -397,7 +397,7 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
 
          for(int i = from.rank, j = from.file; i >= to.rank && j <= to.file; i--, j++){
 
-            if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
+            if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
                 p.rank = i;
                 p.file = j;
@@ -417,7 +417,7 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
 
          for(int i = from.rank, j = from.file; i >= to.rank && j >= to.file; i--, j--){
 
-            if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() != owner){
+            if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
                 p.rank = i;
                 p.file = j;
@@ -440,17 +440,17 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
 //TALK OVER WITH MALVIKA
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
-    currBoard[posNew.rank][posNew.file] = p;
-    currBoard[posOld.rank][posOld.rank] = nullptr;
+    currBoard[posNew.file][posNew.rank] = p;
+    currBoard[posOld.file][posOld.rank] = nullptr;
 }
 
 void Board::place(Pieces* addPiece, Position pos){
     //double check with malvike that she checks if there is anything already at the position
-    currBoard[pos.rank][pos.file] = addPiece;
+    currBoard[pos.file][pos.rank] = addPiece;
 }
   
 void Board::removePiece(Position pos){
-    currBoard[pos.rank][pos.file];
+    currBoard[pos.file][pos.rank] = nullptr;
 }
 
   
