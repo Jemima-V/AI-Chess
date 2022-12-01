@@ -23,6 +23,7 @@ void addGraphics::notify() {
 int color;
 int row = 8;
 int dim = 60;
+int y = -1; 
 string pieceName;
 
   //print a blank board
@@ -47,12 +48,12 @@ string pieceName;
 
 
   //Print Pieces onto the board
-  for (int i = 0; i <= 7; ++i) {
+  for (int i = 7; i >= 0; --i) {
 
 
     for (int j = 0; j <= 7; ++j) {
       char letter = subject->getState(j,i);
-      //cout << "Check: "<< letter << endl;
+      //cout << "Check: "<< letter << j << i;
 
       //null pointer at the location
       if(letter == 'X'){
@@ -100,7 +101,28 @@ string pieceName;
         }
         
       }
-      window->drawString((dim*j)+(2*dim+(dim/5)), (dim*i)+(2*dim+(dim/2)), pieceName);
+      
+      //flip y values for Xwindows Draw string
+      if(i == 7){
+        y = 0;
+      } else if (i == 6){
+        y = 1;
+      } else if (i == 5){
+        y = 2;
+      } else if (i == 4){
+        y = 3;
+      } else if (i == 3){
+        y = 4;
+      } else if (i == 2){
+        y = 5;
+      } else if (i == 1){
+        y = 6;
+      } else {
+        y = 7;
+      }
+
+      window->drawString((dim*j)+(2*dim+(dim/5)), (dim*y)+(2*dim+(dim/2)), pieceName);
+
     }    
   }
 
