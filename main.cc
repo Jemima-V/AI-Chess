@@ -116,6 +116,7 @@ Position convert(string square) {
 
 //creates a player
 Player* create(string player) {
+    cout << "here" << endl;
     if (player == "human") {
         Player *h = new Human{player};
         return h;
@@ -192,6 +193,10 @@ int main() {
                 cin >> player1 >> player2;
                 Player *w = create(player1); //creates white player
                 Player *b = create(player2); //creates black player
+                string p1 = w->getName();
+                string p2 = b->getName();
+                cout << p1 << endl;
+                cout << p2 << endl;
                 //creates a new game 
                 g = new Game(gameboard, w, b, firstTurn); //white moves first
                 Observer *t = new addText{gameboard}; //text observer
@@ -264,6 +269,10 @@ int main() {
                 //converts square into a position struct 
                 Position s1 = convert(square1);
                 Position s2 = convert(square2);
+                cout << s1.file << "   ";
+                cout << s1.rank << endl;
+                cout << s2.file << "   ";
+                cout << s2.rank << endl;
                 //checks if there is a piece at square 1
                 if ((gameboard->pieceAt(s1) != nullptr) && 
                     ((s1.file >= 0) && (s1.file <= 7)) && //checks if s1 file is within the bounds 1-8 
@@ -271,11 +280,14 @@ int main() {
                     ((s2.file >= 0) && (s2.file <= 7)) && //checks if s2 file is within the bounds 1-8
                     ((s2.rank >= 0) && (s2.rank <= 7)) && //checks if s2 rank is within the bounds 1-8
                     //checks if s1 does not equal to s2
-                    (s1.rank != s2.rank) && (s1.file != s2.file)) { 
+                    (((s1.rank != s2.rank) && (s1.file != s2.file)) || 
+                     ((s1.rank != s2.rank) && (s1.file == s2.file)) ||
+                     ((s1.rank == s2.rank) && (s1.file != s2.file)))) { 
                     Pieces *p = gameboard->pieceAt(s1);
                     //white
                     if (p->getOwner() == 1) {
                         if ((g->getTurn() == "white") && (w->hasMoved() == false)) { //while loop?
+                            cout << "after" << endl;
                             w->playerMove(s1, s2, gameboard, p, "white");
                             if (w->hasMoved() == false) {
                                 g->setTurn("white");

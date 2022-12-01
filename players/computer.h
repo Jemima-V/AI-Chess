@@ -15,10 +15,10 @@ class Computer : public Player {
     string name;
 
     //checks if the king exists on the board
-    bool kingExists;
+    bool kingExists = true;
 
     //checks if the player has moved yet
-    bool moved;
+    bool moved = false;
 
     public:
         //constructor 

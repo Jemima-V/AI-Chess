@@ -157,6 +157,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
         else if (p->validMove(s1, s2, gameboard) == true) {
             gameboard->makeMove(p, s1, s2); 
             moved = true;
+            //cout << "here" << endl;
             gameboard->render();
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                 cout << "Black is in check." << endl;
