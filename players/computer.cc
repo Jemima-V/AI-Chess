@@ -4,12 +4,11 @@
 
 using namespace std;
 
-/*
+
 //constructor 
-Computer::Computer(string name) {}
+Computer::Computer(string name) : Player(name) {}
 
 //destructor
 Computer::~Computer() {
-
+    delete p;
 }
-*/

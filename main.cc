@@ -5,7 +5,7 @@
 //#include "computer.h"
 #include "human.h"
 //#include "levelfour.h"
-//#include "levelone.h"
+#include "levelone.h"
 //#include "leveltwo.h"
 //#include "levelthree.h"
 #include "player.h"
@@ -24,6 +24,57 @@
 #include "window.h"
 
 using namespace std;
+
+//creates random positions 
+Position randPos() {
+    int max = 7;
+    int min = 0;
+    int range = (max - min) + 1;
+    int sFile = std::rand() % range + min;
+    int sRank = std::rand() % range + min;
+    Position p{sFile, sRank};
+    return p;
+}
+
+//creating a piece 
+Pieces* createPiece(char piece) {
+    if (piece == 'P') {
+        return new Pawn{1, false, 'P', true}; //
+    }
+    else if (piece == 'K') {
+        return new King{1, false, 'K'}; //
+    }
+    else if (piece == 'Q') {
+        return new Queen{1, false, 'Q'}; //
+    }
+    else if (piece == 'B') {
+        return new Bishop{1, false, 'B'}; //
+    }
+    else if (piece == 'R') {
+        return new Rook{1, false, 'R'}; //
+    }
+    else if (piece == 'N') {
+        return new Knight{1, false, 'N'}; //
+    }
+    else if (piece == 'p') {
+        return new Pawn{2, false, 'p', true}; //
+    }
+    else if (piece == 'k') {
+        return new King{2, false, 'k'}; //
+    }
+    else if (piece == 'q') {
+        return new Queen{2, false, 'q'}; //
+    }
+    else if (piece == 'b') {
+        return new Bishop{2, false, 'b'}; //
+    }
+    else if (piece == 'r') {
+        return new Rook{2, false, 'r'}; //
+    }
+    else if (piece == 'n') {
+        return new Knight{2, false, 'n'}; //
+    }
+}
 
 //converting a square into a position struct
 Position convert(string square) {
@@ -63,57 +114,6 @@ Position convert(string square) {
     return p;
 }
 
-//returns the Promotion piece for pawn promotion
-Pieces* promo(string player, char promoChar) {
-    int id;
-    if (player == "white") {
-        id = 1;
-    } else {
-        id = 2;
-    }
-    if (promoChar == 'Q') {
-        if (player == "white") {
-            Pieces *q = new Queen{id, false, 'Q'};
-            return q;
-        }
-        else {
-            Pieces *q = new Queen{id, false, 'q'};
-            return q;
-        }
-    }
-    else if (promoChar == 'R') {
-        if (player == "white") {
-            Pieces *r = new Rook{id, false, 'R'};
-            return r;
-        }
-        else {
-            Pieces *r = new Rook{id, false, 'r'};
-            return r;
-        }
-    }
-    else if (promoChar == 'K') {
-        if (player == "white") {
-            Pieces *k = new Knight{id, false, 'K'};
-            return k;
-        }
-        else {
-            Pieces *k = new Knight{id, false, 'k'};
-            return k;
-        }
-    }
-    else if (promoChar == 'B') {
-        if (player == "white") {
-            Pieces *b = new Bishop{id, false, 'B'};
-            return b;
-        }
-        else {
-            Pieces *b = new Bishop{id, false, 'b'};
-            return b;
-        }
-    }
-    //try catch?
-}
-
 //creates a player
 Player* create(string player) {
     if (player == "human") {
@@ -121,20 +121,20 @@ Player* create(string player) {
         return h;
     } 
     else if (player == "computer1") {
-        Player *h = new Human{player}; //
-        return h;
+        Player *one = new LevelOne{player}; //
+        return one;
     } 
     else if (player == "computer2") {
-        Player *h = new Human{player}; //
-        return h;
+        Player *two = new Human{player}; //
+        return two;
     } 
     else if (player == "computer3") {
-        Player *h = new Human{player}; //
-        return h;
+        Player *three = new Human{player}; //
+        return three;
     }
     else if (player == "computer4") {
-        Player *h = new Human{player}; //
-        return h;
+        Player *four = new Human{player}; //
+        return four;
     }
 }
 
@@ -160,6 +160,9 @@ int main() {
     //string to input player types 
     string s;
 
+    //colour that goes first when the game starts
+    string firstTurn = "white";
+
     Game *g = nullptr;
 
     Observer *t = nullptr;
@@ -168,6 +171,9 @@ int main() {
     
     while (true) {
         if (cin.eof()) {
+            int draws = ties / 2;
+            white += draws;
+            black += draws;
             string w = to_string(white);
             string b = to_string(black);
             cout << "Final Score:" << endl;
@@ -179,19 +185,68 @@ int main() {
             cin >> s;
             Player *w = nullptr;
             Player *b = nullptr;
+            Game *g = nullptr;
             if (s == "game") {
                 string player1;
                 string player2;
                 cin >> player1 >> player2;
-                Player *w = create(player1);
-                Player *b = create(player2);
+                Player *w = create(player1); //creates white player
+                Player *b = create(player2); //creates black player
                 //creates a new game 
-                Game *g = new Game(gameboard, w, b, "white");
-                Observer *t = new addText{gameboard};
-                Observer *gr = new addGraphics{gameboard};
+                g = new Game(gameboard, w, b, firstTurn); //white moves first
+                Observer *t = new addText{gameboard}; //text observer
+                Observer *gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);
                 stack.push_back(gr);
-                gameboard->render();           }
+                gameboard->render(); //displays text and graphics observers 
+                if ((w->getName() == "computer1" || "computer2" || "computer3" ||"computer4") && 
+                    (b->getName() == "computer1" || "computer2" || "computer3" ||"computer4")) {
+                        while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                            Position s1 = randPos();
+                            Position s2 = randPos();
+                            cout << s1.file << "   ";
+                            cout << s1.rank << endl;
+                            cout << s2.file << "   ";
+                            cout << s2.rank << endl;
+                            if ((s1.file != s2.file) && (s1.rank != s2.rank) && 
+                                (gameboard->pieceAt(s1) != nullptr)) {
+                                Pieces *p = gameboard->pieceAt(s1);
+                                if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
+                                    w->playerMove(s1, s2, gameboard, p, "white");
+                                    if (w->hasMoved() == false) {
+                                        g->setTurn("white");
+                                    }
+                                    else {
+                                        g->setTurn("black");
+                                        b->setMoved(false);
+                                    }
+                                }
+                                else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
+                                    b->playerMove(s1, s2, gameboard, p, "black");
+                                    if (b->hasMoved() == false) {
+                                        g->setTurn("black");
+                                    }
+                                    else {
+                                        g->setTurn("white");
+                                        w->setMoved(false);
+                                    }
+                                }
+                            } 
+                            else {
+                                continue; 
+                            }
+                        }
+                }
+                else if ((w->getName() == "human") && (b->getName() == "computer1" || "computer2" || "computer3" ||"computer4")) {
+                    continue; //add more
+                }
+                else if ((w->getName() == "computer1" || "computer2" || "computer3" ||"computer4") && (b->getName() == "human")) {
+                    continue; //add more
+                }
+                else if ((w->getName() == "human") && (b->getName() == "human")) {
+                    continue;
+                }
+            }
             else if (s == "resign") {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
                     ++black; 
@@ -205,7 +260,6 @@ int main() {
             else if (s == "move") {
                 string square1;
                 string square2;
-                char promotionChar;
                 cin >> square1 >> square2;
                 //converts square into a position struct 
                 Position s1 = convert(square1);
@@ -219,141 +273,38 @@ int main() {
                     //checks if s1 does not equal to s2
                     (s1.rank != s2.rank) && (s1.file != s2.file)) { 
                     Pieces *p = gameboard->pieceAt(s1);
-                    //white moves
+                    //white
                     if (p->getOwner() == 1) {
-                        if (((s1.file == 4) && (s1.rank == 0)) &&
-                            ((s2.file == 6) && (s2.rank == 0))) {
-                                if (p->isValidCastling(s1, s2, gameboard, p) == true) {
-                                    gameboard->makeMove(p, s1, s2); 
-                                    Position rpos{7, 0};
-                                    Position rnew{5, 0};
-                                    Pieces *rook = gameboard->pieceAt(rpos);
-                                    gameboard->makeMove(rook, rpos, rnew);
-                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                        cout << "Black is in check." << endl;
-                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                            cout << "Checkmate! White wins!" << endl;
-                                        }
-                                    }
-                                }
-                        }
-                        else if (((s1.file == 4) && (s1.rank == 0)) &&
-                                ((s2.file == 2) && (s2.rank == 0))) {
-                                    if (p->isValidCastling(s1, s2, gameboard, p) == true) {
-                                        gameboard->makeMove(p, s1, s2); 
-                                        Position rpos{0, 0};
-                                        Position rnew{3, 0};
-                                        Pieces *rook = gameboard->pieceAt(rpos);
-                                        gameboard->makeMove(rook, rpos, rnew);
-                                        if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                            cout << "Black is in check." << endl;
-                                            if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                                cout << "Checkmate! White wins!" << endl;
-                                            }
-                                        }
-                                    }
-                        }
-                        else if (p->getId() == 'P') {
-                            if (s1.rank == 6) {
-                                cin >> promotionChar; 
-                                if (p->validMove(s1, s2, gameboard) == true) {
-                                    gameboard->makeMove(p, s1, s2); 
-                                    Pieces *promoPiece = promo("white", promotionChar);
-                                    gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
-                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                        cout << "Black is in check." << endl;
-                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                            cout << "Checkmate! White wins!" << endl;
-                                        }
-                                    }
-                                }      
+                        if ((g->getTurn() == "white") && (w->hasMoved() == false)) { //while loop?
+                            w->playerMove(s1, s2, gameboard, p, "white");
+                            if (w->hasMoved() == false) {
+                                g->setTurn("white");
                             }
-                        }
-                        else if (p->validMove(s1, s2, gameboard) == true) {
-                            gameboard->makeMove(p, s1, s2); 
-                            Observer *t = new addText{gameboard};
-                            Observer *gr = new addGraphics{gameboard};
-                            stack.push_back(t);
-                            stack.push_back(gr);
-                            gameboard->render();
-                            if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                cout << "Black is in check." << endl;
-                                if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                    cout << "Checkmate! White wins!" << endl;
-                                }
+                            else {
+                                g->setTurn("black");
+                                b->setMoved(false);
                             }
                         }
                         else {
                             continue;
                         }
-                    }
-                    //black moves
-                    else if (p->getOwner() == 2) {
-                        if (((s1.file == 4) && (s1.rank == 7)) &&
-                            ((s2.file == 6) && (s2.rank == 7))) {
-                                if (p->isValidCastling(s1, s2, gameboard, p) == true) {
-                                    gameboard->makeMove(p, s1, s2); 
-                                    Position rpos{7, 7};
-                                    Position rnew{5, 7};
-                                    Pieces *rook = gameboard->pieceAt(rpos);
-                                    gameboard->makeMove(rook, rpos, rnew);
-                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                        cout << "White is in check." << endl;
-                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                            cout << "Checkmate! Black wins!" << endl;
-                                        }
-                                    }
-                                }
-                        }
-                        else if (((s1.file == 4) && (s1.rank == 7)) &&
-                                ((s2.file == 2) && (s2.rank == 7))) {
-                                    if (p->isValidCastling(s1, s2, gameboard, p) == true) {
-                                        gameboard->makeMove(p, s1, s2); 
-                                        Position rpos{0, 7};
-                                        Position rnew{3, 7};
-                                        Pieces *rook = gameboard->pieceAt(rpos);
-                                        gameboard->makeMove(rook, rpos, rnew);
-                                        if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                            cout << "White is in check." << endl;
-                                            if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                                cout << "Checkmate! Black wins!" << endl;
-                                            }
-                                        }
-                                    }
-                        }
-                        else if (p->getId() == 'p') {
-                            if (s1.rank == 1) {
-                                if (p->validMove(s1, s2, gameboard) == true) {
-                                    gameboard->makeMove(p, s1, s2); 
-                                    Pieces *promoPiece = promo("black", promotionChar);
-                                    gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
-                                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                        cout << "White is in check." << endl;
-                                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                            cout << "Checkmate! Black wins!" << endl;
-                                        }
-                                    }
-                                }      
+                    } 
+                    //black
+                    else if (p->getOwner() == 2) { //while loop?
+                        if ((g->getTurn() == "white") && (b->hasMoved() == false)) {
+                            b->playerMove(s1, s2, gameboard, p, "black");
+                            if (b->hasMoved() == false) {
+                                g->setTurn("black");
                             }
-                        }
-                        else if (p->validMove(s1, s2, gameboard) == true) {
-                            gameboard->makeMove(p, s1, s2); 
-                            Observer *t = new addText{gameboard};
-                            Observer *gr = new addGraphics{gameboard};
-                            stack.push_back(t);
-                            stack.push_back(gr);
-                            gameboard->render();
-                            if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                                cout << "White is in check." << endl;
-                                if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                                    cout << "Checkmate! Black wins!" << endl;
-                                }
+                            else {
+                                g->setTurn("white");
+                                w->setMoved(false);
                             }
                         }
                         else {
                             continue;
                         }
-                    }
+                    } 
                     else {
                         continue;
                     }
@@ -374,25 +325,7 @@ int main() {
                             char piece;
                             string square;
                             cin >> piece >> square;
-                            Pieces *piecePlace = nullptr;
-                            if (piece == 'P') {
-                                piecePlace = new Pawn{1, false, 'P', true}; //
-                            }
-                            else if (piece == 'K') {
-                                piecePlace = new King{1, false, 'K'}; //
-                            }
-                            else if (piece == 'Q') {
-                                piecePlace = new Queen{1, false, 'Q'}; //
-                            }
-                            else if (piece == 'B') {
-                                piecePlace = new Bishop{1, false, 'B'}; //
-                            }
-                            else if (piece == 'R') {
-                                piecePlace = new Rook{1, false, 'R'}; //
-                            }
-                            else if (piece == 'N') {
-                                piecePlace = new Knight{1, false, 'P'}; //
-                            }
+                            Pieces *piecePlace = createPiece(piece);
                             //converting square into a position struct
                             Position p = convert(square); 
                             //if there is an exisiting piece at that position
@@ -421,7 +354,7 @@ int main() {
                         else if (command == "=") {
                             string colour;
                             cin >> colour;
-                            //setPlayerTurn(colour); //implement this function in player class
+                            firstTurn = colour; 
                         } 
                         else {
                             continue; //continues with command loop if any command is misspelled

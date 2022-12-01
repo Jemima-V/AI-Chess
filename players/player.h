@@ -3,6 +3,7 @@
 #include <string.h>
 //#include <vector.h>
 #include "game.h"
+#include "board.h"
 #include "pieces.h"
 
 using namespace std; 
@@ -31,15 +32,11 @@ class Player {
         //checks if the player has moved
         virtual bool hasMoved() = 0;
         //allows the player to make a valid move
-        //virtual void makeMove() = 0; 
-        //gets the score of the player
-        //virtual int score() = 0;
-        //captures opponent's piece
-        //virtual void capture(Pieces *p) = 0; 
-        //moves to a valid position on the board
-        //virtual Position moveTo() = 0;
-        //reverses a player's move
-        //virtual void reverseMove() = 0;
+        virtual void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) = 0; 
+        //creates random moves for computer player
+        //virtual void randGenerator();
+        //sets if the player has moved
+        virtual void setMoved(bool checkMoved) = 0;
 
         //destructor 
         ~Player();

@@ -27,6 +27,9 @@ class Game {
 
         //gets the players turn
         string getTurn(); 
+
+        //sets the players turn
+        void setTurn(string t);
         
         //destructor
         ~Game();

@@ -1,53 +1,57 @@
 #include <string.h>
 #include "player.h"
-#include "computer.h"
+//#include "computer.h"
 #include "levelone.h"
-/*
+#include "textObserver.h"
+#include "graphicsObserver.h"
+#include "observer.h"
+
+using namespace std; 
+
 //constructor 
-LevelOne::LevelOne(string name) {}
+LevelOne::LevelOne(string name) : Player(name) {}
 
 //gets the player's name
 string LevelOne::getName() {
-
+    return name;
 }
 
 //checks if the king is on the board
 bool LevelOne::kingIsThere() {
-
+    return kingExists;
 } 
 
 //checks if the player has moved
 bool LevelOne::hasMoved() {
-
+    return moved;
 }
 
 //allows the player to make a valid move
-void LevelOne::makeMove() {
-
+void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    //vector <Observer*> stack;
+    if (p->validMove(s1, s2, gameboard) == true) {
+        gameboard->makeMove(p, s1, s2); 
+        moved = true;
+        gameboard->render();
+        if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+            cout << "White is in check." << endl;
+            if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+                kingExists = false;
+                cout << "Checkmate! Black wins!" << endl;
+            }
+        }
+    } 
+    else {
+        moved = false;
+    }
+    //delete stack
 }
 
-//gets the score of the player
-int LevelOne::score() {
-
-}
-
-//captures opponent's piece
-void LevelOne::capture(Piece *p) {
-
-} 
-
-//moves to a valid square on the board
-Square LevelOne::moveTo() {
-
-}
-
-//reverses a player's move
-void LevelOne::reverseMove() {
-
+void LevelOne::setMoved(bool checkMoved) {
+    moved = checkMoved;
 }
 
 //destructor
 LevelOne::~LevelOne() {
-
+    delete p;
 }
-*/

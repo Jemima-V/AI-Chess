@@ -2,10 +2,21 @@
 #define COMPUTER_H
 #include <string.h>
 #include "player.h"
+#include "board.h"
+#include "pieces.h"
 
 using namespace std;
 
 class Computer : public Player {
+
+    Player *p;
+
+    //player name
+    string name;
+
+    //checks if the king exists on the board
+    bool kingExists;
+
     //checks if the player has moved yet
     bool moved;
 
@@ -20,15 +31,7 @@ class Computer : public Player {
         //checks if the player has moved
         virtual bool hasMoved() = 0;
         //allows the player to make a valid move
-        //virtual void makeMove() = 0; 
-        //gets the score of the player
-        //virtual int score() = 0;
-        //captures opponent's piece
-        //virtual void capture(Piece *p) = 0; 
-        //moves to a valid square on the board
-        //virtual Square moveTo() = 0;
-        //reverses a player's move
-        //virtual void reverseMove() = 0;
+        virtual bool playerMove(Position s1, Position s2, Board *gameboard, Pieces *p) = 0; 
 
         //destructor
         ~Computer();

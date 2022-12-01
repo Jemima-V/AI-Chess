@@ -11,6 +11,11 @@ string Game::getTurn() {
     return turn;
 }
 
+//sets the players turn
+void Game::setTurn(string t) {
+    turn = t;
+}
+
 //destructor
 Game::~Game() {
     delete gameBoard;

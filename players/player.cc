@@ -7,5 +7,7 @@
  //constructor 
 Player::Player(string name) : name{name} {}
 
+//void Player::randGenerator() {}
+
 //destructor 
 Player::~Player() {}

@@ -5,7 +5,7 @@ EXEC = chess
 OBJECTS = main.o \
 		  board.o subject.o textObserver.o graphicsObserver.o window.o \
 		  bishop.o king.o knight.o pawn.o pieces.o queen.o rook.o \
-		  human.o player.o game.o
+		  human.o player.o game.o levelone.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 VPATH=board:pieces:players
