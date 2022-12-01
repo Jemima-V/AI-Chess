@@ -30,6 +30,15 @@ class Game {
 
         //sets the players turn
         void setTurn(string t);
+
+        //creating a piece 
+        //Pieces* createPiece(char piece);
+
+        //converting a square into a position struct
+        //Position convert(string square);
+
+        //creates a player
+        //Player* create(string player);
         
         //destructor
         ~Game();

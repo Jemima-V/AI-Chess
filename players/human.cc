@@ -134,30 +134,28 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     }
         }
         //pawn promotion case
-        else if (p->getId() == 'P') {
-            if (s1.rank == 6) {
-                char promotionChar;
-                cin >> promotionChar; 
-                if (p->validMove(s1, s2, gameboard) == true) {
-                    gameboard->makeMove(p, s1, s2); 
-                    Pieces *promoPiece = promo("white", promotionChar);
-                    gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
-                    moved = true;
-                    gameboard->render();
-                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                        cout << "Black is in check." << endl;
-                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                            cout << "Checkmate! White wins!" << endl;
-                        }
+        else if ((p->getId() == 'P') && (s1.rank == 6)) {
+            char promotionChar;
+            cin >> promotionChar; 
+            if (p->validMove(s1, s2, gameboard) == true) {
+                gameboard->makeMove(p, s1, s2); 
+                Pieces *promoPiece = promo("white", promotionChar);
+                gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
+                moved = true;
+                gameboard->render();
+                if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+                    cout << "Black is in check." << endl;
+                    if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+                        cout << "Checkmate! White wins!" << endl;
                     }
-                }      
-            }
+                }
+            }      
         }
         //regular move
         else if (p->validMove(s1, s2, gameboard) == true) {
             gameboard->makeMove(p, s1, s2); 
             moved = true;
-            //cout << "here" << endl;
+            cout << "WORKKKK" << endl;
             gameboard->render();
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                 cout << "Black is in check." << endl;
@@ -216,24 +214,22 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     }
         }
         //pawn promotion case
-        else if (p->getId() == 'p') {
-            if (s1.rank == 1) {
-                char promotionChar;
-                cin >> promotionChar;
-                if (p->validMove(s1, s2, gameboard) == true) {
-                    gameboard->makeMove(p, s1, s2); 
-                    Pieces *promoPiece = promo("black", promotionChar);
-                    gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
-                    moved = true;
-                    gameboard->render();
-                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                        cout << "White is in check." << endl;
-                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                            cout << "Checkmate! Black wins!" << endl;
-                        }
+        else if ((p->getId() == 'p') && (s1.rank == 1)) {
+            char promotionChar;
+            cin >> promotionChar;
+            if (p->validMove(s1, s2, gameboard) == true) {
+                gameboard->makeMove(p, s1, s2); 
+                Pieces *promoPiece = promo("black", promotionChar);
+                gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
+                moved = true;
+                gameboard->render();
+                if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+                    cout << "White is in check." << endl;
+                    if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+                        cout << "Checkmate! Black wins!" << endl;
                     }
-                }      
-            }
+                }
+            }      
         }
         //regular move
         else if (p->validMove(s1, s2, gameboard) == true) {

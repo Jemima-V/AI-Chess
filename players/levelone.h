@@ -33,6 +33,8 @@ class LevelOne : public Player {
         void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) override;
         //sets if the player has moved
         void setMoved(bool checkMoved) override;
+        //creates random positions 
+        //Position randPos();
         
         //destructor
         ~LevelOne();

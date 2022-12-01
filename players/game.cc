@@ -1,6 +1,13 @@
-#include "board.h"
-#include "player.h"
 #include "game.h"
+#include "player.h"
+#include "bishop.h"
+#include "king.h"
+#include "knight.h"
+#include "pawn.h"
+#include "pieces.h"
+#include "queen.h"
+#include "rook.h"
+#include "board.h"
 
 //constructor 
 Game::Game(Board *gameBoard, Player *white, Player *black, string turn) : gameBoard{gameBoard}, white{white},
@@ -8,7 +15,6 @@ Game::Game(Board *gameBoard, Player *white, Player *black, string turn) : gameBo
 
 //gets the players turn
 string Game::getTurn() {
-    cout << turn << endl;
     return turn;
 }
 

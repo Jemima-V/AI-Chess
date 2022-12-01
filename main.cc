@@ -168,9 +168,11 @@ int main() {
     Game *g = nullptr;
 
     Observer *t = nullptr;
+    Observer *gr = nullptr;
 
     Player *w = nullptr;
     Player *b = nullptr;
+
     std::vector<Observer*> stack;
     
     while (true) {
@@ -199,8 +201,8 @@ int main() {
                 cout << p2 << endl;
                 //creates a new game 
                 g = new Game(gameboard, w, b, firstTurn); //white moves first
-                Observer *t = new addText{gameboard}; //text observer
-                Observer *gr = new addGraphics{gameboard}; //graphics observer
+                t = new addText{gameboard}; //text observer
+                gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);
                 stack.push_back(gr);
                 gameboard->render(); //displays text and graphics observers 
@@ -291,17 +293,18 @@ int main() {
                     cout << "comes in 1" << endl;
                     if (p->getOwner() == 1) {
                         cout << "comes in 2" << endl;
-                        cout << g->getTurn() << endl;
-                        cout << "hey" << endl;
                         if ((g->getTurn() == "white") && (w->hasMoved() == false)) { //while loop?
                             cout << "comes in 3" << endl;
                             w->playerMove(s1, s2, gameboard, p, "white");
+                            cout << "here" << endl;
                             if (w->hasMoved() == false) {
                                 g->setTurn("white");
+                                cout << "false" << endl;
                             }
                             else {
                                 g->setTurn("black");
                                 b->setMoved(false);
+                                cout << "true" << endl;
                             }
                         }
                         else {
