@@ -27,3 +27,8 @@ bool Knight::validMove(Position start, Position end, Board* board) const {
         return false;
     }
 }
+
+// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+bool Knight::validMoveFinal(Position start, Position end, Board* board) const {
+    return false;
+}

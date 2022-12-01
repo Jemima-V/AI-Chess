@@ -25,4 +25,9 @@ bool Rook::validMove(Position start, Position end, Board* board) const {
         return false;
     }
 }
+
+// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+bool Rook::validMoveFinal(Position start, Position end, Board* board) const {
+    return false;
+}
  

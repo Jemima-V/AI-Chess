@@ -56,3 +56,8 @@ bool King::validMove(Position start, Position end, Board* board) const {
     }
 }
 
+// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+bool King::validMoveFinal(Position start, Position end, Board* board) const {
+    return false;
+}
+

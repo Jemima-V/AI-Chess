@@ -25,4 +25,9 @@ bool Queen::validMove(Position start, Position end, Board* board) const {
         return false;
     }
 }
+
+// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+bool Queen::validMoveFinal(Position start, Position end, Board* board) const {
+    return false;
+}
    

@@ -37,23 +37,31 @@ class Pieces {
   // set whether the specific piece is captured or not
   void setCaptured(bool newCapture);
 
-  // checks if a move is valid, this is overridden by each derived piece
+  // checks if a move is base valid (i.e the piece is allowed to move from start to end), 
+  //  this is overridden by each derived piece
   virtual bool validMove(Position start, Position end, Board* board) const = 0;
+
+  // checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+  virtual bool validMoveFinal(Position start, Position end, Board* board) const = 0;
 
   // returns true if there is a piece of the same colour at the end position
   bool samePieceCheck(Position start, Position end, Board* board) const;
 
-  // checks if castling is allowed for the King -> TO IMPLEMENT STILLL!!!!
-  bool isValidCastling(Position start, Position end, Board* board, Pieces* p) const;
+  // checks if castling is allowed for the King
+  bool isValidCastling(Position start, Position end, Board* board) const;
 
-  // checks if the move for the player's piece places the player's King in check -> TO IMPLEMENT STILLL!!!!
+  // checks if the move for the player's piece places the player's King in check
   bool myKingInCheck(Position start, Position end, Board* board) const;
 
   // checks if the move for the player's piece places the Opponent's King in check
   bool opponentKingInCheck(Position start, Position end, Board* board) const;
 
-  // checks if the move for the player's piece places the Opponent's King in checkmate
+  // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
   bool opponentKingCheckmate(Position start, Position end, Board* board) const;
+
+  // check if king, at loc, puts itself in check
+  // true if it puts itself in check and false if it doesn't
+  bool kingSelfCheck(Position loc, Board* board) const;
 
   // specific methods for pieces that are set to empty and get overridden
   // return whether the king, rook has moved
@@ -79,6 +87,9 @@ class Pieces {
 
   // set whether the king is in check
   virtual void setInCheck(bool newCheck);
+
+  // check whether the pawn did a valid capture en passant -> TO IMPLEMENT STILLL!!!!
+  bool validCaptureEnPassant(Position start, Position end, Board* board) const;
 
 };
 #endif

@@ -81,3 +81,8 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
         }
     }
 }
+
+// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
+    return false;
+}
