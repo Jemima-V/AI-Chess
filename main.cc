@@ -119,6 +119,7 @@ Player* create(string player) {
     cout << "here" << endl;
     if (player == "human") {
         Player *h = new Human{player};
+        cout << "end" << endl;
         return h;
     } 
     else if (player == "computer1") {
@@ -198,14 +199,17 @@ int main() {
                 cout << p1 << endl;
                 cout << p2 << endl;
                 //creates a new game 
-                g = new Game(gameboard, w, b, firstTurn); //white moves first
+                Game *g = new Game(gameboard, w, b, firstTurn); //white moves first
                 Observer *t = new addText{gameboard}; //text observer
                 Observer *gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);
                 stack.push_back(gr);
                 gameboard->render(); //displays text and graphics observers 
-                if ((w->getName() == "computer1" || "computer2" || "computer3" ||"computer4") && 
-                    (b->getName() == "computer1" || "computer2" || "computer3" ||"computer4")) {
+                if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
+                    ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
+                        cout << p1 << endl;
+                        cout << p2 << endl;
+                        cout << "comes to computer computer case" << endl;
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
                             Position s1 = randPos();
                             Position s2 = randPos();
@@ -242,13 +246,13 @@ int main() {
                             }
                         }
                 }
-                else if ((w->getName() == "human") && (b->getName() == "computer1" || "computer2" || "computer3" ||"computer4")) {
+                else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
                     continue; //add more
                 }
-                else if ((w->getName() == "computer1" || "computer2" || "computer3" ||"computer4") && (b->getName() == "human")) {
+                else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
                     continue; //add more
                 }
-                else if ((w->getName() == "human") && (b->getName() == "human")) {
+                else if ((p1 == "human") && (p2 == "human")) {
                     continue;
                 }
             }
@@ -285,9 +289,13 @@ int main() {
                      ((s1.rank == s2.rank) && (s1.file != s2.file)))) { 
                     Pieces *p = gameboard->pieceAt(s1);
                     //white
+                    cout << "comes in 1" << endl;
                     if (p->getOwner() == 1) {
+                        cout << "comes in 2" << endl;
+                        cout << g->getTurn() << endl;
+                        cout << "hey" << endl;
                         if ((g->getTurn() == "white") && (w->hasMoved() == false)) { //while loop?
-                            cout << "after" << endl;
+                            cout << "comes in 3" << endl;
                             w->playerMove(s1, s2, gameboard, p, "white");
                             if (w->hasMoved() == false) {
                                 g->setTurn("white");

@@ -8,6 +8,7 @@ Game::Game(Board *gameBoard, Player *white, Player *black, string turn) : gameBo
 
 //gets the players turn
 string Game::getTurn() {
+    cout << turn << endl;
     return turn;
 }
 

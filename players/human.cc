@@ -66,7 +66,7 @@ Pieces* promo(string player, char promoChar) {
 }
 
 //constructor 
-Human::Human(string name) : Player(name) {}
+Human::Human(string name) : Player{name}, name{name} {}
 
 //gets the player's name
 string Human::getName() {
