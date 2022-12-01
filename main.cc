@@ -169,6 +169,8 @@ int main() {
 
     Observer *t = nullptr;
 
+    Player *w = nullptr;
+    Player *b = nullptr;
     std::vector<Observer*> stack;
     
     while (true) {
@@ -185,21 +187,18 @@ int main() {
         }
         else {
             cin >> s;
-            Player *w = nullptr;
-            Player *b = nullptr;
-            Game *g = nullptr;
             if (s == "game") {
                 string player1;
                 string player2;
                 cin >> player1 >> player2;
-                Player *w = create(player1); //creates white player
-                Player *b = create(player2); //creates black player
+                w = create(player1); //creates white player
+                b = create(player2); //creates black player
                 string p1 = w->getName();
                 string p2 = b->getName();
                 cout << p1 << endl;
                 cout << p2 << endl;
                 //creates a new game 
-                Game *g = new Game(gameboard, w, b, firstTurn); //white moves first
+                g = new Game(gameboard, w, b, firstTurn); //white moves first
                 Observer *t = new addText{gameboard}; //text observer
                 Observer *gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);

@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -MMD -Werror=vla -Wextra \
+CXXFLAGS = -std=c++14 -Wall -MMD -Werror=vla -Wextra -g \
 		   -I board -I pieces -I players
 EXEC = chess
 OBJECTS = main.o \
