@@ -1,9 +1,12 @@
 #ifndef BOARD_H
 #define BOARD_H
-#include <iostream>
-#include <vector>
 #include "pieces.h"
 #include "subject.h"
+
+#include <iostream>
+#include <vector>
+#include <memory>
+
 using namespace std;
 
 class Board: public Subject{
@@ -12,6 +15,7 @@ class Board: public Subject{
   //initalize to 8 "rows" of vectors with 8 "Columns" containing nullptrs 
   //vector<vector<Pieces*>> currBoard(8, vector<Pieces*>(8, nullptr));
   vector<vector<Pieces*>> currBoard;
+  //vector<vector<unique_ptr<Pieces>>> currBoard;
   
   Position whiteKing;
   Position blackKing;
@@ -53,7 +57,7 @@ class Board: public Subject{
 
   Position checkColOpp(int owner, Position from, Position to);
 
-  Position checkDiagOpp(int owner, Position from, Position to);
+  Position checkDiagOpp(int owner, Position from, int direction);
 
   //need to be carefull with this --> what is the difference btwn this and make move
   void place(Pieces* addPiece, Position pos);

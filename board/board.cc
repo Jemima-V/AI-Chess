@@ -8,12 +8,15 @@
 #include "pieces.h"
 
 #include <vector>
+#include <memory>
+
 using namespace std;
 
 Board:: Board(){
     //currBoard(8, (vector<Piece*>(8, nullptr))); 
     for (int i = 0; i < 8; i++){
-        currBoard.push_back(std::vector<Pieces*>{});
+        //currBoard.push_back(std::vector<unique_ptr<Pieces>>{});
+        currBoard.push_back(vector<Pieces*>{});
         for(int j = 0; j < 8; j++){
             currBoard[i].emplace_back(nullptr);
             //currBoard[i][j] = nullptr;
@@ -48,6 +51,8 @@ void Board:: initBoard(){
         //Rooks
         if(i == 0 || i == 7){
             currBoard[i][0]= new Rook{white, false, 'R'};
+            //currBoard[i][0]= unique.ptr<Peices> {new Rook {white, false, 'R'}};
+            
         
         //Knights
         } else if (i == 1 || i == 6){
@@ -350,13 +355,23 @@ Position Board:: checkColOpp(int owner, Position from, Position to){
     }
 }
 
-Position Board:: checkDiagOpp(int owner, Position from, Position to){
+Position Board:: checkDiagOpp(int owner, Position from, int direction){
     Position p{-1, -1};
+    int upLeft = 1;
+    int downLeft = 2;
+    int upRight = 3;
+    int downRight = 4;
+
+    int maxFile = 7;
+    int minFile = 0;
+    int maxRank = 7;
+    int minRank = 0;
+
 
     //Direction => Upwards to the right
-    if(from.rank < to.rank && from.file < to.file){
+    if(direction == upRight){
         
-        for(int i = from.rank, j = from.file; i <= to.rank && j <= to.file; i++, j++){
+        for(int i = from.rank, j = from.file; i <= maxRank && j <= maxFile; i++, j++){
 
             if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
@@ -373,9 +388,9 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
         return p;
 
     //Direction => Upwards to the left
-    } else if (from.rank < to.rank && from.file > to.file){
+    } else if (direction == upLeft){
 
-        for(int i = from.rank, j = from.file; i <= to.rank && j >= to.file; i++, j--){
+        for(int i = from.rank, j = from.file; i <= maxRank && j >= minFile; i++, j--){
 
             if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
@@ -392,9 +407,9 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
         return p;
 
     //Direction => Downwards to right
-    } else if (from.rank > to.rank && from.file < to.file){
+    } else if (direction == downRight){
 
-         for(int i = from.rank, j = from.file; i >= to.rank && j <= to.file; i--, j++){
+         for(int i = from.rank, j = from.file; i >= minRank && j <= maxFile; i--, j++){
 
             if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
@@ -414,7 +429,7 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
     //from.rank > to.rank && from.file > to.file
     } else{
 
-         for(int i = from.rank, j = from.file; i >= to.rank && j >= to.file; i--, j--){
+         for(int i = from.rank, j = from.file; i >= minRank && j >= minFile; i--, j--){
 
             if(currBoard[j][i] != nullptr && currBoard[j][i]->getOwner() != owner){
                 //return currBoard[i][j];
@@ -439,12 +454,23 @@ Position Board:: checkDiagOpp(int owner, Position from, Position to){
 //TALK OVER WITH MALVIKA
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
+    //dont forget to update the whiteking/black king if it is moved
+    if(p->getId() == 'K'){
+        whiteKing.file = posNew.file;
+        whiteKing.rank = posNew.rank;
+    } else if (p->getId() == 'k'){
+        blackKing.file == posNew.file;
+        blackKing.rank == posNew.rank;
+    }
+
+    //DOUBLE CHECK FOR MEMORY LEAK?
     currBoard[posNew.file][posNew.rank] = p;
     currBoard[posOld.file][posOld.rank] = nullptr;
 }
 
 void Board::place(Pieces* addPiece, Position pos){
     //double check with malvike that she checks if there is anything already at the position
+    //DOUBLE CHECK FOR MEMORY LEAKS 
     currBoard[pos.file][pos.rank] = addPiece;
 }
   
