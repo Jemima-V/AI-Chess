@@ -14,6 +14,8 @@ class King: public Pieces {
   //dtor
   ~King();
 
+  King* makeCopy() const override;
+
   // return whether castling was done
   bool getCastlingDone() const override;
 

@@ -30,4 +30,8 @@ bool Queen::validMove(Position start, Position end, Board* board) const {
 bool Queen::validMoveFinal(Position start, Position end, Board* board) const {
     return false;
 }
+
+Queen* Queen::makeCopy() const {
+    return (new Queen(*this));
+}
    

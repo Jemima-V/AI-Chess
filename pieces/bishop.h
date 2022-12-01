@@ -10,6 +10,8 @@ class Bishop: public Pieces {
   //dtor
   ~Bishop();
 
+  Bishop* makeCopy() const override;
+
   // checks if a move is valid for the Bishop piece
   bool validMove(Position start, Position end, Board* board) const override;
 

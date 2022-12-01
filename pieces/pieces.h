@@ -18,6 +18,8 @@ class Pieces {
   char id; // up to board init to set these values to distinguish the pieces
   int convertToABS(int toConvert) const; // helper function for the pieces arithmetic
 
+  virtual Pieces* makeCopy() const = 0;
+
  public:
   //ctor
   Pieces(int owner, bool captured, char id);
@@ -50,7 +52,7 @@ class Pieces {
   // checks if castling is allowed for the King
   bool isValidCastling(Position start, Position end, Board* board) const;
 
-  // checks if the move for the player's piece places the player's King in check
+  // checks if the move for the player's piece places the player's King in check -> TO IMPLEMENT STILLL!!!!
   bool myKingInCheck(Position start, Position end, Board* board) const;
 
   // checks if the move for the player's piece places the Opponent's King in check
@@ -59,7 +61,7 @@ class Pieces {
   // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
   bool opponentKingCheckmate(Position start, Position end, Board* board) const;
 
-  // check if king, at loc, puts itself in check
+  // check if king, at loc, puts itself in check -> TO IMPLEMENT STILLL!!!!
   // true if it puts itself in check and false if it doesn't
   bool kingSelfCheck(Position loc, Board* board) const;
 

@@ -115,3 +115,7 @@ bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
     }
     return true;
 }
+
+Pawn* Pawn::makeCopy() const {
+    return (new Pawn(*this));
+}

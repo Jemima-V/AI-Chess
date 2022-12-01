@@ -46,3 +46,7 @@ bool Knight::validMoveFinal(Position start, Position end, Board* board) const {
     }
     return true;
 }
+
+Knight* Knight::makeCopy() const {
+    return (new Knight(*this));
+}

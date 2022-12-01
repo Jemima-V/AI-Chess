@@ -31,3 +31,7 @@ bool Rook::validMoveFinal(Position start, Position end, Board* board) const {
     return false;
 }
  
+Rook* Rook::makeCopy() const {
+    return (new Rook(*this));
+}
+

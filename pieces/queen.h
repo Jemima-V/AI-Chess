@@ -10,6 +10,8 @@ class Queen: public Pieces {
   //dtor
   ~Queen();
 
+  Queen* makeCopy() const override;
+
   // checks if a move is valid for the Queen piece
   bool validMove(Position start, Position end, Board* board) const override;
 

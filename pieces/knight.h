@@ -10,6 +10,8 @@ class Knight: public Pieces {
   //dtor
   ~Knight();
 
+  Knight* makeCopy() const override;
+
   // checks if a move is valid for the Knight piece
   bool validMove(Position start, Position end, Board* board) const override;
 

@@ -12,6 +12,8 @@ class Pawn: public Pieces {
   //dtor
   ~Pawn();
 
+  Pawn* makeCopy() const override;
+
   // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
   void setFirstMove(bool newMove) override;
 

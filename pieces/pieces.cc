@@ -151,6 +151,7 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
 // false if this move is invalid and the king can go in check
 // true if the move is valid and the king can't go in check
 bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
+    // Board* boardCopy = board; // copy ctor for the board
     // Pseudocode:
     // get what piece is at our current location
     // check all 8 directions for opponent players

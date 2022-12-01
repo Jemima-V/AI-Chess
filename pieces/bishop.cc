@@ -25,5 +25,24 @@ bool Bishop::validMove(Position start, Position end, Board* board) const {
 
 // checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
 bool Bishop::validMoveFinal(Position start, Position end, Board* board) const {
-    return false;
+    Pieces* currPiece = board->pieceAt(start);
+    int currPlayer = currPiece->getOwner();
+    // validMove == true
+
+    // can't capture piece of your own player
+    Pieces* endPiece = board->pieceAt(end);
+    if (endPiece != nullptr) {
+        int endPlayer = endPiece->getOwner();
+        if (currPlayer == endPlayer) {
+            return false;
+        }
+    }
+    // no other pieces are in the way
+
+
+    return true;
+}
+
+Bishop* Bishop::makeCopy() const {
+    return (new Bishop(*this));
 }

@@ -43,7 +43,7 @@ bool King::validMove(Position start, Position end, Board* board) const {
     int ABSrankChange = convertToABS(rankChange);
     // convert fileChange to ABS
     int ABSfileChange = convertToABS(fileChange);
-    if (rankChange != 1 || rankChange != -1 || fileChange != 1 || fileChange != -1) {
+    if (ABSrankChange != 1 || ABSfileChange != 1) {
         return false;
     } else if ((start.rank == end.rank) || (start.file == end.file)) { 
         // Rook's rules (refer to Rook.cc for implementation specific comments)
@@ -59,5 +59,9 @@ bool King::validMove(Position start, Position end, Board* board) const {
 // checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
 bool King::validMoveFinal(Position start, Position end, Board* board) const {
     return false;
+}
+
+King* King::makeCopy() const {
+    return (new King(*this));
 }
 
