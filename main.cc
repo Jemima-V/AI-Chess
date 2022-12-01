@@ -160,7 +160,7 @@ int main() {
     int ties = 0;
 
     //string to input player types 
-    string s;
+    //string s;
 
     //colour that goes first when the game starts
     string firstTurn = "white";
@@ -168,7 +168,7 @@ int main() {
     Game *g = nullptr;
 
     Observer *t = nullptr;
-    Observer *gr = nullptr;
+    //Observer *gr = nullptr;
 
     Player *w = nullptr;
     Player *b = nullptr;
@@ -176,7 +176,8 @@ int main() {
     std::vector<Observer*> stack;
     
     while (true) {
-        if (cin.eof()) {
+        if (cin.eof() || cin.fail()) {
+            cout << "test" << endl;
             int draws = ties / 2;
             white += draws;
             black += draws;
@@ -188,11 +189,15 @@ int main() {
             break; 
         }
         else {
+            //string to input player types 
+            string s;
             cin >> s;
+            cout << s << endl;
             if (s == "game") {
                 string player1;
                 string player2;
                 cin >> player1 >> player2;
+                cout << "creating second set of players" << endl;
                 w = create(player1); //creates white player
                 b = create(player2); //creates black player
                 string p1 = w->getName();
@@ -202,9 +207,9 @@ int main() {
                 //creates a new game 
                 g = new Game(gameboard, w, b, firstTurn); //white moves first
                 t = new addText{gameboard}; //text observer
-                gr = new addGraphics{gameboard}; //graphics observer
+                //gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);
-                stack.push_back(gr);
+                //stack.push_back(gr);
                 gameboard->render(); //displays text and graphics observers 
                 if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
                     ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
@@ -313,7 +318,7 @@ int main() {
                     } 
                     //black
                     else if (p->getOwner() == 2) { //while loop?
-                        if ((g->getTurn() == "white") && (b->hasMoved() == false)) {
+                        if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
                             b->playerMove(s1, s2, gameboard, p, "black");
                             if (b->hasMoved() == false) {
                                 g->setTurn("black");
@@ -389,6 +394,7 @@ int main() {
             }
         }
     }
+    return 0;
 }
 
 //delete pointers
