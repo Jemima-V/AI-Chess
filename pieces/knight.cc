@@ -28,7 +28,21 @@ bool Knight::validMove(Position start, Position end, Board* board) const {
     }
 }
 
-// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+// checks if a move is fully valid, this is overridden by each derived piece
 bool Knight::validMoveFinal(Position start, Position end, Board* board) const {
-    return false;
+    Pieces* currPiece = board->pieceAt(start);
+    int currPlayer = currPiece->getOwner();
+    // validMove == true
+    if (currPiece->validMove(start, end, board) == false) {
+        return false;
+    }
+    // can't capture your own piece: check that the same piece owner isn't at the end position
+    Pieces* endPiece = board->pieceAt(end);
+    if (endPiece != nullptr) {
+        int endPlayer = endPiece->getOwner();
+        if (currPlayer == endPlayer) {
+            return false;
+        }
+    }
+    return true;
 }

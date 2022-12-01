@@ -27,8 +27,17 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
         if (firstMove == true) { // move forward 2 squares only at starting position
             // rank changes by +1 or +2, file must stay the same
             int rankChange = end.rank - start.rank;
-            if ((start.file == end.file) && ((rankChange == 1) || (rankChange == 2))) {
+            if ((start.file == end.file) && (rankChange == 1)) {
                 return true;
+            } else if ((start.file == end.file) && (rankChange == 2)) {
+                // check that it doesn't jump over other pieces
+                Position midCheck{start.file, start.rank + 1};
+                Pieces* middleCheck = board->pieceAt(midCheck);
+                if (middleCheck != nullptr) {
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
                 return false;
             }
@@ -39,8 +48,6 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
             int fileChange = end.file - start.file;
             if (rankChange == 1 && (fileChange == 1 || fileChange == -1)) {
                 return true;
-            } else {
-                return false;
             }
         } else { // can only move forward 1 position
             // rank changes by +1, file must stay the same
@@ -55,8 +62,17 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
         if (firstMove == true) { // move forward 2 squares only at starting position
             // rank changes by -1 or -2, file must stay the same
             int rankChange = end.rank - start.rank;
-            if ((start.file == end.file) && ((rankChange == -1) || (rankChange == -2))) {
+            if ((start.file == end.file) && (rankChange == -1)) {
                 return true;
+            } else if ((start.file == end.file) && (rankChange == -2)) {
+                // check that it doesn't jump over other pieces
+                Position midCheck{start.file, start.rank - 1};
+                Pieces* middleCheck = board->pieceAt(midCheck);
+                if (middleCheck != nullptr) {
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
                 return false;
             }
@@ -67,8 +83,6 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
             int fileChange = end.file - start.file;
             if (rankChange == -1 && (fileChange == 1 || fileChange == -1)) {
                 return true;
-            } else {
-                return false;
             }
         } else { // can only move forward 1 position
             // rank changes by -1, file must stay the same
@@ -80,9 +94,24 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
             }
         }
     }
+    return false;
 }
 
-// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+// checks if a move is fully valid, this is overridden by each derived piece
 bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
-    return false;
+    Pieces* currPiece = board->pieceAt(start);
+    int currPlayer = currPiece->getOwner();
+    // validMove == true: no other piece should be in the way is already checked in here
+    if (currPiece->validMove(start, end, board) == false) {
+        return false;
+    }
+    // can't capture your own piece: check that the same piece owner isn't at the end position
+    Pieces* endPiece = board->pieceAt(end);
+    if (endPiece != nullptr) {
+        int endPlayer = endPiece->getOwner();
+        if (currPlayer == endPlayer) {
+            return false;
+        }
+    }
+    return true;
 }
