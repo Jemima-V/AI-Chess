@@ -21,6 +21,8 @@ class Board: public Subject{
   Position blackKing;
   //Pieces* currBoard[8][8];
 
+  bool isOppKnightAt(Position tempPos, int curOwner);
+
 
  public:
 
@@ -71,6 +73,13 @@ class Board: public Subject{
   */
 
   void render();
+
+  bool inBounds(Position pos);
+
+  //Board copy ctor
+  Board( const Board &other);
+
+  bool checkL(Position start);
   
 
 };

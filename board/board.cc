@@ -12,6 +12,7 @@
 
 using namespace std;
 
+//Board Ctor
 Board:: Board(){
     //currBoard(8, (vector<Piece*>(8, nullptr))); 
     for (int i = 0; i < 8; i++){
@@ -29,6 +30,26 @@ Board:: Board(){
     blackKing.rank = 7;
 }
 
+//Board copy constructor
+//copy position fields in MIL
+Board::Board(const Board &other): Board{}, whiteKing{other.whiteKing}, blackKing{other.blackKing}{
+    
+    //loop through 2D vector and call pieces copy ctor
+    for (int i = 0; i < 8; i++){
+        
+        for(int j = 0; j < 8; j++){
+
+            //make sure we dont call makeCopy() on an empty position
+            if(currBoard[i][j] != nullptr){
+                currBoard[i][j] = other.currBoard[i][j]->makeCopy();
+            } else {
+                currBoard[i][j] = nullptr;
+            }
+            
+        }
+    }
+}
+
   //dtor 
 Board:: ~Board(){/*
     //iterate over the 2D vector and delete each piece pointer it contains
@@ -38,7 +59,7 @@ Board:: ~Board(){/*
         }
     }
 
-    delete currBoard;*/
+    //delete currBoard;*/
 }
 
 void Board:: initBoard(){
@@ -211,10 +232,11 @@ bool Board:: checkCol(Position from, Position to){
 bool Board:: checkDiagonal(Position from, Position to){
     
     //check if kriti is only sending positions that are diagonal to each other
+    //THIS ALSO CHECKS
     //Direction => Upwards to the right
     if(from.rank < to.rank && from.file < to.file){
         
-        for(int i = from.rank, j = from.file; i <= to.rank && j <= to.file; i++, j++){
+        for(int i = from.rank + 1, j = from.file + 1; i <= to.rank && j <= to.file; i++, j++){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -227,7 +249,7 @@ bool Board:: checkDiagonal(Position from, Position to){
     //Direction => Upwards to the left
     } else if (from.rank < to.rank && from.file > to.file){
 
-        for(int i = from.rank, j = from.file; i <= to.rank && j >= to.file; i++, j--){
+        for(int i = from.rank + 1, j = from.file - 1; i <= to.rank && j >= to.file; i++, j--){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -240,7 +262,7 @@ bool Board:: checkDiagonal(Position from, Position to){
     //Direction => Downwards to right
     } else if (from.rank > to.rank && from.file < to.file){
 
-         for(int i = from.rank, j = from.file; i >= to.rank && j <= to.file; i--, j++){
+         for(int i = from.rank - 1, j = from.file + 1; i >= to.rank && j <= to.file; i--, j++){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -254,7 +276,7 @@ bool Board:: checkDiagonal(Position from, Position to){
     //from.rank > to.rank && from.file > to.file
     } else{
 
-         for(int i = from.rank, j = from.file; i >= to.rank && j >= to.file; i--, j--){
+         for(int i = from.rank - 1, j = from.file - 1; i >= to.rank && j >= to.file; i--, j--){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -454,32 +476,150 @@ Position Board:: checkDiagOpp(int owner, Position from, int direction){
 //TALK OVER WITH MALVIKA
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
-    //dont forget to update the whiteking/black king if it is moved
+    
+    //update the whiteking/black king if it is moved
+
+    //update if a white king moves
     if(p->getId() == 'K'){
         whiteKing.file = posNew.file;
         whiteKing.rank = posNew.rank;
+
+    //update if a black king moves
     } else if (p->getId() == 'k'){
         blackKing.file == posNew.file;
         blackKing.rank == posNew.rank;
     }
 
     //DOUBLE CHECK FOR MEMORY LEAK?
+
+    //check if new position is already occuppied (if the move will cause a capture)
+    //capturing move
+    if(currBoard[posNew.file][posNew.rank] != nullptr){
+        //ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE THAT IS BEING CAPTURED??
+        delete currBoard[posNew.file][posNew.rank];
+    }
+
     currBoard[posNew.file][posNew.rank] = p;
+
+    //AGAIN ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE BEFORE SETTING TO NULL??
     currBoard[posOld.file][posOld.rank] = nullptr;
 }
 
 void Board::place(Pieces* addPiece, Position pos){
     //double check with malvike that she checks if there is anything already at the position
     //DOUBLE CHECK FOR MEMORY LEAKS 
+
+    if(currBoard[pos.file][pos.rank] != nullptr){
+        //ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE THAT IS BEING CAPTURED??
+        delete currBoard[pos.file][pos.rank];
+    }
+    
     currBoard[pos.file][pos.rank] = addPiece;
 }
   
 void Board::removePiece(Position pos){
+    //AGAIN ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE BEFORE SETTING TO NULL??
     currBoard[pos.file][pos.rank] = nullptr;
 }
 
   
 void Board::render(){
     notifyObservers();
+}
+
+bool Board::inBounds(Position pos){
+    if(pos.file > 7 || pos.file < 0 || pos.rank > 7 || pos.rank < 0){
+        return false;
+    } else{
+        return true;
+    }
+}
+
+bool Board::isOppKnightAt(Position tempPos, int curOwner){
+    
+    //check if the case is in bounds and that there is a piece that is of the opponent
+    if(inBounds(tempPos) && pieceAt(tempPos) != nullptr && pieceAt(tempPos)->getOwner() != curOwner){
+        //check if that piece is a knight
+        if( pieceAt(tempPos)->getId() == 'n' || pieceAt(tempPos)->getId() == 'N'){
+            return true;
+        }
+
+    } else {
+        return false;
+    }
+}
+
+//specifally for kingInCheck function to check for sourrounding horses that can attack my king
+bool Board::checkL(Position start){
+
+    //KRITI CANT SEND ME A STARTING POSITION THAT DOES NOT HAVE A PIECE AT THE LOCATION
+    int curOwner = pieceAt(start)->getOwner();
+    Position tempPos{-1,-1};
+
+    //case A
+    tempPos.file = start.file + 1;
+    tempPos.rank = start.rank + 2;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case B
+    tempPos.file = start.file + 2;
+    tempPos.rank = start.rank + 1;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case C
+    tempPos.file = start.file + 2;
+    tempPos.rank = start.rank - 1;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case D
+    tempPos.file = start.file + 1;
+    tempPos.rank = start.rank - 2;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case E
+    tempPos.file = start.file - 1;
+    tempPos.rank = start.rank - 2;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case F
+    tempPos.file = start.file - 2;
+    tempPos.rank = start.rank - 1;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case G
+    tempPos.file = start.file - 2;
+    tempPos.rank = start.rank + 1;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    //case H
+    tempPos.file = start.file - 1;
+    tempPos.rank = start.rank + 2;
+
+    if(isOppKnightAt(tempPos, curOwner)){
+        return true;
+    }
+
+    return false;
 }
 
