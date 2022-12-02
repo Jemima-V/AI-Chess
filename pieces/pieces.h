@@ -1,5 +1,7 @@
 #ifndef _PIECES_H_
 #define _PIECES_H_
+#include <vector>
+
 // forward declare to avoid circular dependency
 class Board;
 
