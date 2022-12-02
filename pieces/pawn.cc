@@ -99,13 +99,19 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
 
 // checks if a move is fully valid, this is overridden by each derived piece
 bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
+    cout << "vmf pawn" << endl;
     Pieces* currPiece = board->pieceAt(start);
+    cout << start.file << endl;
+    cout << start.rank << endl;
+    cout << "create currPiece" << endl;
     int currPlayer = currPiece->getOwner();
+    cout << "create curplayer" << endl;
     // validMove == true: no other piece should be in the way is already checked in here
     if (currPiece->validMove(start, end, board) == false) {
         return false;
     }
     // can't capture your own piece: check that the same piece owner isn't at the end position
+    cout << "endpiece" << endl;
     Pieces* endPiece = board->pieceAt(end);
     if (endPiece != nullptr) {
         int endPlayer = endPiece->getOwner();
@@ -114,6 +120,7 @@ bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
         }
     }
     // make sure the move doesn't put the king in check
+    cout << "before my king in check" << endl;
     bool checkMoveKingInCheck = currPiece->myKingInCheck(start, end, board);
     if (checkMoveKingInCheck == false) { // false = move is invalid
         return false;

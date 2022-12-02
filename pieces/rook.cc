@@ -1,6 +1,5 @@
 #include "rook.h"
 #include "board.h"
-#include <vector.h>
 
 using namespace std;
 

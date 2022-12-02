@@ -287,36 +287,50 @@ bool Pieces::inCheck(int owner, Board* board) const {
 // false if this move is invalid and the king can go in check
 // true if the move is valid and the king can't go in check
 bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
-    Board* boardCopy = board; // copy ctor for the board
+    cout << "copy" << endl; //take out
+    Board boardCopy = *board; // copy ctor for the board
+    cout << "after copy" << endl; //take out
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
-    boardCopy->makeMove(currPiece, start, end);
+    boardCopy.makeMove(currPiece, start, end);
     // call inCheck to see if this puts our king in check and return this value
-    bool isCheck = currPiece->inCheck(currPlayer, boardCopy);
+    bool isCheck = currPiece->inCheck(currPlayer, &boardCopy);
     return isCheck;
 }
 
 // checks if the move for the player's piece places the Opponent's King in check
 bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) const {
+    cout << "comes to check" << endl; 
     // get what piece is at our current location
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
+    Board* boardCopy = board; // copy ctor for the board
+    // make the move for the currPiece on the boardCopy
+    // we already know that the move is valid from the pieces perspective, 
+    //   we just need to see if the king goes in check once that move is made
+    // stimulate the move for the currPiece on the boardCopy
+    boardCopy->makeMove(currPiece, start, end);
     if (currPlayer == 1) {
+        cout << "end 1 start" << endl; 
         // get location of the opponent's king
         Position opponentKingLoc = board->getBlackKing(); // white's opponent is black
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, board);
+        cout << "goes to vmf" << endl;
+        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
+        cout << "check end 1" << endl; 
         return potentialKill;
     } else { // currPlayer = 2
+        cout << "end 2 start" << endl; 
         // get location of the opponent's king
         Position opponentKingLoc = board->getWhiteKing();
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, board);
+        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
+        cout << "check end 2" << endl; 
         return potentialKill;
     }
 }
