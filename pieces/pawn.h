@@ -26,8 +26,8 @@ class Pawn: public Pieces {
   // checks if a move is fully valid, this is overridden by each derived piece
   bool validMoveFinal(Position start, Position end, Board* board) const override;
 
-  // checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
-  //std::vector<Position> moveGenerator(Position loc) const override;
+  // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+  std::vector<Position> moveGenerator(Position loc) const override;
 
 };
 #endif

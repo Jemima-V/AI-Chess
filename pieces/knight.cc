@@ -55,3 +55,9 @@ bool Knight::validMoveFinal(Position start, Position end, Board* board) const {
 Knight* Knight::makeCopy() const {
     return (new Knight(*this));
 }
+
+// generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+std::vector<Position> Knight::moveGenerator(Position loc) const {
+    std::vector<Position> moveList;
+    return moveList;
+}

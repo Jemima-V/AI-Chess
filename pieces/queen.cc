@@ -73,4 +73,11 @@ bool Queen::validMoveFinal(Position start, Position end, Board* board) const {
 Queen* Queen::makeCopy() const {
     return (new Queen(*this));
 }
+
+// generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+std::vector<Position> Queen::moveGenerator(Position loc) const {
+    std::vector<Position> moveList;
+    return moveList;
+}
+
    

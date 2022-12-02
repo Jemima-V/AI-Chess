@@ -106,3 +106,9 @@ King* King::makeCopy() const {
     return (new King(*this));
 }
 
+// generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+std::vector<Position> King::moveGenerator(Position loc) const {
+    std::vector<Position> moveList;
+    return moveList;
+}
+

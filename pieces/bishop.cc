@@ -55,3 +55,9 @@ bool Bishop::validMoveFinal(Position start, Position end, Board* board) const {
 Bishop* Bishop::makeCopy() const {
     return (new Bishop(*this));
 }
+
+// generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+std::vector<Position> Bishop::moveGenerator(Position loc) const {
+    std::vector<Position> moveList;
+    return moveList;
+}

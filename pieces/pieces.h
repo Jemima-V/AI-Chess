@@ -48,8 +48,8 @@ class Pieces {
   // checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
   virtual bool validMoveFinal(Position start, Position end, Board* board) const = 0;
 
-  // checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
-  //virtual std::vector<Position> moveGenerator(Position loc) const = 0;
+  // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+  virtual std::vector<Position> moveGenerator(Position loc) const = 0;
 
   // returns true if there is a piece of the same colour at the end position
   bool samePieceCheck(Position start, Position end, Board* board) const;

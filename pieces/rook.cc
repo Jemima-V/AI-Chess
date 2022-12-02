@@ -67,3 +67,9 @@ Rook* Rook::makeCopy() const {
     return (new Rook(*this));
 }
 
+// generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+std::vector<Position> Rook::moveGenerator(Position loc) const {
+    std::vector<Position> moveList;
+    return moveList;
+}
+

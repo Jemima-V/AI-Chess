@@ -125,3 +125,9 @@ Pawn* Pawn::makeCopy() const {
     return (new Pawn(*this));
 }
 
+// generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
+std::vector<Position> Pawn::moveGenerator(Position loc) const {
+    std::vector<Position> moveList;
+    return moveList;
+}
+
