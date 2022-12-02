@@ -57,7 +57,7 @@ Knight* Knight::makeCopy() const {
 }
 
 // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
-std::vector<Position> Knight::moveGenerator(Position loc) const {
+std::vector<Position> Knight::moveGenerator(Position loc, Board* board) const {
     std::vector<Position> moveList;
     return moveList;
 }

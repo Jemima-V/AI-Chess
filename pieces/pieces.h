@@ -49,7 +49,7 @@ class Pieces {
   virtual bool validMoveFinal(Position start, Position end, Board* board) const = 0;
 
   // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
-  virtual std::vector<Position> moveGenerator(Position loc) const = 0;
+  virtual std::vector<Position> moveGenerator(Position loc, Board* board) const = 0;
 
   // returns true if there is a piece of the same colour at the end position
   bool samePieceCheck(Position start, Position end, Board* board) const;
@@ -63,9 +63,9 @@ class Pieces {
   // checks if the move for the player's piece places the player's King in check -> TO IMPLEMENT STILLL!!!!
   bool myKingInCheck(Position start, Position end, Board* board) const;
 
-  // check if king, at loc, puts itself in check -> TO IMPLEMENT STILLL!!!!
+  // check if king, making move from start to end, puts itself in check -> TO IMPLEMENT STILLL!!!!
   // true if it puts itself in check and false if it doesn't
-  bool kingSelfCheck(Position loc, Board* board) const;
+  bool kingSelfCheck(Position start, Position end, Board* board) const;
 
   // checks if the move for the player's piece places the Opponent's King in check
   bool opponentKingInCheck(Position start, Position end, Board* board) const;

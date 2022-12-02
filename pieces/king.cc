@@ -95,7 +95,7 @@ bool King::validMoveFinal(Position start, Position end, Board* board) const {
         }
     }
     // make sure the move doesn't put the king in check
-    bool checkMoveKingInCheck = currPiece->kingSelfCheck(end, board);
+    bool checkMoveKingInCheck = currPiece->kingSelfCheck(start, end, board);
     if (checkMoveKingInCheck == false) { // false = move is invalid
         return false;
     }
@@ -107,7 +107,7 @@ King* King::makeCopy() const {
 }
 
 // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
-std::vector<Position> King::moveGenerator(Position loc) const {
+std::vector<Position> King::moveGenerator(Position loc, Board* board) const {
     std::vector<Position> moveList;
     return moveList;
 }

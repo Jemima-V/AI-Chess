@@ -57,7 +57,7 @@ Bishop* Bishop::makeCopy() const {
 }
 
 // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
-std::vector<Position> Bishop::moveGenerator(Position loc) const {
+std::vector<Position> Bishop::moveGenerator(Position loc, Board* board) const {
     std::vector<Position> moveList;
     return moveList;
 }

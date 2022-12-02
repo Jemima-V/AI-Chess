@@ -19,7 +19,7 @@ class Bishop: public Pieces {
   bool validMoveFinal(Position start, Position end, Board* board) const override;
 
   // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
-  std::vector<Position> moveGenerator(Position loc) const override;
+  std::vector<Position> moveGenerator(Position loc, Board* board) const override;
 
 };
 #endif

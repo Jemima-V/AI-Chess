@@ -75,7 +75,7 @@ Queen* Queen::makeCopy() const {
 }
 
 // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
-std::vector<Position> Queen::moveGenerator(Position loc) const {
+std::vector<Position> Queen::moveGenerator(Position loc, Board* board) const {
     std::vector<Position> moveList;
     return moveList;
 }
