@@ -147,34 +147,28 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     return true;
 }
 
-// checks if the move for the player's piece places the player's King in check:
-// false if this move is invalid and the king can go in check
-// true if the move is valid and the king can't go in check
-bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
-    // Board* boardCopy = board; // copy ctor for the board
+// checks if the king is in check on the board -> TO IMPLEMENT STILLL!!!!
+// true if king is not in check and false otherwise
+bool Pieces::inCheck(int owner, Board* board) const {
     // Pseudocode:
-    // get what piece is at our current location
     // check all 8 directions for opponent players
-        // if there is an opponent player, check if it is a validMove (NOT VALIDMOVEFINAL) from that player to my king
-            // if there is a valid move, return false
+        // if there is an opponent player, check if it is a validMoveFinal from that player to my king
+            // if there is one, return false
         // else return true
     // Implememtation:
-    // get what piece is at our current location
-    Pieces* currPiece = board->pieceAt(start);
-    int currPlayer = currPiece->getOwner();
     Position KingLoc{0,0};
-    if (currPlayer == 1) {
+    if (owner == 1) {
         KingLoc = board->getWhiteKing();
     } else { //currPlayer is 2
         KingLoc = board->getBlackKing();
     }
     // check all 8 directions for opponent players
     // up column: make sure start != end to keep invariants
-    Position upCol{start.file, 7};
-    bool sameLocUp = checkSamePos(start, upCol);
+    Position upCol{KingLoc.file, 7};
+    bool sameLocUp = checkSamePos(KingLoc, upCol);
     Position upColPiecePos;
     if (sameLocUp == false) { // make sure start != end to keep invariants
-        upColPiecePos = board->checkColOpp(currPlayer, start, upCol); 
+        upColPiecePos = board->checkColOpp(owner, KingLoc, upCol); 
     }
     // upColPiecePos will be (-1, -1) if there is nothing in the way
     Position nullPos{-1, -1};
@@ -182,17 +176,17 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
         Pieces* upColPiece = board->pieceAt(upColPiecePos);
         // check whether that piece can harm our king
         // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = upColPiece->validMove(upColPiecePos, KingLoc, board);
+        bool potentialKill = upColPiece->validMoveFinal(upColPiecePos, KingLoc, board);
         if (potentialKill == true) {
             return false;
         }
     }
     // down column: make sure start != end to keep invariants
-    Position downCol{start.file, 0};
-    bool sameLocDown = checkSamePos(start, downCol);
+    Position downCol{KingLoc.file, 0};
+    bool sameLocDown = checkSamePos(KingLoc, downCol);
     Position downColPiecePos;
     if (sameLocDown == false) { // make sure start != end to keep invariants
-        downColPiecePos = board->checkColOpp(currPlayer, start, downCol); 
+        downColPiecePos = board->checkColOpp(owner, KingLoc, downCol); 
     }
     // downColPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(downColPiecePos, nullPos) != true) { // there is a piece in the way
@@ -206,11 +200,11 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
     }
     // check the rows of the king to make sure the opponent's pieces potentially at these places can't harm the king
     // left side row: make sure start != end to keep invariants
-    Position leftRow{0, start.rank};
-    bool sameLocLeft = checkSamePos(start, leftRow);
+    Position leftRow{0, KingLoc.rank};
+    bool sameLocLeft = checkSamePos(KingLoc, leftRow);
     Position leftRowPiecePos;
     if (sameLocLeft == false) { // make sure start != end to keep invariants
-        leftRowPiecePos = board->checkRowOpp(currPlayer, start, leftRow); 
+        leftRowPiecePos = board->checkRowOpp(owner, KingLoc, leftRow); 
     }
     // leftRowPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(leftRowPiecePos, nullPos) != true) { // there is a piece in the way
@@ -223,11 +217,11 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
         }
     }
     // right side row: make sure start != end to keep invariants
-    Position rightRow{7, start.rank};
-    bool sameLocRight = checkSamePos(start, rightRow);
+    Position rightRow{7, KingLoc.rank};
+    bool sameLocRight = checkSamePos(KingLoc, rightRow);
     Position rightRowPiecePos;
     if (sameLocRight == false) { // make sure start != end to keep invariants
-        rightRowPiecePos = board->checkRowOpp(currPlayer, start, rightRow); 
+        rightRowPiecePos = board->checkRowOpp(owner, KingLoc, rightRow); 
     }
     // rightRowPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(rightRowPiecePos, nullPos) != true) { // there is a piece in the way
@@ -241,7 +235,7 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
     }
     // check the diagonals of the king to make sure the opponent's pieces potentially at these places can't harm the king
     // 1 = left up, 2 = left down, 3 = right up, 4 = right down
-    Position leftUpPiecePos = board->checkDiagOpp(currPlayer, start, 1);
+    Position leftUpPiecePos = board->checkDiagOpp(owner, KingLoc, 1);
     // leftUpPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(leftUpPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* leftUpPiece = board->pieceAt(leftUpPiecePos);
@@ -252,7 +246,7 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
             return false;
         }
     }
-    Position leftDownPiecePos = board->checkDiagOpp(currPlayer, start, 2);
+    Position leftDownPiecePos = board->checkDiagOpp(owner, KingLoc, 2);
     // leftDownPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(leftDownPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* leftDownPiece = board->pieceAt(leftDownPiecePos);
@@ -263,7 +257,7 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
             return false;
         }
     }
-    Position rightUpPiecePos = board->checkDiagOpp(currPlayer, start, 3);
+    Position rightUpPiecePos = board->checkDiagOpp(owner, KingLoc, 3);
     // rightUpPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(rightUpPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* rightUpPiece = board->pieceAt(rightUpPiecePos);
@@ -274,7 +268,7 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
             return false;
         }
     }
-    Position rightDownPiecePos = board->checkDiagOpp(currPlayer, start, 4);
+    Position rightDownPiecePos = board->checkDiagOpp(owner, KingLoc, 4);
     // rightDownPiecePos will be (-1, -1) if there is nothing in the way
     if (checkSamePos(rightDownPiecePos, nullPos) != true) { // there is a piece in the way
         Pieces* rightDownPiece = board->pieceAt(rightDownPiecePos);
@@ -285,7 +279,21 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
             return false;
         }
     }
+    // ADD CASEL HERE ONE ITS IMPLEMENTED IN THE BOARD CLASS
     return true;
+}
+
+// checks if the move for the player's piece places the player's King in check:
+// false if this move is invalid and the king can go in check
+// true if the move is valid and the king can't go in check
+bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
+    Board* boardCopy = board; // copy ctor for the board
+    // make the move for the currPiece on the boardCopy
+
+    // call inCheck to see if this puts our king in check and return this value
+
+    // temp
+    return false;
 }
 
 // checks if the move for the player's piece places the Opponent's King in check
@@ -377,132 +385,15 @@ void Pieces::setInCheck(bool newCheck) {}
 // check if king, at loc, puts itself in check
 // true if it puts itself in check and false if it doesn't
 bool Pieces::kingSelfCheck(Position loc, Board* board) const {
-    // Pseudocode:
-    // check all 8 directions for opponent players
-        // if there is an opponent player, check if it is a validMove (NOT VALIDMOVEFINAL) from that player to my king
-            // if there is a valid move, return false
-        // else return true
-    // Implememtation:
+    Board* boardCopy = board; // copy ctor for the board
+    // make the move for the currPiece on the boardCopy
     Pieces* currPiece = board->pieceAt(loc);
     int currPlayer = currPiece->getOwner();
-    // check all 8 directions for opponent players
-    // up column: make sure start != end to keep invariants
-    Position upCol{loc.file, 7};
-    bool sameLocUp = checkSamePos(loc, upCol);
-    Position upColPiecePos;
-    if (sameLocUp == false) { // make sure start != end to keep invariants
-        upColPiecePos = board->checkColOpp(currPlayer, loc, upCol); 
-    }
-    // upColPiecePos will be (-1, -1) if there is nothing in the way
-    Position nullPos{-1, -1};
-    if (checkSamePos(upColPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* upColPiece = board->pieceAt(upColPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = upColPiece->validMove(upColPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    // down column: make sure start != end to keep invariants
-    Position downCol{loc.file, 0};
-    bool sameLocDown = checkSamePos(loc, downCol);
-    Position downColPiecePos;
-    if (sameLocDown == false) { // make sure start != end to keep invariants
-        downColPiecePos = board->checkColOpp(currPlayer, loc, downCol); 
-    }
-    // downColPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(downColPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* downColPiece = board->pieceAt(downColPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = downColPiece->validMove(downColPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    // check the rows of the king to make sure the opponent's pieces potentially at these places can't harm the king
-    // left side row: make sure start != end to keep invariants
-    Position leftRow{0, loc.rank};
-    bool sameLocLeft = checkSamePos(loc, leftRow);
-    Position leftRowPiecePos;
-    if (sameLocLeft == false) { // make sure start != end to keep invariants
-        leftRowPiecePos = board->checkRowOpp(currPlayer, loc, leftRow); 
-    }
-    // leftRowPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(leftRowPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* leftRowPiece = board->pieceAt(leftRowPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = leftRowPiece->validMove(leftRowPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    // right side row: make sure start != end to keep invariants
-    Position rightRow{7, loc.rank};
-    bool sameLocRight = checkSamePos(loc, rightRow);
-    Position rightRowPiecePos;
-    if (sameLocRight == false) { // make sure start != end to keep invariants
-        rightRowPiecePos = board->checkRowOpp(currPlayer, loc, rightRow); 
-    }
-    // rightRowPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(rightRowPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* rightRowPiece = board->pieceAt(rightRowPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = rightRowPiece->validMove(rightRowPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    // check the diagonals of the king to make sure the opponent's pieces potentially at these places can't harm the king
-    // 1 = left up, 2 = left down, 3 = right up, 4 = right down
-    Position leftUpPiecePos = board->checkDiagOpp(currPlayer, loc, 1);
-    // leftUpPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(leftUpPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* leftUpPiece = board->pieceAt(leftUpPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = leftUpPiece->validMove(leftUpPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    Position leftDownPiecePos = board->checkDiagOpp(currPlayer, loc, 2);
-    // leftDownPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(leftDownPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* leftDownPiece = board->pieceAt(leftDownPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = leftDownPiece->validMove(leftDownPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    Position rightUpPiecePos = board->checkDiagOpp(currPlayer, loc, 3);
-    // rightUpPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(rightUpPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* rightUpPiece = board->pieceAt(rightUpPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = rightUpPiece->validMove(rightUpPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    Position rightDownPiecePos = board->checkDiagOpp(currPlayer, loc, 4);
-    // rightDownPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(rightDownPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* rightDownPiece = board->pieceAt(rightDownPiecePos);
-        // check whether that piece can harm our king
-        // call validMove for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = rightDownPiece->validMove(rightDownPiecePos, loc, board);
-        if (potentialKill == true) {
-            return false;
-        }
-    }
-    return true;
+    //makeMove(currPiece, Position posOld, Position posNew);
+    // call inCheck to see if this puts our king in check and return the opposite value
+
+    // temp
+    return false;
 }
 
 // check whether the pawn did a valid capture en passant -> TO IMPLEMENT STILLL!!!!
