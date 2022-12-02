@@ -168,7 +168,7 @@ int main() {
     Game *g = nullptr;
 
     Observer *t = nullptr;
-    //Observer *gr = nullptr;
+    Observer *gr = nullptr;
 
     Player *w = nullptr;
     Player *b = nullptr;
@@ -207,9 +207,9 @@ int main() {
                 //creates a new game 
                 g = new Game(gameboard, w, b, firstTurn); //white moves first
                 t = new addText{gameboard}; //text observer
-                //gr = new addGraphics{gameboard}; //graphics observer
+                gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);
-                //stack.push_back(gr);
+                stack.push_back(gr);
                 gameboard->render(); //displays text and graphics observers 
                 if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
                     ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
