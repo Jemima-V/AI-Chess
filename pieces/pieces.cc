@@ -287,7 +287,7 @@ bool Pieces::inCheck(int owner, Board* board) const {
 // false if this move is invalid and the king can go in check
 // true if the move is valid and the king can't go in check
 bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
-    cout << "copy" << endl; //take out
+    // cout << "copy" << endl; //take out
     Board boardCopy = *board; // copy ctor for the board
     cout << "after copy" << endl; //take out
     // we already know that the move is valid from the pieces perspective, 
