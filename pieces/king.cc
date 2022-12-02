@@ -58,9 +58,48 @@ bool King::validMove(Position start, Position end, Board* board) const {
     }
 }
 
-// checks if a move is fully valid, this is overridden by each derived piece -> TO IMPLEMENT STILLL!!!!
+// checks if a move is fully valid, this is overridden by each derived piece
 bool King::validMoveFinal(Position start, Position end, Board* board) const {
-    return false;
+    Pieces* currPiece = board->pieceAt(start);
+    int currPlayer = currPiece->getOwner();
+    // validMove == true
+    if (currPiece->validMove(start, end, board) == false) {
+        return false;
+    }
+    // can't capture piece of your own player piece: check that the same piece owner isn't at the end position
+    Pieces* endPiece = board->pieceAt(end);
+    if (endPiece != nullptr) {
+        int endPlayer = endPiece->getOwner();
+        if (currPlayer == endPlayer) {
+            return false;
+        }
+    }
+    // no other pieces are in the way: false if someone is in the way
+    // rook check
+    // check if it moves columns or rows
+    if (start.rank == end.rank) { // rows
+        bool piecesInTheWay = board->checkRow(start, end);
+        if (piecesInTheWay == false) {
+            return false;
+        }
+    } else if (start.file == end.file) { // cols
+        bool piecesInTheWay = board->checkCol(start, end);
+        if (piecesInTheWay == false) {
+            return false;
+        }
+    } else {
+        // bishop check
+        bool piecesInTheWay = board->checkDiagonal(start, end); // start and end must be diagonal now
+        if (piecesInTheWay == false) {
+            return false;
+        }
+    }
+    // make sure the move doesn't put the king in check
+    bool checkMoveKingInCheck = currPiece->kingSelfCheck(end, board);
+    if (checkMoveKingInCheck == false) { // false = move is invalid
+        return false;
+    }
+    return true;
 }
 
 King* King::makeCopy() const {

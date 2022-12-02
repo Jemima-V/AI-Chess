@@ -43,11 +43,6 @@ bool Queen::validMoveFinal(Position start, Position end, Board* board) const {
         }
     }
     // no other pieces are in the way: false if someone is in the way
-    // bishop check
-    bool piecesInTheWay = board->checkDiagonal(start, end);
-    if (piecesInTheWay == false) {
-        return false;
-    }
     // rook check
     // check if it moves columns or rows
     if (start.rank == end.rank) { // rows
@@ -55,9 +50,14 @@ bool Queen::validMoveFinal(Position start, Position end, Board* board) const {
         if (piecesInTheWay == false) {
             return false;
         }
-    }
-    if (start.file == end.file) { // cols
+    } else if (start.file == end.file) { // cols
         bool piecesInTheWay = board->checkCol(start, end);
+        if (piecesInTheWay == false) {
+            return false;
+        }
+    } else {
+        // bishop check
+        bool piecesInTheWay = board->checkDiagonal(start, end); // start and end must be diagonal now
         if (piecesInTheWay == false) {
             return false;
         }
