@@ -116,10 +116,10 @@ Position convert(string square) {
 
 //creates a player
 Player* create(string player) {
-    cout << "here" << endl;
+    //cout << "here" << endl;
     if (player == "human") {
         Player *h = new Human{player};
-        cout << "end" << endl;
+        //cout << "end" << endl;
         return h;
     } 
     else if (player == "computer1") {
@@ -177,7 +177,7 @@ int main() {
     
     while (true) {
         if (cin.eof() || cin.fail()) {
-            cout << "test" << endl;
+            //cout << "test" << endl;
             int draws = ties / 2;
             white += draws;
             black += draws;
@@ -192,12 +192,12 @@ int main() {
             //string to input player types 
             string s;
             cin >> s;
-            cout << s << endl;
+            //cout << s << endl;
             if (s == "game") {
                 string player1;
                 string player2;
                 cin >> player1 >> player2;
-                cout << "creating second set of players" << endl;
+                //cout << "creating second set of players" << endl;
                 w = create(player1); //creates white player
                 b = create(player2); //creates black player
                 string p1 = w->getName();
@@ -213,8 +213,8 @@ int main() {
                 gameboard->render(); //displays text and graphics observers 
                 if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
                     ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
-                        cout << p1 << endl;
-                        cout << p2 << endl;
+                        //cout << p1 << endl;
+                        //cout << p2 << endl;
                         cout << "comes to computer computer case" << endl;
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
                             Position s1 = randPos();
@@ -223,7 +223,9 @@ int main() {
                             cout << s1.rank << endl;
                             cout << s2.file << "   ";
                             cout << s2.rank << endl;
-                            if ((s1.file != s2.file) && (s1.rank != s2.rank) && 
+                            if ((((s1.rank != s2.rank) && (s1.file != s2.file)) || 
+                                 ((s1.rank != s2.rank) && (s1.file == s2.file)) ||
+                                 ((s1.rank == s2.rank) && (s1.file != s2.file))) && 
                                 (gameboard->pieceAt(s1) != nullptr)) {
                                 Pieces *p = gameboard->pieceAt(s1);
                                 if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
@@ -295,13 +297,13 @@ int main() {
                      ((s1.rank == s2.rank) && (s1.file != s2.file)))) { 
                     Pieces *p = gameboard->pieceAt(s1);
                     //white
-                    cout << "comes in 1" << endl;
+                    //cout << "comes in 1" << endl;
                     if (p->getOwner() == 1) {
-                        cout << "comes in 2" << endl;
+                        //cout << "comes in 2" << endl;
                         if ((g->getTurn() == "white") && (w->hasMoved() == false)) { //while loop?
                             cout << "comes in 3" << endl;
                             w->playerMove(s1, s2, gameboard, p, "white");
-                            cout << "here" << endl;
+                            //cout << "here" << endl;
                             if (w->hasMoved() == false) {
                                 g->setTurn("white");
                                 cout << "false" << endl;
@@ -309,7 +311,7 @@ int main() {
                             else {
                                 g->setTurn("black");
                                 b->setMoved(false);
-                                cout << "true" << endl;
+                                //cout << "true" << endl;
                             }
                         }
                         else {

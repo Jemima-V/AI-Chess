@@ -6,7 +6,7 @@ using namespace std;
 
 
 //constructor 
-Computer::Computer(string name) : Player(name) {}
+Computer::Computer(string name) : Player{name} {}
 
 //destructor
 Computer::~Computer() {

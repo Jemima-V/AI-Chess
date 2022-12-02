@@ -9,7 +9,7 @@
 using namespace std; 
 
 //constructor 
-LevelOne::LevelOne(string name) : Player(name) {}
+LevelOne::LevelOne(string name) : Player{name}, name{name} {}
 
 //gets the player's name
 string LevelOne::getName() {
@@ -30,9 +30,6 @@ bool LevelOne::hasMoved() {
 void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     //vector <Observer*> stack;
     if (p->validMove(s1, s2, gameboard) == true) {
-        gameboard->makeMove(p, s1, s2); 
-        moved = true;
-        gameboard->render();
         if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
             cout << "White is in check." << endl;
             if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
@@ -40,6 +37,9 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
                 cout << "Checkmate! Black wins!" << endl;
             }
         }
+        gameboard->makeMove(p, s1, s2); 
+        moved = true;
+        gameboard->render();
     } 
     else {
         moved = false;
