@@ -43,14 +43,16 @@ bool King::validMove(Position start, Position end, Board* board) const {
     int ABSrankChange = convertToABS(rankChange);
     // convert fileChange to ABS
     int ABSfileChange = convertToABS(fileChange);
-    if (ABSrankChange != 1 || ABSfileChange != 1) {
-        return false;
-    } else if ((start.rank == end.rank) || (start.file == end.file)) { 
-        // Rook's rules (refer to Rook.cc for implementation specific comments)
-        return true;
-    } else if (ABSrankChange == ABSfileChange) {
-        // Bishop's rules (refer to Bishop.cc for implementation specific comments)
-        return true;
+    if (ABSrankChange == 1 || ABSfileChange == 1) {
+        if ((start.rank == end.rank) || (start.file == end.file)) { 
+            // Rook's rules (refer to Rook.cc for implementation specific comments)
+            return true;
+        } else if (ABSrankChange == ABSfileChange) {
+            // Bishop's rules (refer to Bishop.cc for implementation specific comments)
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }

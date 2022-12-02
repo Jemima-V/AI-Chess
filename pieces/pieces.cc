@@ -314,6 +314,7 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
 bool Pieces::getInCheck() const {}
 
 // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
+//           -----> check for out of bounds position !!!!!!
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
     // get what piece is at our current location
     Pieces* currPiece = board->pieceAt(start);

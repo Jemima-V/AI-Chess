@@ -113,9 +113,15 @@ bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
             return false;
         }
     }
+    // make sure the move doesn't put the king in check
+    bool checkMoveKingInCheck = currPiece->myKingInCheck(start, end, board);
+    if (checkMoveKingInCheck == false) { // false = move is invalid
+        return false;
+    }
     return true;
 }
 
 Pawn* Pawn::makeCopy() const {
     return (new Pawn(*this));
 }
+
