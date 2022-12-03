@@ -83,10 +83,14 @@ std::vector<Position> Rook::moveGenerator(Position loc, Board* board) const {
         for (int j = 0; j <= 7; ++j) {
             //new location that the rook is being moved to 
             Position newLoc{i, j};
-            bool isValid = validMoveFinal(loc, newLoc, board);
-            if (isValid == true) {
-                moveList.push_back(newLoc);
-            }
+            if (((loc.rank != newLoc.rank) && (loc.file != newLoc.file)) || 
+                ((loc.rank != newLoc.rank) && (loc.file == newLoc.file)) ||
+                ((loc.rank == newLoc.rank) && (loc.file != newLoc.file))) {
+                    bool isValid = validMoveFinal(loc, newLoc, board);
+                    if (isValid == true) {
+                        moveList.push_back(newLoc);
+                    }
+                }
         }
     }
     return moveList;
