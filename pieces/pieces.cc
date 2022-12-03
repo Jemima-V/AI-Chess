@@ -173,6 +173,7 @@ bool Pieces::inCheck(int owner, Board* board) const {
     } else { //currPlayer is 2
         KingLoc = board->getBlackKing();
     }
+    Position nullPos{-1, -1};
     // check all 8 directions for opponent players
     // up column: make sure start != end to keep invariants
     Position upCol{KingLoc.file, 7};
@@ -180,16 +181,15 @@ bool Pieces::inCheck(int owner, Board* board) const {
     Position upColPiecePos;
     if (sameLocUp == false) { // make sure start != end to keep invariants
         upColPiecePos = board->checkColOpp(owner, KingLoc, upCol); 
-    }
-    // upColPiecePos will be (-1, -1) if there is nothing in the way
-    Position nullPos{-1, -1};
-    if (checkSamePos(upColPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* upColPiece = board->pieceAt(upColPiecePos);
-        // check whether that piece can harm our king
-        // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = upColPiece->validMoveFinal(upColPiecePos, KingLoc, board);
-        if (potentialKill == true) {
-            return false;
+        // upColPiecePos will be (-1, -1) if there is nothing in the way
+        if (checkSamePos(upColPiecePos, nullPos) != true) { // there is a piece in the way
+            Pieces* upColPiece = board->pieceAt(upColPiecePos);
+            // check whether that piece can harm our king
+            // call validMoveFinal for this piece with (start position end) and (end position the King's location)
+            bool potentialKill = upColPiece->validMoveFinal(upColPiecePos, KingLoc, board);
+            if (potentialKill == true) {
+                return false;
+            }
         }
     }
     // down column: make sure start != end to keep invariants
@@ -198,15 +198,15 @@ bool Pieces::inCheck(int owner, Board* board) const {
     Position downColPiecePos;
     if (sameLocDown == false) { // make sure start != end to keep invariants
         downColPiecePos = board->checkColOpp(owner, KingLoc, downCol); 
-    }
-    // downColPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(downColPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* downColPiece = board->pieceAt(downColPiecePos);
-        // check whether that piece can harm our king
-        // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = downColPiece->validMoveFinal(downColPiecePos, KingLoc, board);
-        if (potentialKill == true) {
-            return false;
+        // downColPiecePos will be (-1, -1) if there is nothing in the way
+        if (checkSamePos(downColPiecePos, nullPos) != true) { // there is a piece in the way
+            Pieces* downColPiece = board->pieceAt(downColPiecePos);
+            // check whether that piece can harm our king
+            // call validMoveFinal for this piece with (start position end) and (end position the King's location)
+            bool potentialKill = downColPiece->validMoveFinal(downColPiecePos, KingLoc, board);
+            if (potentialKill == true) {
+                return false;
+            }
         }
     }
     // check the rows of the king to make sure the opponent's pieces potentially at these places can't harm the king
@@ -216,15 +216,15 @@ bool Pieces::inCheck(int owner, Board* board) const {
     Position leftRowPiecePos;
     if (sameLocLeft == false) { // make sure start != end to keep invariants
         leftRowPiecePos = board->checkRowOpp(owner, KingLoc, leftRow); 
-    }
-    // leftRowPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(leftRowPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* leftRowPiece = board->pieceAt(leftRowPiecePos);
-        // check whether that piece can harm our king
-        // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = leftRowPiece->validMoveFinal(leftRowPiecePos, KingLoc, board);
-        if (potentialKill == true) {
-            return false;
+        // leftRowPiecePos will be (-1, -1) if there is nothing in the way
+        if (checkSamePos(leftRowPiecePos, nullPos) != true) { // there is a piece in the way
+            Pieces* leftRowPiece = board->pieceAt(leftRowPiecePos);
+            // check whether that piece can harm our king
+            // call validMoveFinal for this piece with (start position end) and (end position the King's location)
+            bool potentialKill = leftRowPiece->validMoveFinal(leftRowPiecePos, KingLoc, board);
+            if (potentialKill == true) {
+                return false;
+            }
         }
     }
     // right side row: make sure start != end to keep invariants
@@ -233,15 +233,15 @@ bool Pieces::inCheck(int owner, Board* board) const {
     Position rightRowPiecePos;
     if (sameLocRight == false) { // make sure start != end to keep invariants
         rightRowPiecePos = board->checkRowOpp(owner, KingLoc, rightRow); 
-    }
-    // rightRowPiecePos will be (-1, -1) if there is nothing in the way
-    if (checkSamePos(rightRowPiecePos, nullPos) != true) { // there is a piece in the way
-        Pieces* rightRowPiece = board->pieceAt(rightRowPiecePos);
-        // check whether that piece can harm our king
-        // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = rightRowPiece->validMoveFinal(rightRowPiecePos, KingLoc, board);
-        if (potentialKill == true) {
-            return false;
+        // rightRowPiecePos will be (-1, -1) if there is nothing in the way
+        if (checkSamePos(rightRowPiecePos, nullPos) != true) { // there is a piece in the way
+            Pieces* rightRowPiece = board->pieceAt(rightRowPiecePos);
+            // check whether that piece can harm our king
+            // call validMoveFinal for this piece with (start position end) and (end position the King's location)
+            bool potentialKill = rightRowPiece->validMoveFinal(rightRowPiecePos, KingLoc, board);
+            if (potentialKill == true) {
+                return false;
+            }
         }
     }
     // check the diagonals of the king to make sure the opponent's pieces potentially at these places can't harm the king
@@ -306,36 +306,35 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
-    Pieces* currPiece = board->pieceAt(start);
-    int currPlayer = currPiece->getOwner();
-    boardCopy.makeMove(currPiece, start, end);
+    Pieces* newPiece = boardCopy.pieceAt(start);
+    int currPlayer = newPiece->getOwner();
+    boardCopy.makeMove(newPiece, start, end);
     // call inCheck to see if this puts our king in check and return this value
-    bool isCheck = currPiece->inCheck(currPlayer, &boardCopy);
+    bool isCheck = newPiece->inCheck(currPlayer, &boardCopy);
     return isCheck;
 }
 
 // checks if the move for the player's piece places the Opponent's King in check
 bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) const {
     // get what piece is at our current location
-    Pieces* currPiece = board->pieceAt(start);
-    int currPlayer = currPiece->getOwner();
     Board boardCopy = *board; // copy ctor for the board
     // make the move for the currPiece on the boardCopy
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* newPiece = boardCopy.pieceAt(start);
+    int currPlayer = newPiece->getOwner();
     boardCopy.makeMove(newPiece, start, end);
     if (currPlayer == 1) {
         // get location of the opponent's king
-        Position opponentKingLoc = board->getBlackKing(); // white's opponent is black
+        Position opponentKingLoc = boardCopy.getBlackKing(); // white's opponent is black
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
         bool potentialKill = newPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
         return potentialKill;
     } else { // currPlayer = 2
         // get location of the opponent's king
-        Position opponentKingLoc = board->getWhiteKing();
+        Position opponentKingLoc = boardCopy.getWhiteKing();
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
         bool potentialKill = newPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
@@ -435,14 +434,14 @@ void Pieces::setInCheck(bool newCheck) {}
 bool Pieces::kingSelfCheck(Position start, Position end, Board* board) const {
     Board boardCopy = *board; // copy ctor for the board
     // make the move for the currPiece on the boardCopy
-    Pieces* currPiece = board->pieceAt(start);
-    int currPlayer = currPiece->getOwner();
+    Pieces* newPiece = boardCopy.pieceAt(start);
+    int currPlayer = newPiece->getOwner();
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
-    boardCopy.makeMove(currPiece, start, end);
+    boardCopy.makeMove(newPiece, start, end);
     // call inCheck to see if this puts our king in check and return the opposite value
-    bool isCheck = currPiece->inCheck(currPlayer, &boardCopy);
+    bool isCheck = newPiece->inCheck(currPlayer, &boardCopy);
     if (isCheck == true) {
         return false;
     } else {
