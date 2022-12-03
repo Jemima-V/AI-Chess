@@ -44,7 +44,7 @@ Board::Board(const Board &other): Board{}{
         for(int j = 0; j < 8; j++){
 
             //make sure we dont call makeCopy() on an empty position
-            if(currBoard[i][j] != nullptr){
+            if(other.currBoard[i][j] != nullptr){
                 currBoard[i][j] = other.currBoard[i][j]->makeCopy();
             } else {
                 currBoard[i][j] = nullptr;
@@ -499,13 +499,12 @@ void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
     //check if new position is already occuppied (if the move will cause a capture)
     //capturing move
     if(currBoard[posNew.file][posNew.rank] != nullptr){
-        //ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE THAT IS BEING CAPTURED??
         delete currBoard[posNew.file][posNew.rank];
     }
 
     currBoard[posNew.file][posNew.rank] = p;
 
-    //AGAIN ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE BEFORE SETTING TO NULL??
+    //delete currBoard[posOld.file][posOld.rank];
     currBoard[posOld.file][posOld.rank] = nullptr;
 }
 

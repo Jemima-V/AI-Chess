@@ -66,12 +66,6 @@ class Board: public Subject{
   
   void removePiece(Position pos);
 
-  /*
-  void Board();
-  void Display();
-
-  */
-
   void render();
 
   bool inBounds(Position pos);
