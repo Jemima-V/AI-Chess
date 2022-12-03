@@ -65,5 +65,20 @@ Bishop* Bishop::makeCopy() const {
 // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
 std::vector<Position> Bishop::moveGenerator(Position loc, Board* board) const {
     std::vector<Position> moveList;
+    //creates a new location for the bishop
+    for (int i = 0; i <= 7; ++i) {
+        for (int j = 0; j <= 7; ++j) {
+            //new location that the bishop is being moved to 
+            Position newLoc{i, j};
+            if (((loc.rank != newLoc.rank) && (loc.file != newLoc.file)) || 
+                ((loc.rank != newLoc.rank) && (loc.file == newLoc.file)) ||
+                ((loc.rank == newLoc.rank) && (loc.file != newLoc.file))) {
+                    bool isValid = validMoveFinal(loc, newLoc, board);
+                    if (isValid == true) {
+                        moveList.push_back(newLoc);
+                    }
+                }
+        }
+    }
     return moveList;
 }
