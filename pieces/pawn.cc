@@ -109,6 +109,12 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
 bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
+    if (currPiece->inBounds(start) == false) {
+        return false;
+    }
+    if (currPiece->inBounds(end) == false) {
+        return false;
+    }
     // validMove == true: no other piece should be in the way is already checked in here
     if (currPiece->validMove(start, end, board) == false) {
         return false;
