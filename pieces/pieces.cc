@@ -291,10 +291,10 @@ bool Pieces::inCheck(int owner, Board* board) const {
         }
     }
     // caseL for knights: true if an opponent knight is there and can kill us and false otherwise
-    //bool knightCheck = board->checkL(KingLoc);
-    //if (knightCheck == true) {
-       // return false;
-    //}
+    bool knightCheck = board->checkL(KingLoc);
+    if (knightCheck == true) {
+       return false;
+    }
     return true;
 }
 
