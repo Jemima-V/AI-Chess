@@ -630,17 +630,33 @@ bool Board::checkL(Position start){
 
 //ASK KRITI HOW THESE POINTERS ARE GONNA GET DELETED??
 vector<Pieces*> Board::getPieces(int owner){
-    vector<Pieces*> pieces;
+    vector<Pieces*> curPieces;
     for(int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
-            if(currBoard[i][j]->getOwner() == owner){
+            if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() == owner){
                 //does this create copies or make new ones????
-                pieces.emplace_back(currBoard[i][j]);
+                curPieces.emplace_back(currBoard[i][j]);
             }
         }
     }
 
-    return pieces;
+    return curPieces;
 }
+
+/*
+vector<Pieces> Board::getPieces(int owner){
+    vector<Pieces> curPieces;
+    for(int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if(currBoard[i][j] != nullptr && currBoard[i][j]->getOwner() == owner){
+                //does this create copies or make new ones????
+                curPieces.push_back(*currBoard[i][j]);
+            }
+        }
+    }
+
+    return curPieces;
+}*/
+
 
 
