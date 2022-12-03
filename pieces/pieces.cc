@@ -48,6 +48,14 @@ bool Pieces::samePieceCheck(Position start, Position end, Board* board) const {
     }
 }
 
+bool Pieces::inBounds(Position pos) {
+    if(pos.file > 7 || pos.file < 0 || pos.rank > 7 || pos.rank < 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 // checks if castling is allowed for the King
 bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     // the start and end for the king must be a castling move
@@ -287,9 +295,7 @@ bool Pieces::inCheck(int owner, Board* board) const {
 // false if this move is invalid and the king can go in check
 // true if the move is valid and the king can't go in check
 bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
-    // cout << "copy" << endl; //take out
     Board boardCopy = *board; // copy ctor for the board
-    cout << "after copy" << endl; //take out
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
@@ -314,23 +320,18 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
     // stimulate the move for the currPiece on the boardCopy
     boardCopy->makeMove(currPiece, start, end);
     if (currPlayer == 1) {
-        cout << "end 1 start" << endl; 
         // get location of the opponent's king
         Position opponentKingLoc = board->getBlackKing(); // white's opponent is black
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        cout << "goes to vmf" << endl;
         bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
-        cout << "check end 1" << endl; 
         return potentialKill;
     } else { // currPlayer = 2
-        cout << "end 2 start" << endl; 
         // get location of the opponent's king
         Position opponentKingLoc = board->getWhiteKing();
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
         bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
-        cout << "check end 2" << endl; 
         return potentialKill;
     }
 }
@@ -339,7 +340,6 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
 bool Pieces::getInCheck() const {}
 
 // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
-//           -----> check for out of bounds position !!!!!!
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
     // get what piece is at our current location
     Pieces* currPiece = board->pieceAt(start);
@@ -353,22 +353,46 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     Pieces* oppKing = board->pieceAt(oppKingLoc);
     if (oppKing->getInCheck() == true) { // check if the opponent king is in check
         // return true if the opponent king has no more valid moves
+        bool upCol = false;
+        bool downCol = false;
+        bool leftRow = false;
+        bool rightRow = false;
+        bool leftUpDiag = false;
+        bool leftDownDiag = false;
+        bool rightUpDiag = false;
+        bool rightDownDiag = false;
         Position up{oppKingLoc.file, oppKingLoc.rank + 1};
-        bool upCol = oppKing->validMoveFinal(oppKingLoc, up, board);
+        if (currPiece->inBounds(up) == true) {
+            upCol = oppKing->validMoveFinal(oppKingLoc, up, board);
+        }
         Position down{oppKingLoc.file, oppKingLoc.rank - 1};
-        bool downCol = oppKing->validMoveFinal(oppKingLoc, down, board);
+        if (currPiece->inBounds(up) == true) {
+            downCol = oppKing->validMoveFinal(oppKingLoc, down, board);
+        }
         Position left{oppKingLoc.file - 1, oppKingLoc.rank};
-        bool leftRow = oppKing->validMoveFinal(oppKingLoc, left, board);
+        if (currPiece->inBounds(up) == true) {
+            leftRow = oppKing->validMoveFinal(oppKingLoc, left, board);
+        }
         Position right{oppKingLoc.file + 1, oppKingLoc.rank};
-        bool rightRow = oppKing->validMoveFinal(oppKingLoc, right, board);
+        if (currPiece->inBounds(up) == true) {
+            rightRow = oppKing->validMoveFinal(oppKingLoc, right, board);
+        }
         Position leftup{oppKingLoc.file - 1, oppKingLoc.rank + 1};
-        bool leftUpDiag = oppKing->validMoveFinal(oppKingLoc, leftup, board);
+        if (currPiece->inBounds(up) == true) {
+            leftUpDiag = oppKing->validMoveFinal(oppKingLoc, leftup, board);
+        }
         Position leftdown{oppKingLoc.file - 1, oppKingLoc.rank - 1};
-        bool leftDownDiag = oppKing->validMoveFinal(oppKingLoc, leftdown, board);
+        if (currPiece->inBounds(up) == true) {
+            leftDownDiag = oppKing->validMoveFinal(oppKingLoc, leftdown, board);
+        }
         Position rightup{oppKingLoc.file + 1, oppKingLoc.rank + 1};
-        bool rightUpDiag = oppKing->validMoveFinal(oppKingLoc, rightup, board);
+        if (currPiece->inBounds(up) == true) {
+            rightUpDiag = oppKing->validMoveFinal(oppKingLoc, rightup, board);
+        }
         Position rightdown{oppKingLoc.file + 1, oppKingLoc.rank - 1};
-        bool rightDownDiag = oppKing->validMoveFinal(oppKingLoc, rightdown, board);
+        if (currPiece->inBounds(up) == true) {
+            rightDownDiag = oppKing->validMoveFinal(oppKingLoc, rightdown, board);
+        }
         if (upCol == false && downCol == false && leftRow == false && rightRow == false && leftUpDiag == false
                 && leftDownDiag == false && rightUpDiag == false && rightDownDiag == false) {
             return true;

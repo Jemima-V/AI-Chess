@@ -39,6 +39,7 @@ class Pieces {
   // set whether the specific piece is captured or not
   void setCaptured(bool newCapture);
 
+  // for the board copy ctor
   virtual Pieces* makeCopy() const = 0;
 
   // checks if a move is base valid (i.e the piece is allowed to move from start to end), 
@@ -100,6 +101,8 @@ class Pieces {
 
   // check whether the pawn did a valid capture en passant -> TO IMPLEMENT STILLL!!!!
   bool validCaptureEnPassant(Position start, Position end, Board* board) const;
+
+  bool inBounds(Position pos);
 
 };
 #endif
