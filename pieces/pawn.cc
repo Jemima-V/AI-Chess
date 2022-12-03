@@ -12,6 +12,21 @@ void Pawn::setFirstMove(bool newMove) {
     firstMove = newMove;
 }
 
+// return whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
+bool Pawn::getFirstMove() const {
+    return firstMove;
+}
+
+// return whether this pawn can get captured via en passant
+bool Pawn::getSetupCaptureEnPassant() const {
+    return setupCaptureEnPassant;
+}
+
+// set whether this pawn can get captured via en passant
+void Pawn::setSetupCaptureEnPassant(bool newCheck) {
+    setupCaptureEnPassant = newCheck;
+}
+
 // checks if there is a piece of the other player diagonal to the pawn
 bool Pawn::potentialCapture(Position start, Position end, Board* board) const {
     Pieces* pieceToKill = board->pieceAt(end);

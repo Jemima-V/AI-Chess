@@ -84,6 +84,9 @@ class Pieces {
   // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
   virtual void setFirstMove(bool newMove);
 
+  // return whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
+  virtual bool getFirstMove() const;
+
   // checks if there is a piece of the other player diagonal to the pawn
   virtual bool potentialCapture(Position start, Position end, Board* board) const;
 
@@ -99,7 +102,22 @@ class Pieces {
   // set whether the king is in check
   virtual void setInCheck(bool newCheck);
 
-  // check whether the pawn did a valid capture en passant -> TO IMPLEMENT STILLL!!!!
+  // return whether this pawn can get captured via en passant
+  virtual bool getSetupCaptureEnPassant() const;
+
+  // set whether this pawn can get captured via en passant
+  virtual void setSetupCaptureEnPassant(bool newCheck);
+
+  // helper for pawnCheckL
+  bool isOppPawnAt(Position tempPos, int curOwner, Board* board) const;
+
+  // helper for potentialSetupCaptureEnPassant
+  bool pawnCheckL(int owner, Position start, Board* board) const;
+
+  // check whether there is a setup for pawn enpassant
+  bool potentialSetupCaptureEnPassant(Position start, Position end, Board* board) const;
+
+  // check whether the pawn did a valid capture en passant
   bool validCaptureEnPassant(Position start, Position end, Board* board) const;
 
   bool checkBounds(Position pos);

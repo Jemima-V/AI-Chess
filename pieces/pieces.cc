@@ -358,7 +358,13 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     }
     Pieces* oppKing = board->pieceAt(oppKingLoc);
     if (oppKing->getInCheck() == true) { // check if the opponent king is in check
-        // return true if the opponent king has no more valid moves
+        // see if the check is blocked by another piece that can get in the way of our kill
+
+        // to call moveGenerator here
+
+        // see if our piece can get captured instead
+
+        // return true if the opponent king has no more valid moves, i.e king can't escape
         bool upCol = false;
         bool downCol = false;
         bool leftRow = false;
@@ -402,10 +408,12 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
         if (upCol == false && downCol == false && leftRow == false && rightRow == false && leftUpDiag == false
                 && leftDownDiag == false && rightUpDiag == false && rightDownDiag == false) {
             return true;
+        } else {
+            return false;
         }
+    } else {
         return false;
     }
-    return false;
 }
 
 // return whether the king, rook has moved
@@ -416,6 +424,9 @@ void Pieces::setMoved(bool newMoved) {}
 
 // set whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
 void Pieces::setFirstMove(bool newMove) {}
+
+// return whether it is the pawn's first move: controller responsible to set this to false after the pawn's first move
+bool Pieces::getFirstMove() const {}
 
 // checks if there is a piece of the other player diagonal to the pawn
 bool Pieces::potentialCapture(Position start, Position end, Board* board) const {}
@@ -428,6 +439,12 @@ void Pieces::setCastlingDone(bool newCastling) {}
 
 // set whether the king is in check
 void Pieces::setInCheck(bool newCheck) {}
+
+// return whether this pawn can get captured via en passant
+bool Pieces::getSetupCaptureEnPassant() const {}
+
+// set whether this pawn can get captured via en passant
+void Pieces::setSetupCaptureEnPassant(bool newCheck) {}
 
 // check if king, at loc, puts itself in check
 // true if it puts itself in check and false if it doesn't
@@ -449,8 +466,227 @@ bool Pieces::kingSelfCheck(Position start, Position end, Board* board) const {
     }
 }
 
-// check whether the pawn did a valid capture en passant -> TO IMPLEMENT STILLL!!!!
+bool Pieces::isOppPawnAt(Position tempPos, int curOwner, Board* board) const {
+    //check if the case is in bounds and that there is a piece that is of the opponent
+    Pieces* potentialPiece = board->pieceAt(tempPos);
+    if (board->pieceAt(tempPos) != nullptr) {
+        if (potentialPiece->checkBounds(tempPos) && potentialPiece->getOwner() != curOwner) {
+            //check if that piece is a pawn
+            if(board->pieceAt(tempPos)->getId() == 'p' || board->pieceAt(tempPos)->getId() == 'P'){
+                return true;
+            }
+        }
+    } else {
+        return false;
+    }
+}
+
+bool Pieces::pawnCheckL(int owner, Position start, Board* board) const {
+    Position tempPos{-1,-1};
+    if (owner == 1) {
+        // check right
+        tempPos.file = start.file + 1;
+        tempPos.rank = start.rank + 2;
+        if (isOppPawnAt(tempPos, owner, board)) {
+            return true;
+        }
+        // check left
+        tempPos.file = start.file - 1;
+        tempPos.rank = start.rank + 2;
+        if (isOppPawnAt(tempPos, owner, board)) {
+            return true;
+        }
+        return false;
+    } else {
+        // check right
+        tempPos.file = start.file + 1;
+        tempPos.rank = start.rank - 2;
+        if (isOppPawnAt(tempPos, owner, board)) {
+            return true;
+        }
+        // check left
+        tempPos.file = start.file - 1;
+        tempPos.rank = start.rank - 2;
+        if (isOppPawnAt(tempPos, owner, board)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+// check whether there is a setup for pawn enpassant
+bool Pieces::potentialSetupCaptureEnPassant(Position start, Position end, Board* board) const {
+    Pieces* currPiece = board->pieceAt(start);
+    char currId = currPiece->getId();
+    int currPlayer = currPiece->getOwner();
+    // check whether the piece is a pawn and it is the first move for the pawn
+    if ((currId == 'p' || currId == 'P') && currPiece->getFirstMove() == false) {
+        // check whether there is an opponent pawn to the checkL left or right of this pawn
+        bool isCapture = pawnCheckL(currPlayer, start, board); 
+        if (isCapture == true) {
+            // decides to move 2 squares forward to avoid capture
+            if (currPlayer == 1) {
+                // rank changes by 2, file must stay the same
+                bool checkMove = false;
+                int rankChange = end.rank - start.rank;
+                if ((start.file == end.file) && (rankChange == 2)) {
+                    // check that it doesn't jump over other pieces
+                    Position midCheck{start.file, start.rank + 1};
+                    if (currPiece->checkBounds(midCheck) == false) {
+                        checkMove = false;
+                    }
+                    Pieces* middleCheck = board->pieceAt(midCheck);
+                    if (middleCheck != nullptr) {
+                        checkMove = false;
+                    } else {
+                        checkMove = true;
+                    }
+                }
+                if (checkMove == true) {
+                    //setSetupCaptureEnPassant(bool newCheck) to true and return true
+                    currPiece->setSetupCaptureEnPassant(true);
+                    return true;
+                } else {
+                    currPiece->setSetupCaptureEnPassant(false);
+                    return false;
+                }
+            } else { // owner == 2
+                // rank changes by -2, file must stay the same
+                bool checkMove = false;
+                int rankChange = end.rank - start.rank;
+                if ((start.file == end.file) && (rankChange == -2)) {
+                    // check that it doesn't jump over other pieces
+                    Position midCheck{start.file, start.rank - 1};
+                    if (currPiece->checkBounds(midCheck) == false) {
+                        checkMove = false;
+                    }
+                    Pieces* middleCheck = board->pieceAt(midCheck);
+                    if (middleCheck != nullptr) {
+                        checkMove = false;
+                    } else {
+                        checkMove = true;
+                    }
+                }
+                if (checkMove == true) {
+                    //setSetupCaptureEnPassant(bool newCheck) to true and return true
+                    currPiece->setSetupCaptureEnPassant(true);
+                    return true;
+                } else {
+                    currPiece->setSetupCaptureEnPassant(false);
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+// check whether the pawn did a valid capture en passant
 bool Pieces::validCaptureEnPassant(Position start, Position end, Board* board) const {
+    // invariant: this method will only be called on a pawn at the start position
+    Pieces* currPiece = board->pieceAt(start);
+    int currPlayer = currPiece->getOwner();
+    if (currPlayer == 1) {
+        // make sure the pawn is trying to move diagonally
+        // can be the left diagonal or the right diagonal
+        // rank must be +1, file must be one of +1 or -1
+        int rankChange = end.rank - start.rank;
+        int fileChange = end.file - start.file;
+        // make sure there is an opponent's pawn right next to this piece in the direction we're about to move 
+        // 1. get that direction
+        if (rankChange == 1 && fileChange == 1) {
+            // 2. make sure an opponent's pawn is in that direction
+            Position posCheck{start.file + 1, start.rank};
+            // make sure posCheck is in bounds
+            if (currPiece->checkBounds(posCheck)) {
+                // get the piece at posCheck and check if it is an opponent's pawn
+                Pieces* potentialPawn = board->pieceAt(posCheck);
+                if (potentialPawn != nullptr && potentialPawn->getId() == 'p') {
+                    // make sure its the move right after the potentialSetupCaptureEnPassant
+                    //   i.e setupCaptureEnPassant == true for the pawn we are about to kill
+                    if (potentialPawn->getSetupCaptureEnPassant() == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else if (rankChange == 1 && fileChange == -1) {
+            // 2. make sure an opponent's pawn is in that direction
+            Position posCheck{start.file - 1, start.rank};
+            // make sure posCheck is in bounds
+            if (currPiece->checkBounds(posCheck)) {
+                // get the piece at posCheck and check if it is an opponent's pawn
+                Pieces* potentialPawn = board->pieceAt(posCheck);
+                if (potentialPawn != nullptr && potentialPawn->getId() == 'p') {
+                    // make sure its the move right after the potentialSetupCaptureEnPassant
+                    //   i.e setupCaptureEnPassant == true for the pawn we are about to kill
+                    if (potentialPawn->getSetupCaptureEnPassant() == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    } else {
+        // can be the left diagonal or the right diagonal
+        // rank must be -1, file must be one of +1 or -1
+        int rankChange = end.rank - start.rank;
+        int fileChange = end.file - start.file;
+        // make sure there is an opponent's pawn right next to this piece in the direction we're about to move 
+        // 1. get that direction
+        if (rankChange == -1 && fileChange == 1) {
+            // 2. make sure an opponent's pawn is in that direction
+            Position posCheck{start.file + 1, start.rank};
+            // make sure posCheck is in bounds
+            if (currPiece->checkBounds(posCheck)) {
+                // get the piece at posCheck and check if it is an opponent's pawn
+                Pieces* potentialPawn = board->pieceAt(posCheck);
+                if (potentialPawn != nullptr && potentialPawn->getId() == 'P') {
+                    // make sure its the move right after the potentialSetupCaptureEnPassant
+                    //   i.e setupCaptureEnPassant == true for the pawn we are about to kill
+                    if (potentialPawn->getSetupCaptureEnPassant() == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else if (rankChange == -1 && fileChange == -1) {
+            // 2. make sure an opponent's pawn is in that direction
+            Position posCheck{start.file - 1, start.rank};
+            // make sure posCheck is in bounds
+            if (currPiece->checkBounds(posCheck)) {
+                // get the piece at posCheck and check if it is an opponent's pawn
+                Pieces* potentialPawn = board->pieceAt(posCheck);
+                if (potentialPawn != nullptr && potentialPawn->getId() == 'P') {
+                    // make sure its the move right after the potentialSetupCaptureEnPassant
+                    //   i.e setupCaptureEnPassant == true for the pawn we are about to kill
+                    if (potentialPawn->getSetupCaptureEnPassant() == true) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
     return false;
 }
 
