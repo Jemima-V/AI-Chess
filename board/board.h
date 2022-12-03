@@ -75,6 +75,7 @@ class Board: public Subject{
 
   bool checkL(Position start);
   
+  vector<Pieces*> getPieces(int owner);
 
 };
 

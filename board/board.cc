@@ -505,7 +505,8 @@ void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
     currBoard[posNew.file][posNew.rank] = p;
 
     //delete currBoard[posOld.file][posOld.rank];
-    currBoard[posOld.file][posOld.rank] = nullptr;
+    //currBoard[posOld.file][posOld.rank] = nullptr;
+    removePiece(posOld);
 }
 
 void Board::place(Pieces* addPiece, Position pos){
@@ -626,4 +627,20 @@ bool Board::checkL(Position start){
 
     return false;
 }
+
+//ASK KRITI HOW THESE POINTERS ARE GONNA GET DELETED??
+vector<Pieces*> Board::getPieces(int owner){
+    vector<Pieces*> pieces;
+    for(int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if(currBoard[i][j]->getOwner() == owner){
+                //does this create copies or make new ones????
+                pieces.emplace_back(currBoard[i][j]);
+            }
+        }
+    }
+
+    return pieces;
+}
+
 
