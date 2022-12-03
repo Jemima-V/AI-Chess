@@ -32,7 +32,11 @@ Board:: Board(){
 
 //Board copy constructor
 //copy position fields in MIL
-Board::Board(const Board &other): Board{}, whiteKing{other.whiteKing}, blackKing{other.blackKing}{
+Board::Board(const Board &other): Board{}{
+    whiteKing.file = other.whiteKing.file;
+    whiteKing.rank = other.whiteKing.rank;
+    blackKing.file = other.blackKing.file;
+    blackKing.rank = other.blackKing.rank;
     
     //loop through 2D vector and call pieces copy ctor
     for (int i = 0; i < 8; i++){
@@ -51,7 +55,7 @@ Board::Board(const Board &other): Board{}, whiteKing{other.whiteKing}, blackKing
 }
 
   //dtor 
-Board:: ~Board(){/*
+Board:: ~Board(){
     //iterate over the 2D vector and delete each piece pointer it contains
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
@@ -519,6 +523,7 @@ void Board::place(Pieces* addPiece, Position pos){
   
 void Board::removePiece(Position pos){
     //AGAIN ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE BEFORE SETTING TO NULL??
+    delete currBoard[pos.file][pos.rank] = nullptr;
     currBoard[pos.file][pos.rank] = nullptr;
 }
 
