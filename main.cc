@@ -25,17 +25,6 @@
 
 using namespace std;
 
-//creates random positions 
-Position randPos() {
-    int max = 7;
-    int min = 0;
-    int range = (max - min) + 1;
-    int sFile = std::rand() % range + min;
-    int sRank = std::rand() % range + min;
-    Position p{sFile, sRank};
-    return p;
-}
-
 //creating a piece 
 Pieces* createPiece(char piece) {
     if (piece == 'P') {
@@ -168,7 +157,7 @@ int main() {
     Game *g = nullptr;
 
     Observer *t = nullptr;
-    Observer *gr = nullptr;
+    //Observer *gr = nullptr;
 
     Player *w = nullptr;
     Player *b = nullptr;
@@ -207,9 +196,9 @@ int main() {
                 //creates a new game 
                 g = new Game(gameboard, w, b, firstTurn); //white moves first
                 t = new addText{gameboard}; //text observer
-                gr = new addGraphics{gameboard}; //graphics observer
+                //gr = new addGraphics{gameboard}; //graphics observer
                 stack.push_back(t);
-                stack.push_back(gr);
+                //stack.push_back(gr);
                 gameboard->render(); //displays text and graphics observers 
                 if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
                     ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
@@ -217,40 +206,31 @@ int main() {
                         //cout << p2 << endl;
                         cout << "comes to computer computer case" << endl;
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
-                            Position s1 = randPos();
-                            Position s2 = randPos();
-                            cout << s1.file << "   ";
-                            cout << s1.rank << endl;
-                            cout << s2.file << "   ";
-                            cout << s2.rank << endl;
-                            if ((((s1.rank != s2.rank) && (s1.file != s2.file)) || 
-                                 ((s1.rank != s2.rank) && (s1.file == s2.file)) ||
-                                 ((s1.rank == s2.rank) && (s1.file != s2.file))) && 
-                                (gameboard->pieceAt(s1) != nullptr)) {
-                                Pieces *p = gameboard->pieceAt(s1);
-                                if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
-                                    w->playerMove(s1, s2, gameboard, p, "white");
-                                    if (w->hasMoved() == false) {
-                                        g->setTurn("white");
-                                    }
-                                    else {
-                                        g->setTurn("black");
-                                        b->setMoved(false);
-                                    }
+                            cout << "comes in while" << endl;
+                            Position s1;
+                            Position s2;
+                            Pieces *p = nullptr;
+                            if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
+                                cout << "before playerMove" << endl;
+                                w->playerMove(s1, s2, gameboard, p, "white");
+                                cout << "after playerMove" << endl;
+                                if (w->hasMoved() == false) {
+                                    g->setTurn("white");
                                 }
-                                else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
-                                    b->playerMove(s1, s2, gameboard, p, "black");
-                                    if (b->hasMoved() == false) {
-                                        g->setTurn("black");
-                                    }
-                                    else {
-                                        g->setTurn("white");
-                                        w->setMoved(false);
-                                    }
+                                else {
+                                    g->setTurn("black");
+                                    b->setMoved(false);
                                 }
-                            } 
-                            else {
-                                continue; 
+                            }
+                            else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
+                                b->playerMove(s1, s2, gameboard, p, "black");
+                                if (b->hasMoved() == false) {
+                                    g->setTurn("black");
+                                }
+                                else {
+                                    g->setTurn("white");
+                                    w->setMoved(false);
+                                }
                             }
                         }
                 }

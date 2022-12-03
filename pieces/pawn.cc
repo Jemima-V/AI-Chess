@@ -160,6 +160,11 @@ std::vector<Position> Pawn::moveGenerator(Position loc, Board* board) const {
                 ((loc.rank == newLoc.rank) && (loc.file != newLoc.file))) {
                     bool isValid = validMoveFinal(loc, newLoc, board);
                     if (isValid == true) {
+                        cout << "pawn.cc" << endl;
+                        cout << loc.file << endl;
+                        cout << loc.rank << endl;
+                        cout << newLoc.file << endl;
+                        cout << newLoc.rank << endl;
                         moveList.push_back(newLoc);
                     }
                 }

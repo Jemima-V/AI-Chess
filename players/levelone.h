@@ -33,8 +33,8 @@ class LevelOne : public Player {
         void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) override;
         //sets if the player has moved
         void setMoved(bool checkMoved) override;
-        //creates random positions 
-        //Position randPos();
+        //creates a vector of all the pieces on the board for the specific player
+        std::vector<Position> posOfPiecesOnBoard(Board* board, string turn) const;
         
         //destructor
         ~LevelOne();
