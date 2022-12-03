@@ -395,41 +395,68 @@ bool checkKingEscape(Pieces* currPiece, Pieces* oppKing, Position oppKingLoc, Bo
     }
 }
 
-// checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
+// checks if the move for the player's piece places the Opponent's King in checkmate
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
     // get what piece is at our current location
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
+    int oppPlayer = 0;
     Position oppKingLoc{0,0};
     if (currPlayer == 1) {
         oppKingLoc = board->getBlackKing();
+        oppPlayer = 2;
     } else { //currPlayer is 2
         oppKingLoc = board->getWhiteKing();
+        oppPlayer = 1;
     }
     Pieces* oppKing = board->pieceAt(oppKingLoc);
     // check if the opponent king is in check after this move is made
-    // only consider if this piece is going to put the king in check and not if its alr in check
-
-    if (oppKing->getInCheck() == true) { // check if the opponent king is in check
+    // (only consider if this piece is going to put the king in check and not if its alr in check)
+    Board boardCopy = *board; // invoke copy ctor for the board
+    // we already know that the move is valid from the pieces perspective, 
+    //   we just need to see if the king goes in check once that move is made
+    // stimulate the move for the currPiece on the boardCopy
+    Pieces* newPiece = boardCopy.pieceAt(start);
+    int newPlayer = newPiece->getOwner();
+    boardCopy.makeMove(newPiece, start, end);
+    // call inCheck to see if this puts opp's king in check and return this value
+    bool isCheck = newPiece->inCheck(oppPlayer, &boardCopy);
+    if (isCheck == false) { // checks if the opponent king is in check
         // return true if the opponent king has no more valid moves, i.e king can't escape
         bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
         // see if our piece can get captured instead: validMove to kill from any of the opp pieces to our piece
-        // vector<Position> oppPositions = board->getPiecePositions(currPlayer);
+        vector<Position> oppPositions = board->getPiecePositions(newPlayer);
         // client's job to delete the created observers
         bool replaceCapture = false;
-        /*
         for (auto it : oppPositions) {
             Pieces* oppPiece = board->pieceAt(it);
-            if (oppPiece->validMoveFinal(it, end, board) == true) {
+            if (oppPiece->validMoveFinal(it, end, &boardCopy) == true) {
                 replaceCapture = true;
             }
-        }*/
+        }
         // see if the check is blocked by another piece that can get in the way of our kill
-        //      to call moveGenerator here: 
-        // go thru all the oppPieces
-        //          go thru all moveGenerator since its virtual
-        //              see if it stops the check - i.e myKingInCheck is false
+        //   call moveGenerator here: 
+        //   go thru all the oppPieces and generate moves for them
+        //     go thru all these moves and see if, when these moves are completed, inCheck for the king is now false
         bool possibleBlock = false;
+        for (auto it : oppPositions) {
+            Pieces* oppPiece = board->pieceAt(it);
+            vector<Position> possibleMoves = oppPiece->moveGenerator(it, &boardCopy);
+            for (auto it2 : possibleMoves) {
+                // new board for when these moves are stimulated
+                Board boardCopy2 = *board; // invoke copy ctor for the board
+                // we already know that the move is valid from the pieces perspective, 
+                //   we just need to see if the king goes in check once that move is made
+                // stimulate the move for the currPiece on the boardCopy
+                Pieces* newPiece2 = boardCopy2.pieceAt(it);
+                boardCopy.makeMove(newPiece2, it, it2);
+                // call inCheck to see if this puts our king out of check and return this value
+                bool isCheck2 = newPiece2->inCheck(oppPlayer, &boardCopy2);
+                if (isCheck2 == true) {
+                    possibleBlock = true;
+                }
+            }
+        }
         if (checkKingMovement == true && replaceCapture == false && possibleBlock == false) {
             return true;
         } else {

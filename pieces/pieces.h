@@ -71,7 +71,7 @@ class Pieces {
   // checks if the move for the player's piece places the Opponent's King in check
   bool opponentKingInCheck(Position start, Position end, Board* board) const;
 
-  // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
+  // checks if the move for the player's piece places the Opponent's King in checkmate
   bool opponentKingCheckmate(Position start, Position end, Board* board) const;
 
   // checks if the move for the player's piece places the Opponent's King in stalemate -> TO IMPLEMENT STILLL!!!!
