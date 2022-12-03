@@ -302,11 +302,13 @@ bool Pieces::inCheck(int owner, Board* board) const {
 // false if this move is invalid and the king can go in check
 // true if the move is valid and the king can't go in check
 bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
+    cout << "making copy" << endl;
     Board boardCopy = *board; // copy ctor for the board
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* currPiece = board->pieceAt(start);
+    cout << currPiece->getId() << endl;
     int currPlayer = currPiece->getOwner();
     boardCopy.makeMove(currPiece, start, end);
     // call inCheck to see if this puts our king in check and return this value
@@ -319,24 +321,30 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
     // get what piece is at our current location
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
-    Board* boardCopy = board; // copy ctor for the board
+    cout << "making copy 2" << endl;
+    Board boardCopy = *board; // copy ctor for the board
     // make the move for the currPiece on the boardCopy
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
-    boardCopy->makeMove(currPiece, start, end);
+    cout << "on board copy" << endl;
+    Pieces* newPiece = boardCopy.pieceAt(start);
+    boardCopy.makeMove(newPiece, start, end);
+    cout << "on board copy after move" << endl;
+    Pieces* afterPiece = boardCopy.pieceAt(end);
+    cout << afterPiece->getId() << endl;
     if (currPlayer == 1) {
         // get location of the opponent's king
         Position opponentKingLoc = board->getBlackKing(); // white's opponent is black
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, boardCopy);
+        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
         return potentialKill;
     } else { // currPlayer = 2
         // get location of the opponent's king
         Position opponentKingLoc = board->getWhiteKing();
         // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, boardCopy);
+        bool potentialKill = currPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
         // if validMoveFinal returns true, then the opponent king is now in check, else return false
         return potentialKill;
     }
@@ -432,16 +440,18 @@ void Pieces::setInCheck(bool newCheck) {}
 // check if king, at loc, puts itself in check
 // true if it puts itself in check and false if it doesn't
 bool Pieces::kingSelfCheck(Position start, Position end, Board* board) const {
-    Board* boardCopy = board; // copy ctor for the board
+    cout << "making copy 3" << endl;
+    Board boardCopy = *board; // copy ctor for the board
     // make the move for the currPiece on the boardCopy
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
+    cout << currPiece->getId() << endl;
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
-    boardCopy->makeMove(currPiece, start, end);
+    boardCopy.makeMove(currPiece, start, end);
     // call inCheck to see if this puts our king in check and return the opposite value
-    bool isCheck = currPiece->inCheck(currPlayer, boardCopy);
+    bool isCheck = currPiece->inCheck(currPlayer, &boardCopy);
     if (isCheck == true) {
         return false;
     } else {
