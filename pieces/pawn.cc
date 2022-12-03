@@ -34,7 +34,7 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
             } else if ((start.file == end.file) && (rankChange == 2)) {
                 // check that it doesn't jump over other pieces
                 Position midCheck{start.file, start.rank + 1};
-                if (currPiece->inBounds(midCheck) == false) {
+                if (currPiece->checkBounds(midCheck) == false) {
                     return false;
                 }
                 Pieces* middleCheck = board->pieceAt(midCheck);
@@ -72,7 +72,7 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
             } else if ((start.file == end.file) && (rankChange == -2)) {
                 // check that it doesn't jump over other pieces
                 Position midCheck{start.file, start.rank - 1};
-                if (currPiece->inBounds(midCheck) == false) {
+                if (currPiece->checkBounds(midCheck) == false) {
                     return false;
                 }
                 Pieces* middleCheck = board->pieceAt(midCheck);
@@ -109,10 +109,10 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
 bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
-    if (currPiece->inBounds(start) == false) {
+    if (currPiece->checkBounds(start) == false) {
         return false;
     }
-    if (currPiece->inBounds(end) == false) {
+    if (currPiece->checkBounds(end) == false) {
         return false;
     }
     // validMove == true: no other piece should be in the way is already checked in here

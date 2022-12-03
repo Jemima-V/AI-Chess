@@ -48,7 +48,7 @@ bool Pieces::samePieceCheck(Position start, Position end, Board* board) const {
     }
 }
 
-bool Pieces::inBounds(Position pos) {
+bool Pieces::checkBounds(Position pos) {
     if(pos.file > 7 || pos.file < 0 || pos.rank > 7 || pos.rank < 0) {
         return false;
     } else {
@@ -87,7 +87,7 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     int file2 = end.file;
     bool moveLeft = false;
     if (file1 > file2) {
-        moveLeft == true;
+        moveLeft = true;
     }
     // king and rook must not have previously been moved in the game
     // king: we know now that the king is the start piece
@@ -113,6 +113,9 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     } else { // moveLeft == false and currPlayer == 2
         rook = board->pieceAt(rookPos4);
         kingRook = 4;
+    }
+    if (rook == nullptr) {
+        return false;
     }
     if (rook->getMoved() != false) {
         return false;
@@ -155,8 +158,8 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     return true;
 }
 
-// checks if the king is in check on the board -> TO IMPLEMENT STILLL!!!!
-// true if king is not in check and false otherwise
+// checks if the king is in check on the board
+// true if king is not in check and false if the king is in check
 bool Pieces::inCheck(int owner, Board* board) const {
     // Pseudocode:
     // check all 8 directions for opponent players
@@ -287,7 +290,11 @@ bool Pieces::inCheck(int owner, Board* board) const {
             return false;
         }
     }
-    // ADD caseL HERE ONCE ITS IMPLEMENTED IN THE BOARD CLASS
+    // caseL for knights: true if an opponent knight is there and can kill us and false otherwise
+    //bool knightCheck = board->checkL(KingLoc);
+    //if (knightCheck == true) {
+       // return false;
+    //}
     return true;
 }
 
@@ -309,7 +316,6 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
 
 // checks if the move for the player's piece places the Opponent's King in check
 bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) const {
-    cout << "comes to check" << endl; 
     // get what piece is at our current location
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
@@ -362,35 +368,35 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
         bool rightUpDiag = false;
         bool rightDownDiag = false;
         Position up{oppKingLoc.file, oppKingLoc.rank + 1};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             upCol = oppKing->validMoveFinal(oppKingLoc, up, board);
         }
         Position down{oppKingLoc.file, oppKingLoc.rank - 1};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             downCol = oppKing->validMoveFinal(oppKingLoc, down, board);
         }
         Position left{oppKingLoc.file - 1, oppKingLoc.rank};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             leftRow = oppKing->validMoveFinal(oppKingLoc, left, board);
         }
         Position right{oppKingLoc.file + 1, oppKingLoc.rank};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             rightRow = oppKing->validMoveFinal(oppKingLoc, right, board);
         }
         Position leftup{oppKingLoc.file - 1, oppKingLoc.rank + 1};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             leftUpDiag = oppKing->validMoveFinal(oppKingLoc, leftup, board);
         }
         Position leftdown{oppKingLoc.file - 1, oppKingLoc.rank - 1};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             leftDownDiag = oppKing->validMoveFinal(oppKingLoc, leftdown, board);
         }
         Position rightup{oppKingLoc.file + 1, oppKingLoc.rank + 1};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             rightUpDiag = oppKing->validMoveFinal(oppKingLoc, rightup, board);
         }
         Position rightdown{oppKingLoc.file + 1, oppKingLoc.rank - 1};
-        if (currPiece->inBounds(up) == true) {
+        if (currPiece->checkBounds(up) == true) {
             rightDownDiag = oppKing->validMoveFinal(oppKingLoc, rightdown, board);
         }
         if (upCol == false && downCol == false && leftRow == false && rightRow == false && leftUpDiag == false

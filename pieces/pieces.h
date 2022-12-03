@@ -102,7 +102,7 @@ class Pieces {
   // check whether the pawn did a valid capture en passant -> TO IMPLEMENT STILLL!!!!
   bool validCaptureEnPassant(Position start, Position end, Board* board) const;
 
-  bool inBounds(Position pos);
+  bool checkBounds(Position pos);
 
 };
 #endif

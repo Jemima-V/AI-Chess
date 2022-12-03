@@ -62,10 +62,10 @@ bool King::validMove(Position start, Position end, Board* board) const {
 bool King::validMoveFinal(Position start, Position end, Board* board) const {
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
-    if (currPiece->inBounds(start) == false) {
+    if (currPiece->checkBounds(start) == false) {
         return false;
     }
-    if (currPiece->inBounds(end) == false) {
+    if (currPiece->checkBounds(end) == false) {
         return false;
     }
     // validMove == true
