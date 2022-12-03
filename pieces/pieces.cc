@@ -345,6 +345,56 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
 // return whether the king is in check
 bool Pieces::getInCheck() const {}
 
+// return true if the opponent king has no more valid moves, i.e king can't escape
+bool checkKingEscape(Pieces* currPiece, Pieces* oppKing, Position oppKingLoc, Board* board) {
+    bool upCol = false;
+    bool downCol = false;
+    bool leftRow = false;
+    bool rightRow = false;
+    bool leftUpDiag = false;
+    bool leftDownDiag = false;
+    bool rightUpDiag = false;
+    bool rightDownDiag = false;
+    Position up{oppKingLoc.file, oppKingLoc.rank + 1};
+    if (currPiece->checkBounds(up) == true) {
+        upCol = oppKing->validMoveFinal(oppKingLoc, up, board);
+    }
+    Position down{oppKingLoc.file, oppKingLoc.rank - 1};
+    if (currPiece->checkBounds(up) == true) {
+        downCol = oppKing->validMoveFinal(oppKingLoc, down, board);
+    }
+    Position left{oppKingLoc.file - 1, oppKingLoc.rank};
+    if (currPiece->checkBounds(up) == true) {
+        leftRow = oppKing->validMoveFinal(oppKingLoc, left, board);
+    }
+    Position right{oppKingLoc.file + 1, oppKingLoc.rank};
+    if (currPiece->checkBounds(up) == true) {
+        rightRow = oppKing->validMoveFinal(oppKingLoc, right, board);
+    }
+    Position leftup{oppKingLoc.file - 1, oppKingLoc.rank + 1};
+    if (currPiece->checkBounds(up) == true) {
+        leftUpDiag = oppKing->validMoveFinal(oppKingLoc, leftup, board);
+    }
+    Position leftdown{oppKingLoc.file - 1, oppKingLoc.rank - 1};
+    if (currPiece->checkBounds(up) == true) {
+        leftDownDiag = oppKing->validMoveFinal(oppKingLoc, leftdown, board);
+    }
+    Position rightup{oppKingLoc.file + 1, oppKingLoc.rank + 1};
+    if (currPiece->checkBounds(up) == true) {
+        rightUpDiag = oppKing->validMoveFinal(oppKingLoc, rightup, board);
+    }
+    Position rightdown{oppKingLoc.file + 1, oppKingLoc.rank - 1};
+    if (currPiece->checkBounds(up) == true) {
+        rightDownDiag = oppKing->validMoveFinal(oppKingLoc, rightdown, board);
+    }
+    if (upCol == false && downCol == false && leftRow == false && rightRow == false && leftUpDiag == false
+            && leftDownDiag == false && rightUpDiag == false && rightDownDiag == false) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
     // get what piece is at our current location
@@ -357,56 +407,30 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
         oppKingLoc = board->getWhiteKing();
     }
     Pieces* oppKing = board->pieceAt(oppKingLoc);
+    // check if the opponent king is in check after this move is made
+    // only consider if this piece is going to put the king in check and not if its alr in check
+
     if (oppKing->getInCheck() == true) { // check if the opponent king is in check
-        // see if the check is blocked by another piece that can get in the way of our kill
-
-        // to call moveGenerator here
-
-        // see if our piece can get captured instead
-
         // return true if the opponent king has no more valid moves, i.e king can't escape
-        bool upCol = false;
-        bool downCol = false;
-        bool leftRow = false;
-        bool rightRow = false;
-        bool leftUpDiag = false;
-        bool leftDownDiag = false;
-        bool rightUpDiag = false;
-        bool rightDownDiag = false;
-        Position up{oppKingLoc.file, oppKingLoc.rank + 1};
-        if (currPiece->checkBounds(up) == true) {
-            upCol = oppKing->validMoveFinal(oppKingLoc, up, board);
-        }
-        Position down{oppKingLoc.file, oppKingLoc.rank - 1};
-        if (currPiece->checkBounds(up) == true) {
-            downCol = oppKing->validMoveFinal(oppKingLoc, down, board);
-        }
-        Position left{oppKingLoc.file - 1, oppKingLoc.rank};
-        if (currPiece->checkBounds(up) == true) {
-            leftRow = oppKing->validMoveFinal(oppKingLoc, left, board);
-        }
-        Position right{oppKingLoc.file + 1, oppKingLoc.rank};
-        if (currPiece->checkBounds(up) == true) {
-            rightRow = oppKing->validMoveFinal(oppKingLoc, right, board);
-        }
-        Position leftup{oppKingLoc.file - 1, oppKingLoc.rank + 1};
-        if (currPiece->checkBounds(up) == true) {
-            leftUpDiag = oppKing->validMoveFinal(oppKingLoc, leftup, board);
-        }
-        Position leftdown{oppKingLoc.file - 1, oppKingLoc.rank - 1};
-        if (currPiece->checkBounds(up) == true) {
-            leftDownDiag = oppKing->validMoveFinal(oppKingLoc, leftdown, board);
-        }
-        Position rightup{oppKingLoc.file + 1, oppKingLoc.rank + 1};
-        if (currPiece->checkBounds(up) == true) {
-            rightUpDiag = oppKing->validMoveFinal(oppKingLoc, rightup, board);
-        }
-        Position rightdown{oppKingLoc.file + 1, oppKingLoc.rank - 1};
-        if (currPiece->checkBounds(up) == true) {
-            rightDownDiag = oppKing->validMoveFinal(oppKingLoc, rightdown, board);
-        }
-        if (upCol == false && downCol == false && leftRow == false && rightRow == false && leftUpDiag == false
-                && leftDownDiag == false && rightUpDiag == false && rightDownDiag == false) {
+        bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
+        // see if our piece can get captured instead: validMove to kill from any of the opp pieces to our piece
+        // vector<Position> oppPositions = board->getPiecePositions(currPlayer);
+        // client's job to delete the created observers
+        bool replaceCapture = false;
+        /*
+        for (auto it : oppPositions) {
+            Pieces* oppPiece = board->pieceAt(it);
+            if (oppPiece->validMoveFinal(it, end, board) == true) {
+                replaceCapture = true;
+            }
+        }*/
+        // see if the check is blocked by another piece that can get in the way of our kill
+        //      to call moveGenerator here: 
+        // go thru all the oppPieces
+        //          go thru all moveGenerator since its virtual
+        //              see if it stops the check - i.e myKingInCheck is false
+        bool possibleBlock = false;
+        if (checkKingMovement == true && replaceCapture == false && possibleBlock == false) {
             return true;
         } else {
             return false;
@@ -414,6 +438,11 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     } else {
         return false;
     }
+}
+
+// checks if the move for the player's piece places the Opponent's King in stalemate -> TO IMPLEMENT STILLL!!!!
+bool Pieces::opponentKingStalemate(Position start, Position end, Board* board) const {
+    return false;
 }
 
 // return whether the king, rook has moved

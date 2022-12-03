@@ -74,6 +74,9 @@ class Pieces {
   // checks if the move for the player's piece places the Opponent's King in checkmate -> TO IMPLEMENT STILLL!!!!
   bool opponentKingCheckmate(Position start, Position end, Board* board) const;
 
+  // checks if the move for the player's piece places the Opponent's King in stalemate -> TO IMPLEMENT STILLL!!!!
+  bool opponentKingStalemate(Position start, Position end, Board* board) const;
+
   // specific methods for pieces that are set to empty and get overridden
   // return whether the king, rook has moved
   virtual bool getMoved() const;
