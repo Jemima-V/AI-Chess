@@ -504,9 +504,10 @@ void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
 
     currBoard[posNew.file][posNew.rank] = p;
 
+    //removePiece(posOld);
     //delete currBoard[posOld.file][posOld.rank];
-    //currBoard[posOld.file][posOld.rank] = nullptr;
-    removePiece(posOld);
+    currBoard[posOld.file][posOld.rank] = nullptr;
+    
 }
 
 void Board::place(Pieces* addPiece, Position pos){
