@@ -523,7 +523,7 @@ void Board::place(Pieces* addPiece, Position pos){
   
 void Board::removePiece(Position pos){
     //AGAIN ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE BEFORE SETTING TO NULL??
-    delete currBoard[pos.file][pos.rank] = nullptr;
+    delete currBoard[pos.file][pos.rank];
     currBoard[pos.file][pos.rank] = nullptr;
 }
 
