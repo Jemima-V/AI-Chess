@@ -235,10 +235,40 @@ int main() {
                         }
                 }
                 else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
-                    continue; //add more
+                    if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
+                        continue;
+                    }
+                    else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
+                        Position s1;
+                        Position s2;
+                        Pieces *p = nullptr;
+                        w->playerMove(s1, s2, gameboard, p, "black");
+                        if (b->hasMoved() == false) {
+                            g->setTurn("black");
+                        }
+                        else {
+                            g->setTurn("white");
+                            w->setMoved(false);
+                        }
+                    }
                 }
                 else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
-                    continue; //add more
+                    if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
+                        Position s1;
+                        Position s2;
+                        Pieces *p = nullptr;
+                        w->playerMove(s1, s2, gameboard, p, "white");
+                        if (w->hasMoved() == false) {
+                            g->setTurn("white");
+                        }
+                        else {
+                            g->setTurn("black");
+                            b->setMoved(false);
+                        }
+                    }
+                    else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
+                        continue;
+                    }
                 }
                 else if ((p1 == "human") && (p2 == "human")) {
                     continue;

@@ -92,10 +92,20 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
             cout << s2.file << endl;
             cout << s2.rank << endl;
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                cout << "White is in check." << endl;
+                if (turn == "black") {
+                    cout << "White is in check." << endl;
+                }
+                else if (turn == "white") {
+                    cout << "Black is in check." << endl;
+                }
                 if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                     kingExists = false;
-                    cout << "Checkmate! Black wins!" << endl;
+                    if (turn == "black") {
+                        cout << "Checkmate! Black wins!" << endl;
+                    }
+                    else if (turn == "white") {
+                        cout << "Checkmate! White wins!" << endl;
+                    }
                 }
             }
             cout << s1.file << endl;
