@@ -62,7 +62,7 @@ class Pieces {
   bool isValidCastling(Position start, Position end, Board* board) const;
 
   // checks if the king is in check on the board
-  bool inCheck(int owner, Board* board) const;
+  bool inCheck(bool kingSelfCheck, Position kingEnd, int owner, Board* board) const;
 
   // checks if the move for the player's piece places the player's King in check
   bool myKingInCheck(Position start, Position end, Board* board) const;

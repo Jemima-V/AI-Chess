@@ -65,20 +65,16 @@ bool King::validMove(Position start, Position end, Board* board) const {
 
 // checks if a move is fully valid, this is overridden by each derived piece
 bool King::validMoveFinal(Position start, Position end, Board* board) const {
-    cout << "vmf" << endl;
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
     if (currPiece->checkBounds(start) == false) {
-        cout << "if 1" << endl;
         return false;
     }
     if (currPiece->checkBounds(end) == false) {
-        cout << "if 2" << endl;
         return false;
     }
     // validMove == true
     if (currPiece->validMove(start, end, board) == false) {
-        cout << "if 3" << endl;
         return false;
     }
     // can't capture piece of your own player piece: check that the same piece owner isn't at the end position
@@ -92,32 +88,26 @@ bool King::validMoveFinal(Position start, Position end, Board* board) const {
     // no other pieces are in the way: false if someone is in the way
     // rook check
     // check if it moves columns or rows
-    cout << "if 4" << endl;
     if (start.rank == end.rank) { // rows
         bool piecesInTheWay = board->checkRow(start, end);
-        cout << "if 5" << endl;
         if (piecesInTheWay == false) {
             return false;
         }
     } else if (start.file == end.file) { // cols
         bool piecesInTheWay = board->checkCol(start, end);
-        cout << "if 6" << endl;
         if (piecesInTheWay == false) {
             return false;
         }
     } else {
         // bishop check
         bool piecesInTheWay = board->checkDiagonal(start, end); // start and end must be diagonal now
-        cout << "if 7" << endl;
         if (piecesInTheWay == false) {
             return false;
         }
     }
     // make sure the move doesn't put the king in check
-    cout << "check here" << endl;
     bool checkMoveKingInCheck = currPiece->kingSelfCheck(start, end, board);
-    cout << "if 8" << endl;
-    if (checkMoveKingInCheck == false) { // false = move is invalid
+    if (checkMoveKingInCheck == true) { // false = move is valid
         return false;
     }
     return true;
@@ -139,14 +129,7 @@ std::vector<Position> King::moveGenerator(Position loc, Board* board) const {
             if (((loc.rank != newLoc.rank) && (loc.file != newLoc.file)) || 
                 ((loc.rank != newLoc.rank) && (loc.file == newLoc.file)) ||
                 ((loc.rank == newLoc.rank) && (loc.file != newLoc.file))) {
-                    cout << loc.file << endl;
-                    cout << loc.rank << endl;
-                    cout << newLoc.file << endl;
-                    cout << newLoc.rank << endl;
-                    cout << p->getId() << endl;
-                    cout << "here 1" << endl;
                     bool isValid = validMoveFinal(loc, newLoc, board);
-                    cout << "here 2" << endl;
                     if (isValid == true) {
                         moveList.push_back(newLoc);
                     }

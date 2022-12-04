@@ -136,7 +136,8 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     }
     // the king must not be in check at the starting, ending, or in between position
     // start: call inCheck rn
-    if (inCheck(currPlayer, board) == false) {
+    Position p{0,0};
+    if (inCheck(false, p, currPlayer, board) == false) {
         return false;
     }
     // end 
@@ -160,7 +161,7 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
 
 // checks if the king is in check on the board
 // true if king is not in check and false if the king is in check
-bool Pieces::inCheck(int owner, Board* board) const {
+bool Pieces::inCheck(bool kingSelfCheck, Position kingEnd, int owner, Board* board) const {
     // Pseudocode:
     // check all 8 directions for opponent players
         // if there is an opponent player, check if it is a validMoveFinal from that player to my king
@@ -168,10 +169,14 @@ bool Pieces::inCheck(int owner, Board* board) const {
         // else return true
     // Implememtation:
     Position KingLoc{0,0};
-    if (owner == 1) {
-        KingLoc = board->getWhiteKing();
-    } else { //currPlayer is 2
-        KingLoc = board->getBlackKing();
+    if (kingSelfCheck) {
+        KingLoc = kingEnd;
+    } else {
+        if (owner == 1) {
+            KingLoc = board->getWhiteKing();
+        } else { //currPlayer is 2
+            KingLoc = board->getBlackKing();
+        }
     }
     Position nullPos{-1, -1};
     // check all 8 directions for opponent players
@@ -302,6 +307,7 @@ bool Pieces::inCheck(int owner, Board* board) const {
 // false if this move is invalid and the king can go in check
 // true if the move is valid and the king can't go in check
 bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
+    Position p{0,0};
     Board boardCopy = *board; // copy ctor for the board
     // we already know that the move is valid from the pieces perspective, 
     //   we just need to see if the king goes in check once that move is made
@@ -310,7 +316,7 @@ bool Pieces::myKingInCheck(Position start, Position end, Board* board) const {
     int currPlayer = newPiece->getOwner();
     boardCopy.makeMove(newPiece, start, end);
     // call inCheck to see if this puts our king in check and return this value
-    bool isCheck = newPiece->inCheck(currPlayer, &boardCopy);
+    bool isCheck = newPiece->inCheck(false, p, currPlayer, &boardCopy);
     return isCheck;
 }
 
@@ -398,6 +404,7 @@ bool checkKingEscape(Pieces* currPiece, Pieces* oppKing, Position oppKingLoc, Bo
 // checks if the move for the player's piece places the Opponent's King in checkmate
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
     // get what piece is at our current location
+    Position p{0,0};
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
     int oppPlayer = 0;
@@ -419,7 +426,7 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     Pieces* newPiece = boardCopy.pieceAt(start);
     boardCopy.makeMove(newPiece, start, end);
     // call inCheck to see if this puts opp's king in check and return this value
-    bool isCheck = newPiece->inCheck(oppPlayer, &boardCopy);
+    bool isCheck = newPiece->inCheck(false, p, oppPlayer, &boardCopy);
     if (isCheck == false) { // checks if the opponent king is in check
         // return true if the opponent king has no more valid moves, i.e king can't escape
         bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
@@ -450,7 +457,7 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
                 Pieces* newPiece2 = boardCopy2.pieceAt(it);
                 boardCopy.makeMove(newPiece2, it, it2);
                 // call inCheck to see if this puts our king out of check and return this value
-                bool isCheck2 = newPiece2->inCheck(oppPlayer, &boardCopy2);
+                bool isCheck2 = newPiece2->inCheck(false, p, oppPlayer, &boardCopy2);
                 if (isCheck2 == true) {
                     possibleBlock = true;
                 }
@@ -483,7 +490,8 @@ bool Pieces::opponentKingStalemate(Position start, Position end, Board* board) c
     }
     Pieces* oppKing = board->pieceAt(oppKingLoc);
     // oppKing should not be in check
-    bool checkOppKingCheck = oppKing->inCheck(oppPlayer, board);
+    Position p{0,0};
+    bool checkOppKingCheck = oppKing->inCheck(false, p, oppPlayer, board);
     // no legal moves shd be available for the oppKing
     //   go thru all the oppPieces and generate moves for them, keeping count
     int legalMoveCount = 0;
@@ -547,8 +555,16 @@ bool Pieces::kingSelfCheck(Position start, Position end, Board* board) const {
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     boardCopy.makeMove(newPiece, start, end);
+    Position KingLoc{0,0};
+    if (currPlayer == 1) {
+        KingLoc = board->getWhiteKing();
+    } else { //currPlayer is 2
+        KingLoc = board->getBlackKing();
+    }
+    bool kingSelfCheck = true;
     // call inCheck to see if this puts our king in check and return the opposite value
-    bool isCheck = newPiece->inCheck(currPlayer, &boardCopy);
+    // true if king is not in check and false if the king is in check
+    bool isCheck = newPiece->inCheck(kingSelfCheck, end, currPlayer, &boardCopy);
     if (isCheck == true) {
         return false;
     } else {

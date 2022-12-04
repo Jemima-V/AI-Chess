@@ -172,9 +172,8 @@ bool Board:: checkRow(Position from, Position to){
     //Make sure kriti checks start and from are not the same position
     //rightward direction
     if (from.file < to.file){
-
         //Loop through the row and check for any pieces in the way
-        for(int i = from.file; i <= to.file; i++){
+        for(int i = from.file + 1; i < to.file; i++){
             if (currBoard[i][from.rank] != nullptr){
                 return false;
             }
@@ -186,9 +185,8 @@ bool Board:: checkRow(Position from, Position to){
     //case where from.file > to.file
     //leftward direction
     } else {
-
         //Loop through the row and check for any pieces in the way
-        for(int i = from.file; i >= to.file; i--){
+        for(int i = from.file - 1; i > to.file; i--){
             if (currBoard[i][from.rank] != nullptr){
                 return false;
             }
@@ -208,7 +206,7 @@ bool Board:: checkCol(Position from, Position to){
     if (from.rank < to.rank){
 
         //Loop through the column and check for any pieces in the way
-        for(int i = from.rank; i <= to.rank; i++){
+        for(int i = from.rank + 1; i < to.rank; i++){
             if (currBoard[from.file][i] != nullptr){
                 return false;
             }
@@ -221,7 +219,7 @@ bool Board:: checkCol(Position from, Position to){
     } else {
 
         //Loop through the row and check for any pieces in the way
-        for(int i = from.rank; i >= to.rank; i--){
+        for(int i = from.rank - 1; i > to.rank; i--){
             if (currBoard[from.file][i] != nullptr){
                 return false;
             }
@@ -239,9 +237,7 @@ bool Board:: checkDiagonal(Position from, Position to){
     //THIS ALSO CHECKS
     //Direction => Upwards to the right
     if(from.rank < to.rank && from.file < to.file){
-        
-        for(int i = from.rank + 1, j = from.file + 1; i <= to.rank && j <= to.file; i++, j++){
-
+        for(int i = from.rank + 1, j = from.file + 1; i < to.rank && j < to.file; i++, j++){
             if(currBoard[j][i] != nullptr){
                 return false;
             }
@@ -252,8 +248,7 @@ bool Board:: checkDiagonal(Position from, Position to){
 
     //Direction => Upwards to the left
     } else if (from.rank < to.rank && from.file > to.file){
-
-        for(int i = from.rank + 1, j = from.file - 1; i <= to.rank && j >= to.file; i++, j--){
+        for(int i = from.rank + 1, j = from.file - 1; i < to.rank && j > to.file; i++, j--){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -265,8 +260,7 @@ bool Board:: checkDiagonal(Position from, Position to){
 
     //Direction => Downwards to right
     } else if (from.rank > to.rank && from.file < to.file){
-
-         for(int i = from.rank - 1, j = from.file + 1; i >= to.rank && j <= to.file; i--, j++){
+         for(int i = from.rank - 1, j = from.file + 1; i > to.rank && j < to.file; i--, j++){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -279,8 +273,7 @@ bool Board:: checkDiagonal(Position from, Position to){
     //Direction => downwards to the left
     //from.rank > to.rank && from.file > to.file
     } else{
-
-         for(int i = from.rank - 1, j = from.file - 1; i >= to.rank && j >= to.file; i--, j--){
+         for(int i = from.rank - 1, j = from.file - 1; i > to.rank && j > to.file; i--, j--){
 
             if(currBoard[j][i] != nullptr){
                 return false;
@@ -490,8 +483,8 @@ void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
 
     //update if a black king moves
     } else if (p->getId() == 'k'){
-        blackKing.file == posNew.file;
-        blackKing.rank == posNew.rank;
+        blackKing.file = posNew.file;
+        blackKing.rank = posNew.rank;
     }
 
     //DOUBLE CHECK FOR MEMORY LEAK?
@@ -570,6 +563,7 @@ bool Board::checkL(Position start){
     int curOwner = pieceAt(start)->getOwner();
     Position tempPos{-1,-1};
 
+
     //case A
     tempPos.file = start.file + 1;
     tempPos.rank = start.rank + 2;
@@ -577,6 +571,7 @@ bool Board::checkL(Position start){
     if(isOppKnightAt(tempPos, curOwner)){
         return true;
     }
+
 
     //case B
     tempPos.file = start.file + 2;
