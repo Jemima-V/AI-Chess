@@ -2,12 +2,11 @@
 #include <string.h>
 #include <sstream>
 #include "game.h"
-//#include "computer.h"
 #include "human.h"
 //#include "levelfour.h"
 #include "levelone.h"
-//#include "leveltwo.h"
-//#include "levelthree.h"
+#include "leveltwo.h"
+#include "levelthree.h"
 #include "player.h"
 #include "bishop.h"
 #include "king.h"
