@@ -26,10 +26,12 @@ int dim = 60;
 int y; 
 string pieceName;
 
+
+  
   //print a blank board
   for (int i = 0; i <= 7; ++i) {
     //cout << row << ' ';
-    window->drawString(dim, (dim*(i))+(dim*2+(dim/2)), to_string(row));
+    window->drawString(dim+(dim/2), (dim*(i))+(dim*2+(dim/2)), to_string(row));
     row--;
 
     for (int j = 0; j <= 7; ++j) {
@@ -39,7 +41,7 @@ string pieceName;
 
       //white square => one coordinate is even, one coordinate is odd
       } else {
-        color = 2;
+        color = 9;
       }
 
       window->fillRectangle((dim*j)+(2*dim), (dim*i)+(2*dim), dim, dim, color);
@@ -107,6 +109,7 @@ string pieceName;
       y =  7 - i;
 
       window->drawString((dim*j)+(2*dim+(dim/5)), (dim*y)+(2*dim+(dim/2)), pieceName);
+      window->drawString((dim*j)+(2*dim+(dim/5))+(1/2), (dim*y)+(2*dim+(dim/2)), pieceName);
 
     }    
   }
@@ -114,10 +117,32 @@ string pieceName;
   int x = 0;
   for (char i = 'A'; i <= 'H'; i++){
     string s(1, i);
-    window->drawString((dim*x)+(dim*2+(dim/2)), dim*11, s);
+    window->drawString((dim*x)+(dim*2+(dim/2)), dim*11-(dim/2), s);
     x++;
   }
- 
+
+
+  //draw frames into the board
+  for(int i = 2; i < 11; i++){
+    window->drawLine(2*dim, i*dim, 10*dim , i*dim);
+    window->drawLine(2*dim, i*dim-1, 10*dim , i*dim-1);
+  }
+
+  for(int i = 2; i < 11; i++){
+    window->drawLine(i*dim, 2*dim, i*dim , 10*dim);
+    window->drawLine(i*dim-1, 2*dim, i*dim-1 , 10*dim);
+  }
+
+  window->drawLine(1*dim, 1*dim, 11*dim , 1*dim);
+  window->drawLine(1*dim, 1*dim-1, 11*dim , 1*dim-1);
+
+  window->drawLine(1*dim, 11*dim, 11*dim , 11*dim);
+  window->drawLine(1*dim, 11*dim-1, 11*dim , 11*dim-1);
+
+  window->drawLine(1*dim, 1*dim, 1*dim , 11*dim);
+  window->drawLine(1*dim-1, 1*dim, 1*dim-1, 11*dim);
+
+  window->drawLine(11*dim, 1*dim, 11*dim , 11*dim);
+  window->drawLine(11*dim-1, 1*dim, 11*dim-1 , 11*dim);
   
 }
-
