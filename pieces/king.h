@@ -14,6 +14,9 @@ class King: public Pieces {
   //dtor
   ~King();
 
+  // return the points of the specified piece
+  int getPoints() const override;
+
   King* makeCopy() const override;
 
   // return whether castling was done

@@ -9,6 +9,11 @@ Rook::Rook(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 // dtor
 Rook::~Rook() {}
 
+// return the points of the specified piece
+int Rook::getPoints() const {
+    return 5;
+}
+
 // return whether the rook has moved
 bool Rook::getMoved() const {
     return moved;

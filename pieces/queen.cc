@@ -7,6 +7,11 @@ Queen::Queen(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 // dtor
 Queen::~Queen() {}
 
+// return the points of the specified piece
+int Queen::getPoints() const {
+    return 9;
+}
+
 bool Queen::validMove(Position start, Position end, Board* board) const {
     // combination of Rook's and Bishop's rules
     int rankChange = end.rank - start.rank;

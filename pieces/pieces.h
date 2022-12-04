@@ -27,6 +27,9 @@ class Pieces {
   //dtor
   virtual ~Pieces();
 
+  // return the points of the specified piece
+  virtual int getPoints() const = 0;
+
   // return the owner of the specified piece
   int getOwner() const;
 

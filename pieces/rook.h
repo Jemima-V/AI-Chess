@@ -12,6 +12,9 @@ class Rook: public Pieces {
   //dtor
   ~Rook();
 
+  // return the points of the specified piece
+  int getPoints() const override;
+
   Rook* makeCopy() const override;
 
   // return whether the rook has moved

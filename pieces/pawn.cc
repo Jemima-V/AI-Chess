@@ -8,6 +8,11 @@ Pawn::Pawn(int owner, bool captured, char id, bool firstMove):
 // dtor
 Pawn::~Pawn() {}
 
+// return the points of the specified piece
+int Pawn::getPoints() const {
+    return 1;
+}
+
 void Pawn::setFirstMove(bool newMove) {
     firstMove = newMove;
 }

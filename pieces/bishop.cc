@@ -7,6 +7,11 @@ Bishop::Bishop(int owner, bool captured, char id): Pieces(owner, captured, id) {
 // dtor
 Bishop::~Bishop() {}
 
+// return the points of the specified piece
+int Bishop::getPoints() const {
+    return 3;
+}
+
 bool Bishop::validMove(Position start, Position end, Board* board) const {
     // a move is only diagonal if the ABSOLUTE change in rank is equal to the ABSOLUTE change in file
     int rankChange = end.rank - start.rank;

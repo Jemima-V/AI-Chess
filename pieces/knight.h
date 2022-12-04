@@ -10,6 +10,9 @@ class Knight: public Pieces {
   //dtor
   ~Knight();
 
+  // return the points of the specified piece
+  int getPoints() const override;
+
   Knight* makeCopy() const override;
 
   // checks if a move is valid for the Knight piece

@@ -10,6 +10,9 @@ class Bishop: public Pieces {
   //dtor
   ~Bishop();
 
+  // return the points of the specified piece
+  int getPoints() const override;
+
   Bishop* makeCopy() const override;
 
   // checks if a move is valid for the Bishop piece

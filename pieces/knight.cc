@@ -7,6 +7,11 @@ Knight::Knight(int owner, bool captured, char id): Pieces(owner, captured, id) {
 // dtor
 Knight::~Knight() {}
 
+// return the points of the specified piece
+int Knight::getPoints() const {
+    return 3;
+}
+
 bool Knight::validMove(Position start, Position end, Board* board) const {
     int rankChange = end.rank - start.rank;
     int fileChange = end.file - start.file;

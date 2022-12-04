@@ -10,6 +10,9 @@ class Queen: public Pieces {
   //dtor
   ~Queen();
 
+  // return the points of the specified piece
+  int getPoints() const override;
+
   Queen* makeCopy() const override;
 
   // checks if a move is valid for the Queen piece

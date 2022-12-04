@@ -7,6 +7,11 @@ King::King(int owner, bool captured, char id): Pieces(owner, captured, id) {}
 // dtor
 King::~King() {}
 
+// return the points of the specified piece
+int King::getPoints() const {
+    return 0;
+}
+
 bool King::getCastlingDone() const {
     return castlingDone;
 }
