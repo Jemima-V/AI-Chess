@@ -2,7 +2,6 @@
 #define LEVELTHREE_H
 #include <string.h>
 #include "player.h"
-#include "computer.h"
 #include "pieces.h"
 #include "board.h"
 

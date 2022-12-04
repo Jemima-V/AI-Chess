@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string.h>
 #include "player.h"
-#include "computer.h"
 #include "leveltwo.h"
 
 using namespace std;
