@@ -417,7 +417,6 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* newPiece = boardCopy.pieceAt(start);
-    int newPlayer = newPiece->getOwner();
     boardCopy.makeMove(newPiece, start, end);
     // call inCheck to see if this puts opp's king in check and return this value
     bool isCheck = newPiece->inCheck(oppPlayer, &boardCopy);
@@ -425,7 +424,7 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
         // return true if the opponent king has no more valid moves, i.e king can't escape
         bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
         // see if our piece can get captured instead: validMove to kill from any of the opp pieces to our piece
-        vector<Position> oppPositions = board->getPiecePositions(newPlayer);
+        vector<Position> oppPositions = board->getPiecePositions(oppPlayer);
         // client's job to delete the created observers
         bool replaceCapture = false;
         for (auto it : oppPositions) {
@@ -467,9 +466,44 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     }
 }
 
-// checks if the move for the player's piece places the Opponent's King in stalemate -> TO IMPLEMENT STILLL!!!!
+// checks if the move for the player's piece places the Opponent's King in stalemate
+//   true if there is a stalemate and false otherwise
 bool Pieces::opponentKingStalemate(Position start, Position end, Board* board) const {
-    return false;
+    // get what piece is at our current location
+    Pieces* currPiece = board->pieceAt(start);
+    int currPlayer = currPiece->getOwner();
+    int oppPlayer = 0;
+    Position oppKingLoc{0,0};
+    if (currPlayer == 1) {
+        oppKingLoc = board->getBlackKing();
+        oppPlayer = 2;
+    } else { //currPlayer is 2
+        oppKingLoc = board->getWhiteKing();
+        oppPlayer = 1;
+    }
+    Pieces* oppKing = board->pieceAt(oppKingLoc);
+    // oppKing should not be in check
+    bool checkOppKingCheck = oppKing->inCheck(oppPlayer, board);
+    // no legal moves shd be available for the oppKing
+    //   go thru all the oppPieces and generate moves for them, keeping count
+    int legalMoveCount = 0;
+    Board boardCopy = *board; // invoke copy ctor for the board
+    // we already know that the move is valid from the pieces perspective, 
+    //   we just need to see if the king goes in check once that move is made
+    // stimulate the move for the currPiece on the boardCopy
+    Pieces* newPiece = boardCopy.pieceAt(start);
+    boardCopy.makeMove(newPiece, start, end);
+    vector<Position> oppPositions = board->getPiecePositions(oppPlayer);
+    for (auto it : oppPositions) {
+        Pieces* oppPiece = board->pieceAt(it);
+        vector<Position> possibleMoves = oppPiece->moveGenerator(it, &boardCopy);
+        legalMoveCount += possibleMoves.size();
+    }
+    if (checkOppKingCheck == true && legalMoveCount == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // return whether the king, rook has moved
