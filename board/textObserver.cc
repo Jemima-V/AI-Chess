@@ -14,6 +14,12 @@ addText::~addText() {
   subject->detach(this);
 }
 
+int addText::getType(){
+  return 1;
+}
+
+void addText::GCMove(int x1, int x2, int y1, int y2){}
+
 void addText::notify() {
   int row = 8;
   cout << endl;

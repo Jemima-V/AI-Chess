@@ -13,6 +13,8 @@ class Subject {
   void notifyObservers();
   virtual char getState(int row, int col) const = 0;
   virtual ~Subject() = default;
+
+  void notifyMove(int x1, int x2, int y1, int y2);
 };
 
 #endif

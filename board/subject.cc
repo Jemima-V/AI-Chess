@@ -18,4 +18,14 @@ void Subject::notifyObservers() {
   for (auto ob : observers) ob->notify();
 }
 
+void Subject::notifyMove(int x1, int x2, int y1, int y2){
+  for (auto ob : observers){
+    if(ob->getType() == 2){
+      ob->GCMove(x1, x2, y1, y2);
+    } else {
+      ob->notify();
+    }
+  } 
+}
+
 

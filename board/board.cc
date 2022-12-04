@@ -31,14 +31,14 @@ Board:: Board(){
 }
 
 //Board copy constructor
-//copy position fields in MIL
+//call default ctor in MIL to initalize vector
 Board::Board(const Board &other): Board{}{
     whiteKing.file = other.whiteKing.file;
     whiteKing.rank = other.whiteKing.rank;
     blackKing.file = other.blackKing.file;
     blackKing.rank = other.blackKing.rank;
     
-    //loop through 2D vector and call pieces copy ctor
+    //loop through 2D vector and call pieces copy 
     for (int i = 0; i < 8; i++){
         
         for(int j = 0; j < 8; j++){
@@ -531,6 +531,14 @@ void Board::removePiece(Position pos){
   
 void Board::render(){
     notifyObservers();
+}
+
+/*void Board::renderText(){
+    notifyText();
+}*/
+
+void Board::renderMove(int x1, int x2, int y1, int y2){
+    notifyMove(x1, x2, y1, y2);
 }
 
 bool Board::inBounds(Position pos){
