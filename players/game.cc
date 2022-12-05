@@ -1,3 +1,6 @@
+#include <iostream>
+#include <string.h>
+#include <sstream>
 #include "game.h"
 #include "player.h"
 #include "bishop.h"
@@ -8,6 +11,8 @@
 #include "queen.h"
 #include "rook.h"
 #include "board.h"
+
+using namespace std;
 
 //constructor 
 Game::Game(Board *gameBoard, Player *white, Player *black, string turn) : gameBoard{gameBoard}, white{white},
@@ -22,6 +27,8 @@ string Game::getTurn() {
 void Game::setTurn(string t) {
     turn = t;
 }
+
+
 
 //destructor
 Game::~Game() {

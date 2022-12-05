@@ -3,7 +3,7 @@
 #include <sstream>
 #include "game.h"
 #include "human.h"
-//#include "levelfour.h"
+#include "levelfour.h"
 #include "levelone.h"
 #include "leveltwo.h"
 #include "levelthree.h"

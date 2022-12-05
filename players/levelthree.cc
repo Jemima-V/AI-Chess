@@ -118,6 +118,7 @@ bool LevelThree::moveCanCapture(Position s1, Position s2, Board *gameboard, Piec
         playerMakeMove(s1, s2, gameboard, p, turn);
         return true;
     }
+    return false;
 }
 
 //allows the player to make a valid move
