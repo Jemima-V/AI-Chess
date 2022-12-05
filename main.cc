@@ -8,21 +8,54 @@
 #include "leveltwo.h"
 #include "levelthree.h"
 #include "player.h"
+#include "pieces.h"
+#include "board.h"
+#include "graphicsObserver.h"
+#include "textObserver.h"
 #include "bishop.h"
 #include "king.h"
 #include "knight.h"
 #include "pawn.h"
-#include "pieces.h"
 #include "queen.h"
 #include "rook.h"
-#include "board.h"
-#include "graphicsObserver.h"
-#include "textObserver.h"
-#include "observer.h"
-#include "subject.h"
-#include "window.h"
 
 using namespace std;
+
+//converting a square into a position struct
+Position convert(string square) {
+    char file = square[0];
+    char rank = square[1];
+    int f;
+    int r;
+    if (file == 'a') {
+        f = 0;
+    }
+    else if (file == 'b') {
+        f = 1;
+    }
+    else if (file == 'c') {
+        f = 2;
+    }
+    else if (file == 'd') {
+        f = 3;
+    }
+    else if (file == 'e') {
+        f = 4;
+    }
+    else if (file == 'f') {
+        f = 5;
+    }
+    else if (file == 'g') {
+        f = 6;
+    }
+    else if (file == 'h') {
+        f = 7;
+    }
+    r = rank - '0';
+    --r;
+    Position p{f, r};
+    return p;
+}
 
 //creating a piece 
 Pieces* createPiece(char piece) {
@@ -64,79 +97,31 @@ Pieces* createPiece(char piece) {
     }
 }
 
-//converting a square into a position struct
-Position convert(string square) {
-    char file = square[0];
-    char rank = square[1];
-    //cout << file << endl << rank << endl;
-    int f;
-    int r;
-    if (file == 'a') {
-        f = 0;
-    }
-    else if (file == 'b') {
-        f = 1;
-    }
-    else if (file == 'c') {
-        f = 2;
-    }
-    else if (file == 'd') {
-        f = 3;
-    }
-    else if (file == 'e') {
-        f = 4;
-    }
-    else if (file == 'f') {
-        f = 5;
-    }
-    else if (file == 'g') {
-        f = 6;
-    }
-    else if (file == 'h') {
-        f = 7;
-    }
-    r = rank - '0';
-    --r;
-    Position p{f, r};
-    //cout << p.file << endl << p.rank << endl;
-    return p;
-}
-
 //creates a player
 Player* create(string player) {
-    //cout << "here" << endl;
     if (player == "human") {
         Player *h = new Human{player};
-        //cout << "end" << endl;
         return h;
     } 
     else if (player == "computer1") {
-        Player *one = new LevelOne{player}; //
+        Player *one = new LevelOne{player}; 
         return one;
     } 
     else if (player == "computer2") {
-        Player *two = new Human{player}; //
+        Player *two = new LevelTwo{player};
         return two;
     } 
     else if (player == "computer3") {
-        Player *three = new Human{player}; //
+        Player *three = new LevelThree{player}; 
         return three;
     }
     else if (player == "computer4") {
-        Player *four = new Human{player}; //
+        Player *four = new LevelFour{player};
         return four;
     }
 }
 
 int main() {
-    //creates the game board
-    Board *gameboard = new Board(); 
-
-    //initializes the gameboard
-    gameboard->initBoard();
-
-    //checks if the game is running
-    bool grunning = false;
 
     //white wins
     int white = 0;
@@ -146,31 +131,52 @@ int main() {
 
     //for tie games
     int ties = 0;
-
-    //string to input player types 
-    //string s;
-
-    //colour that goes first when the game starts
-    string firstTurn = "white";
-
-    Game *g = nullptr;
-
-    Observer *t = nullptr;
-    //Observer *gr = nullptr;
-
-    Player *w = nullptr;
-    Player *b = nullptr;
-
-    std::vector<Observer*> stack;
     
     while (true) {
+        //creates the game board
+        Board *gameboard = new Board(); 
+
+        //checks if the game is running
+        bool grunning = false;
+
+        //checks if the player has done a personalized setup move
+        bool setupDone = false;
+
+        //checks which player goes first when the game starts
+        string firstTurn = "white";
+
+        //for the game to begin 
+        Game *g = nullptr;
+
+        //sets up text observer
+        Observer *t = nullptr;
+        //sets up graphics observer
+        Observer *gr = nullptr;
+
+        //sets up player white
+        Player *w = nullptr;
+        //sets up player black
+        Player *b = nullptr;
+
+        //stack for storing observers
+        std::vector<Observer*> stack;
+
         if (cin.eof() || cin.fail()) {
-            //cout << "test" << endl;
+            //deletes pointers
+            delete gameboard;
+            delete g;
+            delete w;
+            delete b;
+            //deletes observers
+            for (auto &ob : stack) delete ob;
+            //distributes draws
             int draws = ties / 2;
             white += draws;
             black += draws;
+            //converts int to string
             string w = to_string(white);
             string b = to_string(black);
+            //prints final results
             cout << "Final Score:" << endl;
             cout << "White " + w << endl;
             cout << "Black " + b << endl;
@@ -179,99 +185,143 @@ int main() {
         else {
             //string to input player types 
             string s;
+
             cin >> s;
-            //cout << s << endl;
+
             if (s == "game") {
+                //strings to store player1 and player2 names
                 string player1;
                 string player2;
                 cin >> player1 >> player2;
-                //cout << "creating second set of players" << endl;
-                w = create(player1); //creates white player
-                b = create(player2); //creates black player
-                string p1 = w->getName();
-                string p2 = b->getName();
-                cout << p1 << endl;
-                cout << p2 << endl;
-                //creates a new game 
-                g = new Game(gameboard, w, b, firstTurn); //white moves first
-                t = new addText{gameboard}; //text observer
-                //gr = new addGraphics{gameboard}; //graphics observer
-                stack.push_back(t);
-                //stack.push_back(gr);
-                gameboard->render(); //displays text and graphics observers 
-                if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
-                    ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
-                        //cout << p1 << endl;
-                        //cout << p2 << endl;
-                        cout << "comes to computer computer case" << endl;
+                if (((player1 == "human") || (player1 == "computer1")|| (player1 == "computer2") || (player1 == "computer3") || (player1 == "computer4")) &&
+                    ((player2 == "human") || (player2 == "computer1")|| (player2 == "computer2") || (player2 == "computer3") || (player2 == "computer4"))) {
+                    //creates players
+                    w = create(player1); //creates white player
+                    b = create(player2); //creates black player
+
+                    //stores players names in a string
+                    string p1 = w->getName();
+                    string p2 = b->getName();
+
+                    //sets up regular gameboard only if personalized setup is not done
+                    if (setupDone == false) {
+                        //initializes the gameboard
+                        gameboard->initBoard();
+                    }
+
+                    //creates a new game 
+                    g = new Game(gameboard, w, b, firstTurn); //white moves first
+
+                    //creates observers
+                    t = new addText{gameboard}; //text observer
+                    gr = new addGraphics{gameboard}; //graphics observer
+
+                    //pushes the observers onto the stack
+                    stack.push_back(t);
+                    stack.push_back(gr);
+
+                    gameboard->render(); //displays text and graphics observers
+
+                    //if game is computer vs computer
+                    if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
+                        ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
+                            //checks if the game is not in checkmate for either player
+                            while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                                g->computerMove(gameboard, w, b);
+                            }
+                    }
+                    //if game is human vs computer
+                    else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
-                            cout << "comes in while" << endl;
-                            Position s1;
-                            Position s2;
-                            Pieces *p = nullptr;
                             if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
-                                cout << "before playerMove" << endl;
-                                w->playerMove(s1, s2, gameboard, p, "white");
-                                cout << "after playerMove" << endl;
-                                if (w->hasMoved() == false) {
-                                    g->setTurn("white");
+                                string wantsMove;
+                                cin >> wantsMove;
+                                if (wantsMove == "move") {
+                                    g->humanMove(gameboard, w, b);
+                                }
+                                else if (wantsMove == "resign") {
+                                    if (w->hasMoved() == false) {
+                                        ++black; 
+                                        cout << "Black Wins!" << endl;
+                                        break;
+                                    } 
+                                    else {
+                                        ++white;
+                                        cout << "White Wins!" << endl;
+                                        break;
+                                    }
                                 }
                                 else {
-                                    g->setTurn("black");
-                                    b->setMoved(false);
+                                    continue;
                                 }
                             }
                             else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
-                                b->playerMove(s1, s2, gameboard, p, "black");
-                                if (b->hasMoved() == false) {
-                                    g->setTurn("black");
+                                g->computerMove(gameboard, w, b);
+                            }
+                        }
+                    }
+                    //if game is computer vs human
+                    else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
+                        while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                            if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
+                                g->computerMove(gameboard, w, b);
+                            }
+                            else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
+                                string wantsMove;
+                                cin >> wantsMove;
+                                if (wantsMove == "move") {
+                                    g->humanMove(gameboard, w, b);
+                                }
+                                else if (wantsMove == "resign") {
+                                    if (w->hasMoved() == false) {
+                                        ++black; 
+                                        cout << "Black Wins!" << endl;
+                                        break;
+                                    } 
+                                    else {
+                                        ++white;
+                                        cout << "White Wins!" << endl;
+                                        break;
+                                    }
                                 }
                                 else {
-                                    g->setTurn("white");
-                                    w->setMoved(false);
+                                    continue;
                                 }
                             }
                         }
-                }
-                else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
-                    if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
-                        continue;
                     }
-                    else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
-                        Position s1;
-                        Position s2;
-                        Pieces *p = nullptr;
-                        w->playerMove(s1, s2, gameboard, p, "black");
-                        if (b->hasMoved() == false) {
-                            g->setTurn("black");
+                    //if game is human vs computer
+                    else if ((p1 == "human") && (p2 == "human")) {
+                        while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                            string wantsMove;
+                            cin >> wantsMove;
+                            if (wantsMove == "move") {
+                                g->humanMove(gameboard, w, b);
+                            }
+                            else if (wantsMove == "resign") {
+                                if (w->hasMoved() == false) {
+                                    ++black; 
+                                    cout << "Black Wins!" << endl;
+                                    break;
+                                } 
+                                else {
+                                    ++white;
+                                    cout << "White Wins!" << endl;
+                                    break;
+                                }
+                            }
+                            else {
+                                continue;
+                            }
                         }
-                        else {
-                            g->setTurn("white");
-                            w->setMoved(false);
-                        }
-                    }
-                }
-                else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
-                    if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
-                        Position s1;
-                        Position s2;
-                        Pieces *p = nullptr;
-                        w->playerMove(s1, s2, gameboard, p, "white");
-                        if (w->hasMoved() == false) {
-                            g->setTurn("white");
-                        }
-                        else {
-                            g->setTurn("black");
-                            b->setMoved(false);
-                        }
-                    }
-                    else if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
-                        continue;
                     }
                 }
-                else if ((p1 == "human") && (p2 == "human")) {
+                else {
                     continue;
                 }
+            }
+            else if (s == "move") {
+                g->humanMove(gameboard, w, b);
             }
             else if (s == "resign") {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
@@ -283,80 +333,13 @@ int main() {
                     cout << "White Wins!" << endl;
                 }
             }
-            else if (s == "move") {
-                string square1;
-                string square2;
-                cin >> square1 >> square2;
-                //converts square into a position struct 
-                Position s1 = convert(square1);
-                Position s2 = convert(square2);
-                cout << s1.file << "   ";
-                cout << s1.rank << endl;
-                cout << s2.file << "   ";
-                cout << s2.rank << endl;
-                //checks if there is a piece at square 1
-                if ((gameboard->pieceAt(s1) != nullptr) && 
-                    ((s1.file >= 0) && (s1.file <= 7)) && //checks if s1 file is within the bounds 1-8 
-                    ((s1.rank >= 0) && (s1.rank <= 7)) && //checks if s1 rank is within the bounds 1-8 
-                    ((s2.file >= 0) && (s2.file <= 7)) && //checks if s2 file is within the bounds 1-8
-                    ((s2.rank >= 0) && (s2.rank <= 7)) && //checks if s2 rank is within the bounds 1-8
-                    //checks if s1 does not equal to s2
-                    (((s1.rank != s2.rank) && (s1.file != s2.file)) || 
-                     ((s1.rank != s2.rank) && (s1.file == s2.file)) ||
-                     ((s1.rank == s2.rank) && (s1.file != s2.file)))) { 
-                    Pieces *p = gameboard->pieceAt(s1);
-                    //white
-                    //cout << "comes in 1" << endl;
-                    if (p->getOwner() == 1) {
-                        //cout << "comes in 2" << endl;
-                        if ((g->getTurn() == "white") && (w->hasMoved() == false)) { //while loop?
-                            cout << "comes in 3" << endl;
-                            w->playerMove(s1, s2, gameboard, p, "white");
-                            //cout << "here" << endl;
-                            if (w->hasMoved() == false) {
-                                g->setTurn("white");
-                                cout << "false" << endl;
-                            }
-                            else {
-                                g->setTurn("black");
-                                b->setMoved(false);
-                                //cout << "true" << endl;
-                            }
-                        }
-                        else {
-                            continue;
-                        }
-                    } 
-                    //black
-                    else if (p->getOwner() == 2) { //while loop?
-                        if ((g->getTurn() == "black") && (b->hasMoved() == false)) {
-                            b->playerMove(s1, s2, gameboard, p, "black");
-                            if (b->hasMoved() == false) {
-                                g->setTurn("black");
-                            }
-                            else {
-                                g->setTurn("white");
-                                w->setMoved(false);
-                            }
-                        }
-                        else {
-                            continue;
-                        }
-                    } 
-                    else {
-                        continue;
-                    }
-                } 
-                else {
-                    continue;
-                }
-            }
             else if (s == "setup") {
                 if (grunning == false) {
-                    string command;
                     while (true) {
+                        string command;
                         cin >> command;
                         if (command == "done") {
+                            setupDone = true;
                             break;
                         }
                         else if (command == "+") {
@@ -368,13 +351,13 @@ int main() {
                             Position p = convert(square); 
                             //if there is an exisiting piece at that position
                             if (gameboard->pieceAt(p) != nullptr) {
-                                gameboard->place(piecePlace, p); //board handles case for replacing 
+                                gameboard->place(piecePlace, p); //board handles case for replacing piece
                             }
                             //if the position is a null pointer 
                             else {
                                 gameboard->place(piecePlace, p);
                             }
-                            gameboard->render(); // how to display board
+                            gameboard->render(); //displays board
                         }
                         else if (command == "-") {
                             string square;
@@ -383,16 +366,16 @@ int main() {
                             Position p = convert(square);
                             if (gameboard->pieceAt(p) != nullptr) {
                                 gameboard->removePiece(p); //board handles case for removing piece at position
-                                gameboard->render(); // how to display board
+                                gameboard->render(); //displays board
                             } 
                             else {
-                                continue;
+                                continue; //if position is a nullptr
                             }
                         }
                         else if (command == "=") {
                             string colour;
                             cin >> colour;
-                            firstTurn = colour; 
+                            firstTurn = colour;
                         } 
                         else {
                             continue; //continues with command loop if any command is misspelled

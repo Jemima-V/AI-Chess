@@ -12,14 +12,11 @@ class Player {
     //player name
     string name; 
 
-    //player score
-    //int capturedScore; 
-
-    //player's captures pieces
-    //vector <Pieces*> capturedPieces; 
-
     //if the king is on the board
-    bool kingExists; //maybe
+    bool kingExists; 
+
+    //checks if player has moved
+    bool moved;
 
     public:
         //constructor 
@@ -33,8 +30,6 @@ class Player {
         virtual bool hasMoved() = 0;
         //allows the player to make a valid move
         virtual void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) = 0; 
-        //creates random moves for computer player
-        //virtual void randGenerator();
         //sets if the player has moved
         virtual void setMoved(bool checkMoved) = 0;
 

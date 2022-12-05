@@ -31,14 +31,14 @@ class Game {
         //sets the players turn
         void setTurn(string t);
 
-        //creating a piece 
-        //Pieces* createPiece(char piece);
+        //converts user move inputs into positions
+        Position convert(string square);
 
-        //converting a square into a position struct
-        //Position convert(string square);
+        //creates a human move
+        void humanMove(Board *gameboard, Player *w, Player *b);
 
-        //creates a player
-        //Player* create(string player);
+        //creates a computer move
+        void computerMove(Board *gameboard, Player *w, Player *b);
         
         //destructor
         ~Game();

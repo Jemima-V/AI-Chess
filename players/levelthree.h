@@ -42,6 +42,8 @@ class LevelThree : public Player {
         bool moveChecksOpp(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
         //helper for playermove to capture opponent piece when making a move
         bool moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        //generates a random move
+        void makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
 
         //destructor
         ~LevelThree();

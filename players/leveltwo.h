@@ -38,6 +38,8 @@ class LevelTwo : public Player {
         void playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
         //checks if the player can capture a piece
         bool moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        //generates a random move
+        void makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
 
         //destructor
         ~LevelTwo();

@@ -6,7 +6,14 @@
 #include "board.h"
 
 class LevelFour : public Player {
-        
+
+    // A struct that stores s1, s2 and value of piece at s2
+    struct PotentialCapture {
+        Position start;
+        Position end;
+        int value;
+    };
+
     Player *p;
 
     //player name
@@ -40,8 +47,8 @@ class LevelFour : public Player {
         bool moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
         //helper for playermove to check opponent king when making a move
         bool moveChecksOpp(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
-        //helper for playermove to capture opponent piece when making a move
-        bool moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        //generates a random move
+        void makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
 
         //destructor
         ~LevelFour();

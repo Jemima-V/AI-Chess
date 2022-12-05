@@ -88,8 +88,6 @@ void Human::setMoved(bool checkMoved) {
 }
 
 void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    cout << "playerMove" << endl;
-    //vector <Observer*> stack;
     //white moves
     if (turn == "white") {
         //castling case 1
@@ -110,7 +108,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     p->setMoved(true);
                     rook->setMoved(true);
                     moved = true;
-                    gameboard->render();
+                    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
                 }
         }
         //castling case 2
@@ -131,7 +129,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         p->setMoved(true);
                         rook->setMoved(true);
                         moved = true;
-                        gameboard->render();
+                        gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
                     }
         }
         //pawn promotion case
@@ -149,24 +147,48 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 Pieces *promoPiece = promo("white", promotionChar);
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
                 moved = true;
-                gameboard->render();
+                gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                if (p->getFirstMove() == true) {
+                    p->setFirstMove(false);
+                }
             }      
+        }
+        //en passant case 
+        else if ((p->getId() == 'P') && (s1.rank == 2) && (s2.rank == 4) && (p->getFirstMove() == true)) {
+            if (p->potentialSetupCaptureEnPassant(s1, s2, gameboard) == true) {
+                if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
+                    Position left{s1.file - 1, s1.rank + 2};
+                    Pieces *oppPawnL = gameboard->pieceAt(left);
+                    if (oppPawnL != nullptr) {
+                        Position oppPawnNewPos{s1.file, s1.rank + 1};
+                        gameboard->removePiece(s1);
+                        gameboard->makeMove(oppPawnL, left, oppPawnNewPos);
+                        //show render
+                    }
+                    else {
+                        Position right{s1.file + 1, s1.rank + 2};
+                        Pieces *oppPawnR = gameboard->pieceAt(right);
+                        //add
+                    }
+                }
+            }
         }
         //regular move
         else if (p->validMoveFinal(s1, s2, gameboard) == true) {
-            cout << "comes here" << endl;
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                 cout << "Black is in check." << endl;
                 if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                     cout << "Checkmate! White wins!" << endl;
                 }
             }
-            cout << "before move" << endl;
             gameboard->makeMove(p, s1, s2); 
             moved = true;
-            cout << "after move" << endl;
-            //cout << "WORKKKK" << endl;
-            gameboard->render();
+            gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+            if (p->getId() == 'P') {
+                if (p->getFirstMove() == true) {
+                    p->setFirstMove(false);
+                }
+            }
         }
         else {
             moved = false;
@@ -193,7 +215,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     p->setMoved(true);
                     rook->setMoved(true);
                     moved = true;
-                    gameboard->render();
+                    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
                 }
         }
         //castling case 2
@@ -214,7 +236,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         p->setMoved(true);
                         rook->setMoved(true);
                         moved = true;
-                        gameboard->render();
+                        gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
                     }
         }
         //pawn promotion case
@@ -232,7 +254,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 Pieces *promoPiece = promo("black", promotionChar);
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
                 moved = true;
-                gameboard->render();
+                gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                if (p->getFirstMove() == true) {
+                    p->setFirstMove(false);
+                }
             }      
         }
         //regular move
@@ -245,7 +270,12 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             }
             gameboard->makeMove(p, s1, s2); 
             moved = true;
-            gameboard->render();
+            gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+            if (p->getId() == 'p') {
+                if (p->getFirstMove() == true) {
+                    p->setFirstMove(false);
+                }
+            }
         }
         else {
             moved = false;

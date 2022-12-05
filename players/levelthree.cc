@@ -69,7 +69,12 @@ void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Piec
     }
     gameboard->makeMove(p, s1, s2); 
     moved = true;
-    gameboard->render();
+    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+    if ((p->getId() == 'P') || (p->getId() == 'p')) {
+        if (p->getFirstMove() == true) {
+            p->setFirstMove(false);
+        }
+    }
 }
 
 bool LevelThree::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
@@ -100,7 +105,6 @@ bool LevelThree::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, P
             }
         }
     }
-    playerMakeMove(s1, s2, gameboard, p, turn);
     return false;
 }
  
@@ -119,6 +123,37 @@ bool LevelThree::moveCanCapture(Position s1, Position s2, Board *gameboard, Piec
         return true;
     }
     return false;
+}
+
+void LevelThree::makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    while (moved != true) { 
+        --startPosSize;
+        //creates a random index from the possible starting position
+        int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
+        //gets the random starting position
+        s1 = startPos[ranPiece];
+        //gets piece at start
+        p = gameboard->pieceAt(s1);
+        //stores possible ending positions for the random start position
+        vector <Position> endPos;
+        endPos = p->moveGenerator(s1, gameboard);
+        //gets size of vector endPos
+        int endPosSize = endPos.size();
+        if (endPosSize != 0) {
+            //creates a random index from the possible ending position
+            --endPosSize;
+            int ranEndPos = std::rand() % (endPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
+            //gets the random starting position
+            s2 = endPos[ranEndPos];
+            bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
+            if (avoidsCapture == false) {
+                playerMakeMove(s1, s2, gameboard, p, turn);
+            }
+        }
+        else {
+            continue;
+        }
+    }
 }
 
 //allows the player to make a valid move
@@ -144,20 +179,17 @@ void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *
                 bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
                 bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
                 if (avoidsCapture == false) {
-                    return;
-                }
-                else if (checksOpp == true) {
-                    return;
-                }
-                else if (canCapture == true) {
-                    return;
-                }
-                else {
-                    playerMakeMove(s1, s2, gameboard, p, turn);
+                    if (checksOpp == true) {
+                        return;
+                    }
+                    else if (canCapture == true) {
+                        return;
+                    }
                 }
             }
         }
     }
+    makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
 }
 
 void LevelThree::setMoved(bool checkMoved) {

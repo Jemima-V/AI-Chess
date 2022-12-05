@@ -54,44 +54,30 @@ std::vector<Position> LevelOne::posOfPiecesOnBoard(Board* board, string turn) co
 
 //allows the player to make a valid move
 void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    cout << "before vector startPos" << endl;
     //stores possible starting positions for turn's pieces on curr board
     vector <Position> startPos;
     startPos = posOfPiecesOnBoard(gameboard, turn);
-    cout << "after vector startPos" << endl;
     //gets size of vector startPos
     int startPosSize = startPos.size();
-    cout << startPosSize << endl;
     while (moved != true) { 
-        cout << "in while" << endl;
         --startPosSize;
         //creates a random index from the possible starting position
         int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
-        cout << ranPiece << endl;
         //gets the random starting position
         s1 = startPos[ranPiece];
-        cout << "after s1" << endl;
         //gets piece at start
         p = gameboard->pieceAt(s1);
-        cout << p->getId() << endl;
         //stores possible ending positions for the random start position
         vector <Position> endPos;
-        cout << "before moveGen" << endl;
         endPos = p->moveGenerator(s1, gameboard);
-        cout << "after endPos" << endl;
         //gets size of vector endPos
         int endPosSize = endPos.size();
-        cout << endPosSize << endl;
         if (endPosSize != 0) {
             //creates a random index from the possible ending position
             --endPosSize;
             int ranEndPos = std::rand() % (endPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
             //gets the random starting position
-            cout << ranEndPos << endl;
             s2 = endPos[ranEndPos];
-            cout << "after s2" << endl;
-            cout << s2.file << endl;
-            cout << s2.rank << endl;
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
                 if (turn == "black") {
                     cout << "White is in check." << endl;
@@ -109,13 +95,14 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
                     }
                 }
             }
-            cout << s1.file << endl;
-            cout << s1.rank << endl;
-            cout << s2.file << endl;
-            cout << s2.rank << endl;
             gameboard->makeMove(p, s1, s2); 
             moved = true;
-            gameboard->render();
+            gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+            if ((p->getId() == 'P') || (p->getId() == 'p')) {
+                if (p->getFirstMove() == true) {
+                    p->setFirstMove(false);
+                }
+            }
         }
         else {
             continue;

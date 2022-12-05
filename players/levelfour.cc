@@ -1,7 +1,9 @@
 #include <string.h>
+#include <iostream>
 #include "player.h"
-#include "computer.h"
 #include "levelfour.h"
+
+using namespace std;
 
 //constructor 
 LevelFour::LevelFour(string name) : Player{name}, name{name} {}
@@ -67,7 +69,12 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
     }
     gameboard->makeMove(p, s1, s2); 
     moved = true;
-    gameboard->render();
+    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+    if ((p->getId() == 'P') || (p->getId() == 'p')) {
+        if (p->getFirstMove() == true) {
+            p->setFirstMove(false);
+        }
+    }
 }
 
 bool LevelFour::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
@@ -98,7 +105,6 @@ bool LevelFour::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pi
             }
         }
     }
-    playerMakeMove(s1, s2, gameboard, p, turn);
     return false;
 }
  
@@ -110,26 +116,45 @@ bool LevelFour::moveChecksOpp(Position s1, Position s2, Board *gameboard, Pieces
     return false;
 }
 
-bool LevelFour::moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    Pieces *capturePiece = gameboard->pieceAt(s2);
-    if (capturePiece != nullptr) {
-        int value = capturePiece->getPoints();
-        playerMakeMove(s1, s2, gameboard, p, turn);
-        return true;
+void LevelFour::makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    while (moved != true) { 
+        --startPosSize;
+        //creates a random index from the possible starting position
+        int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
+        //gets the random starting position
+        s1 = startPos[ranPiece];
+        //gets piece at start
+        p = gameboard->pieceAt(s1);
+        //stores possible ending positions for the random start position
+        vector <Position> endPos;
+        endPos = p->moveGenerator(s1, gameboard);
+        //gets size of vector endPos
+        int endPosSize = endPos.size();
+        if (endPosSize != 0) {
+            //creates a random index from the possible ending position
+            --endPosSize;
+            int ranEndPos = std::rand() % (endPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
+            //gets the random starting position
+            s2 = endPos[ranEndPos];
+            bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
+            if (avoidsCapture == false) {
+                playerMakeMove(s1, s2, gameboard, p, turn);
+            }
+        }
+        else {
+            continue;
+        }
     }
-    return false;
 }
 
 //allows the player to make a valid move
 void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    //cout << "before vector startPos" << endl;
     //stores possible starting positions for turn's pieces on curr board
     vector <Position> startPos;
     startPos = posOfPiecesOnBoard(gameboard, turn);
-    //cout << "after vector startPos" << endl;
     //gets size of vector startPos
     int startPosSize = startPos.size();
-    //cout << startPosSize << endl;
+    vector <PotentialCapture> pc;
     for(int i = 0; i < startPosSize; ++i) {
         s1 = startPos[i];
         p = gameboard->pieceAt(s1);
@@ -141,22 +166,35 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
                 s2 = endPos[k];
                 bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
                 bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
-                bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
+                //move can capture case
+                Pieces *capturePiece = gameboard->pieceAt(s2);
+                if (capturePiece != nullptr) {
+                    int value = capturePiece->getPoints();
+                    PotentialCapture pieceVal{s1, s2, value};
+                    pc.push_back(pieceVal);
+                }
                 if (avoidsCapture == false) {
-                    return;
-                }
-                else if (checksOpp == true) {
-                    return;
-                }
-                else if (canCapture == true) {
-                    return;
-                }
-                else {
-                    playerMakeMove(s1, s2, gameboard, p, turn);
+                    if (checksOpp == true) {
+                        return;
+                    }
                 }
             }
         }
     }
+    //captures peice of the highest value
+    int pcSize = pc.size();
+    if (pcSize != 0) {
+        int max = pc[0].value; 
+        int index = 0;
+        for (int y = 1; y < pcSize; ++y) {
+            if (pc[y].value > max) {
+                max = pc[y].value;
+                index = y;
+            }
+        }
+        playerMakeMove(pc[index].start, pc[index].end, gameboard, p, turn);
+    }
+    makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
 }
 
 void LevelFour::setMoved(bool checkMoved) {
