@@ -455,7 +455,7 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
                 //   we just need to see if the king goes in check once that move is made
                 // stimulate the move for the currPiece on the boardCopy
                 Pieces* newPiece2 = boardCopy2.pieceAt(it);
-                boardCopy.makeMove(newPiece2, it, it2);
+                boardCopy2.makeMove(newPiece2, it, it2);
                 // call inCheck to see if this puts our king out of check and return this value
                 bool isCheck2 = newPiece2->inCheck(false, p, oppPlayer, &boardCopy2);
                 if (isCheck2 == true) {
