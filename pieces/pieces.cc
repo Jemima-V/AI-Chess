@@ -131,7 +131,7 @@ bool Pieces::isValidCastling(Position start, Position end, Board* board) const {
     } else {
         placeCheck = board->checkRow(start, rookPos4);
     }
-    if (placeCheck == true) {
+    if (placeCheck == false) {
         return false;
     }
     // the king must not be in check at the starting, ending, or in between position
