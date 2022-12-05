@@ -234,7 +234,7 @@ int main() {
                                 }
                                 g->computerMove(gameboard, w, b);
                             }
-                        setupDone == false;   
+                        setupDone = false;   
                     }
                     //if game is human vs computer
                     else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
@@ -268,7 +268,7 @@ int main() {
                                 g->computerMove(gameboard, w, b);
                             }
                         }
-                        setupDone == false;
+                        setupDone = false;
                     }
                     //if game is computer vs human
                     else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
@@ -302,7 +302,7 @@ int main() {
                                 }
                             }
                         }
-                        setupDone == false;
+                        setupDone = false;
                     }
                     //if game is human vs computer
                     else if ((p1 == "human") && (p2 == "human")) {
@@ -331,7 +331,7 @@ int main() {
                                 continue;
                             }
                         }
-                        setupDone == false;
+                        setupDone = false;
                     }
                 }
                 else {
@@ -345,12 +345,12 @@ int main() {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
                     ++black; 
                     cout << "Black Wins!" << endl;
-                    setupDone == false;
+                    setupDone = false;
                 } 
                 else {
                     ++white;
                     cout << "White Wins!" << endl;
-                    setupDone == false;
+                    setupDone = false;
                 }
             }
             else if (s == "setup") {
