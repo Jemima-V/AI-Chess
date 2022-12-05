@@ -28,14 +28,20 @@ class LevelThree : public Player {
         bool kingIsThere() override; 
         //checks if the player has moved
         bool hasMoved() override;
-        //allows the player to make a valid move
+        //allows the player to make a valid move considering game levels
         void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) override;
         //sets if the player has moved
         void setMoved(bool checkMoved) override;
         //creates a vector of all the pieces on the board for the specific player
         std::vector<Position> posOfPiecesOnBoard(Board* board, string turn) const;
+        //makes the player's move
+        void playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
         //helper for playermove to avoid capture for making a move
-        bool moveAvoidsCapture(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        bool moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        //helper for playermove to check opponent king when making a move
+        bool moveChecksOpp(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        //helper for playermove to capture opponent piece when making a move
+        bool moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
 
         //destructor
         ~LevelThree();
