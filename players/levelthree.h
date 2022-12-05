@@ -34,6 +34,8 @@ class LevelThree : public Player {
         void setMoved(bool checkMoved) override;
         //creates a vector of all the pieces on the board for the specific player
         std::vector<Position> posOfPiecesOnBoard(Board* board, string turn) const;
+        //helper for playermove to avoid capture for making a move
+        bool moveAvoidsCapture(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
 
         //destructor
         ~LevelThree();
