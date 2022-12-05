@@ -34,6 +34,10 @@ class LevelTwo : public Player {
         void setMoved(bool checkMoved) override;
         //creates a vector of all the pieces on the board for the specific player
         std::vector<Position> posOfPiecesOnBoard(Board* board, string turn) const;
+        //makes the player's move
+        void playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        //checks if the player can capture a piece
+        bool moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
 
         //destructor
         ~LevelTwo();

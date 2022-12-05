@@ -49,130 +49,63 @@ std::vector<Position> LevelTwo::posOfPiecesOnBoard(Board* board, string turn) co
     return posOfPieces;  
 }
 
+void LevelTwo::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+        if (turn == "black") {
+            cout << "White is in check." << endl;
+        }
+        else if (turn == "white") {
+            cout << "Black is in check." << endl;
+        }
+        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+            kingExists = false;
+            if (turn == "black") {
+                cout << "Checkmate! Black wins!" << endl;
+            }
+            else if (turn == "white") {
+                cout << "Checkmate! White wins!" << endl;
+            }
+        }
+    }
+    gameboard->makeMove(p, s1, s2); 
+    moved = true;
+    gameboard->render();
+}
+
+bool LevelTwo::moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    Pieces *capturePiece = gameboard->pieceAt(s2);
+    if (capturePiece != nullptr) {
+        playerMakeMove(s1, s2, gameboard, p, turn);
+        return true;
+    }
+}
+
 //allows the player to make a valid move
 void LevelTwo::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    cout << "before vector startPos" << endl;
+    //cout << "before vector startPos" << endl;
     //stores possible starting positions for turn's pieces on curr board
     vector <Position> startPos;
     startPos = posOfPiecesOnBoard(gameboard, turn);
-    cout << "after vector startPos" << endl;
+    //cout << "after vector startPos" << endl;
     //gets size of vector startPos
     int startPosSize = startPos.size();
-    cout << startPosSize << endl;
-    bool canCapture = false;
-    for (int i = 0; i < startPosSize; ++i) {
+    //cout << startPosSize << endl;
+    for(int i = 0; i < startPosSize; ++i) {
         s1 = startPos[i];
-        cout << "after s1" << endl;
-        //gets piece at start
         p = gameboard->pieceAt(s1);
-        cout << p->getId() << endl;
-        //stores possible ending positions for the random start position
         vector <Position> endPos;
-        cout << "before moveGen" << endl;
         endPos = p->moveGenerator(s1, gameboard);
-        cout << "after endPos" << endl;
-        //gets size of vector endPos
         int endPosSize = endPos.size();
-        cout << endPosSize << endl;
         if (endPosSize != 0) {
-            for (int j = 0; j < endPosSize; ++j) {
-                s2 = endPos[j];
-                Pieces *capturePiece = gameboard->pieceAt(s2);
-                if (capturePiece != nullptr) {
-                    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                        if (turn == "black") {
-                            cout << "White is in check." << endl;
-                        }
-                        else if (turn == "white") {
-                            cout << "Black is in check." << endl;
-                        }
-                        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                            kingExists = false;
-                            if (turn == "black") {
-                                cout << "Checkmate! Black wins!" << endl;
-                            }
-                            else if (turn == "white") {
-                                cout << "Checkmate! White wins!" << endl;
-                            }
-                        }
-                    }
-                    cout << s1.file << endl;
-                    cout << s1.rank << endl;
-                    cout << s2.file << endl;
-                    cout << s2.rank << endl;
-                    gameboard->makeMove(p, s1, s2); 
-                    moved = true;
-                    canCapture = true;
-                    gameboard->render();
-                    break;
+            for (int k = 0; k < endPosSize; ++k) {
+                s2 = endPos[k];
+                bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
+                if (canCapture == true) {
+                    return;
                 }
-            }
-        }
-        else {
-            continue;
-        }
-        if (moved == true) {
-            break;
-        }
-    }
-    if (canCapture == false) {
-        while (moved != true) {
-            cout << "in while" << endl;
-            --startPosSize;
-            //creates a random index from the possible starting position
-            int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
-            cout << ranPiece << endl;
-            //gets the random starting position
-            s1 = startPos[ranPiece];
-            cout << "after s1" << endl;
-            //gets piece at start
-            p = gameboard->pieceAt(s1);
-            cout << p->getId() << endl;
-            //stores possible ending positions for the random start position
-            vector <Position> endPos;
-            cout << "before moveGen" << endl;
-            endPos = p->moveGenerator(s1, gameboard);
-            cout << "after endPos" << endl;
-            //gets size of vector endPos
-            int endPosSize = endPos.size();
-            cout << endPosSize << endl;
-            if (endPosSize != 0) {
-                //creates a random index from the possible ending position
-                --endPosSize;
-                int ranEndPos = std::rand() % (endPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
-                //gets the random starting position
-                cout << ranEndPos << endl;
-                s2 = endPos[ranEndPos];
-                cout << "after s2" << endl;
-                cout << s2.file << endl;
-                cout << s2.rank << endl;
-                if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
-                    if (turn == "black") {
-                        cout << "White is in check." << endl;
-                    }
-                    else if (turn == "white") {
-                        cout << "Black is in check." << endl;
-                    }
-                    if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
-                        kingExists = false;
-                        if (turn == "black") {
-                            cout << "Checkmate! Black wins!" << endl;
-                        }
-                        else if (turn == "white") {
-                            cout << "Checkmate! White wins!" << endl;
-                        }
-                    }
+                else {
+                    playerMakeMove(s1, s2, gameboard, p, turn);
                 }
-                cout << s1.file << endl;
-                cout << s1.rank << endl;
-                cout << s2.file << endl;
-                cout << s2.rank << endl;
-                gameboard->makeMove(p, s1, s2); 
-                moved = true;
-                gameboard->render();
-            }
-            else {
-                continue;
             }
         }
     }
