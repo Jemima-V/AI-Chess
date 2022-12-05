@@ -46,7 +46,7 @@ std::vector<Position> LevelTwo::posOfPiecesOnBoard(Board* board, string turn) co
             }
         }
     }
-    return posOfPieces;
+    return posOfPieces;  
 }
 
 //allows the player to make a valid move
@@ -118,6 +118,7 @@ void LevelTwo::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
     if (canCapture == false) {
         while (moved != true) {
             cout << "in while" << endl;
+            --startPosSize;
             //creates a random index from the possible starting position
             int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
             cout << ranPiece << endl;

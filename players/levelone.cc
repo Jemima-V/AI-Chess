@@ -62,7 +62,7 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
     //gets size of vector startPos
     int startPosSize = startPos.size();
     cout << startPosSize << endl;
-    while (moved != true) {
+    while (moved != true) { 
         cout << "in while" << endl;
         --startPosSize;
         //creates a random index from the possible starting position

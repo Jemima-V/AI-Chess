@@ -49,6 +49,29 @@ std::vector<Position> LevelThree::posOfPiecesOnBoard(Board* board, string turn) 
     return posOfPieces;
 }
 
+void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+        if (turn == "black") {
+            cout << "White is in check." << endl;
+        }
+        else if (turn == "white") {
+            cout << "Black is in check." << endl;
+        }
+        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+            kingExists = false;
+            if (turn == "black") {
+                cout << "Checkmate! Black wins!" << endl;
+            }
+            else if (turn == "white") {
+                cout << "Checkmate! White wins!" << endl;
+            }
+        }
+    }
+    gameboard->makeMove(p, s1, s2); 
+    moved = true;
+    gameboard->render();
+}
+
 bool LevelThree::moveAvoidsCapture(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     for(int i = 0; i < startPosSize; ++i) {
         s1 = startPos[i];
@@ -89,9 +112,66 @@ bool LevelThree::moveAvoidsCapture(vector <Position> startPos, int startPosSize,
             }
         }
     }
+    playerMakeMove(s1, s2, gameboard, p, turn);
     return false;
 }
  
+bool LevelThree::moveChecksOpp(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    for(int i = 0; i < startPosSize; ++i) {
+        s1 = startPos[i];
+        p = gameboard->pieceAt(s1);
+        vector <Position> endPos;
+        endPos = p->moveGenerator(s1, gameboard);
+        int endPosSize = endPos.size();
+        if (endPosSize != 0) {
+            for (int k = 0; k < endPosSize; ++k) {
+                s2 = endPos[k];
+                if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+                    playerMakeMove(s1, s2, gameboard, p, turn);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool LevelThree::moveCanCapture(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    for(int i = 0; i < startPosSize; ++i) {
+        s1 = startPos[i];
+        p = gameboard->pieceAt(s1);
+        vector <Position> endPos;
+        endPos = p->moveGenerator(s1, gameboard);
+        int endPosSize = endPos.size();
+        if (endPosSize != 0) {
+            for (int k = 0; k < endPosSize; ++k) {
+                s2 = endPos[k];
+                Pieces *capturePiece = gameboard->pieceAt(s2);
+                if (capturePiece != nullptr) {
+                    playerMakeMove(s1, s2, gameboard, p, turn);
+                    return true;
+                }
+            }
+        }
+    }
+}
+
+void LevelThree::moveRandom(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    for(int i = 0; i < startPosSize; ++i) {
+        s1 = startPos[i];
+        p = gameboard->pieceAt(s1);
+        vector <Position> endPos;
+        endPos = p->moveGenerator(s1, gameboard);
+        int endPosSize = endPos.size();
+        if (endPosSize != 0) {
+            for (int k = 0; k < endPosSize; ++k) {
+                s2 = endPos[k];
+                playerMakeMove(s1, s2, gameboard, p, turn);
+            }
+        }
+    }
+}
+
 //allows the player to make a valid move
 void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     //cout << "before vector startPos" << endl;
@@ -103,10 +183,19 @@ void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *
     int startPosSize = startPos.size();
     //cout << startPosSize << endl;
     bool avoidsCapture = moveAvoidsCapture(startPos, startPosSize, s1, s2, gameboard, p, turn);
-    bool checksOpp = false;
-    bool canCapture = false;
+    bool checksOpp = moveChecksOpp(startPos, startPosSize, s1, s2, gameboard, p, turn);
+    bool canCapture = moveCanCapture(startPos, startPosSize, s1, s2, gameboard, p, turn);
     if (avoidsCapture == false) {
-        //makemove
+        return;
+    }
+    else if (checksOpp == true) {
+        return;
+    }
+    else if (canCapture == true) {
+        return;
+    }
+    else {
+        moveRandom(startPos, startPosSize, s1, s2, gameboard, p, turn);
     }
     for (int i = 0; i < startPosSize; ++i) {
         s1 = startPos[i];
