@@ -21,82 +21,6 @@
 
 using namespace std;
 
-//converting a square into a position struct
-Position convert(string square) {
-    char file = square[0];
-    char rank = square[1];
-    int f;
-    int r;
-    if (file == 'a') {
-        f = 0;
-    }
-    else if (file == 'b') {
-        f = 1;
-    }
-    else if (file == 'c') {
-        f = 2;
-    }
-    else if (file == 'd') {
-        f = 3;
-    }
-    else if (file == 'e') {
-        f = 4;
-    }
-    else if (file == 'f') {
-        f = 5;
-    }
-    else if (file == 'g') {
-        f = 6;
-    }
-    else if (file == 'h') {
-        f = 7;
-    }
-    r = rank - '0';
-    --r;
-    Position p{f, r};
-    return p;
-}
-
-//creating a piece 
-Pieces* createPiece(char piece) {
-    if (piece == 'P') {
-        return new Pawn{1, false, 'P', true}; //
-    }
-    else if (piece == 'K') {
-        return new King{1, false, 'K'}; //
-    }
-    else if (piece == 'Q') {
-        return new Queen{1, false, 'Q'}; //
-    }
-    else if (piece == 'B') {
-        return new Bishop{1, false, 'B'}; //
-    }
-    else if (piece == 'R') {
-        return new Rook{1, false, 'R'}; //
-    }
-    else if (piece == 'N') {
-        return new Knight{1, false, 'N'}; //
-    }
-    else if (piece == 'p') {
-        return new Pawn{2, false, 'p', true}; //
-    }
-    else if (piece == 'k') {
-        return new King{2, false, 'k'}; //
-    }
-    else if (piece == 'q') {
-        return new Queen{2, false, 'q'}; //
-    }
-    else if (piece == 'b') {
-        return new Bishop{2, false, 'b'}; //
-    }
-    else if (piece == 'r') {
-        return new Rook{2, false, 'r'}; //
-    }
-    else if (piece == 'n') {
-        return new Knight{2, false, 'n'}; //
-    }
-}
-
 //creates a player
 Player* create(string player) {
     if (player == "human") {
@@ -131,9 +55,6 @@ int main() {
 
     //for tie games
     int ties = 0;
-
-    //checks if the player has done a personalized setup move
-    bool setupDone = false;
     
     while (true) {
         //creates the game board
@@ -141,9 +62,6 @@ int main() {
 
         //checks if the game is running
         bool grunning = false;
-
-        //checks which player goes first when the game starts
-        string firstTurn = "white";
 
         //for the game to begin 
         Game *g = nullptr;
@@ -204,7 +122,7 @@ int main() {
                     string p2 = b->getName();
 
                     //sets up regular gameboard only if personalized setup is not done
-                    if (setupDone == false) {
+                    if (gameboard->getSetupDone() == false) {
                         //initializes the gameboard
                         gameboard->initBoard();
 
@@ -220,6 +138,7 @@ int main() {
                     }
 
                     //creates a new game 
+                    string firstTurn = gameboard->getFirstTurn();
                     g = new Game(gameboard, w, b, firstTurn); //white moves first
                     //game is running now
                     grunning = true;
@@ -234,7 +153,7 @@ int main() {
                                 }
                                 g->computerMove(gameboard, w, b);
                             }
-                        setupDone = false;   
+                        gameboard->setSetupDone(false);   
                     }
                     //if game is human vs computer
                     else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
@@ -268,7 +187,7 @@ int main() {
                                 g->computerMove(gameboard, w, b);
                             }
                         }
-                        setupDone = false;
+                        gameboard->setSetupDone(false);  
                     }
                     //if game is computer vs human
                     else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
@@ -302,7 +221,7 @@ int main() {
                                 }
                             }
                         }
-                        setupDone = false;
+                        gameboard->setSetupDone(false);  
                     }
                     //if game is human vs computer
                     else if ((p1 == "human") && (p2 == "human")) {
@@ -331,7 +250,7 @@ int main() {
                                 continue;
                             }
                         }
-                        setupDone = false;
+                        gameboard->setSetupDone(false);  
                     }
                 }
                 else {
@@ -345,12 +264,12 @@ int main() {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
                     ++black; 
                     cout << "Black Wins!" << endl;
-                    setupDone = false;
+                    gameboard->setSetupDone(false);  
                 } 
                 else {
                     ++white;
                     cout << "White Wins!" << endl;
-                    setupDone = false;
+                    gameboard->setSetupDone(false);  
                 }
             }
             else if (s == "setup") {
@@ -362,7 +281,7 @@ int main() {
                     //pushes the observers onto the stack
                     stack.push_back(t);
                     stack.push_back(gr);
-                    gameboard->boardSetup();
+                    gameboard->boardSetup(gameboard);
                 }
             }
             else {

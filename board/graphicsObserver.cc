@@ -22,7 +22,7 @@ int addGraphics::getType(){
   return 2;;
 }
 
-string findPieceName(char letter){
+/*string findPieceName(char letter){
   if(letter == 'r'){
           pieceName = "rook";
 
@@ -62,7 +62,7 @@ string findPieceName(char letter){
         }
 
         return pieceName;
-}
+}*/
 
 void addGraphics::GCMove(int file1, int rank1, int file2, int rank2){
   int dim = 60;
@@ -188,7 +188,43 @@ string pieceName;
       //there is a piece at the location
       } else {
 
-        
+        if(letter == 'r'){
+          pieceName = "rook";
+
+        } else if (letter == 'n'){
+          pieceName = "knight";
+
+        } else if (letter == 'b'){
+          pieceName = "bishop";
+          
+        } else if (letter == 'q'){
+          pieceName = "queen";
+          
+        } else if (letter == 'k'){
+          pieceName = "king";
+          
+        } else if (letter == 'p'){
+          pieceName = "pawn";
+          
+        } else if (letter == 'R'){
+          pieceName = "ROOK";
+          
+        } else if (letter == 'N'){
+          pieceName = "KNIGHT";
+          
+        } else if (letter == 'B'){
+          pieceName = "BISHOP";
+          
+        } else if (letter == 'Q'){
+          pieceName = "QUEEN";
+          
+        } else if (letter == 'K'){
+          pieceName = "KING";
+          
+        } else { //letter == 'P'
+          pieceName = "PAWN";
+
+        }
         
       }
       

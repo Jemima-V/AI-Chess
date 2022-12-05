@@ -657,12 +657,104 @@ vector<Position> Board::getPiecePositions(int owner){
     return posVec;
 }
 
-void Board::boardSetup() {
+//converting a square into a position struct
+Position Board::convert(string square) {
+    char file = square[0];
+    char rank = square[1];
+    int f;
+    int r;
+    if (file == 'a') {
+        f = 0;
+    }
+    else if (file == 'b') {
+        f = 1;
+    }
+    else if (file == 'c') {
+        f = 2;
+    }
+    else if (file == 'd') {
+        f = 3;
+    }
+    else if (file == 'e') {
+        f = 4;
+    }
+    else if (file == 'f') {
+        f = 5;
+    }
+    else if (file == 'g') {
+        f = 6;
+    }
+    else if (file == 'h') {
+        f = 7;
+    }
+    r = rank - '0';
+    --r;
+    Position p{f, r};
+    return p;
+}
+
+//creating a piece 
+Pieces* Board::createPiece(char piece) {
+    if (piece == 'P') {
+        return new Pawn{1, false, 'P', true}; //
+    }
+    else if (piece == 'K') {
+        return new King{1, false, 'K'}; //
+    }
+    else if (piece == 'Q') {
+        return new Queen{1, false, 'Q'}; //
+    }
+    else if (piece == 'B') {
+        return new Bishop{1, false, 'B'}; //
+    }
+    else if (piece == 'R') {
+        return new Rook{1, false, 'R'}; //
+    }
+    else if (piece == 'N') {
+        return new Knight{1, false, 'N'}; //
+    }
+    else if (piece == 'p') {
+        return new Pawn{2, false, 'p', true}; //
+    }
+    else if (piece == 'k') {
+        return new King{2, false, 'k'}; //
+    }
+    else if (piece == 'q') {
+        return new Queen{2, false, 'q'}; //
+    }
+    else if (piece == 'b') {
+        return new Bishop{2, false, 'b'}; //
+    }
+    else if (piece == 'r') {
+        return new Rook{2, false, 'r'}; //
+    }
+    else if (piece == 'n') {
+        return new Knight{2, false, 'n'}; //
+    }
+}
+
+void Board::setSetupDone(bool isSetup) {
+    setupDone = isSetup;
+}
+
+bool Board::getSetupDone() {
+    return setupDone;
+}
+
+void Board::setFirstTurn(string turn) {
+    firstTurn = turn;
+}
+
+string Board::getFirstTurn() {
+    return firstTurn;
+}
+
+void Board::boardSetup(Board *gameboard) {
     while (true) {
         string command;
         cin >> command;
         if (command == "done") {
-            setupDone = true;
+            gameboard->setSetupDone(true);
             break;
         }
         else if (command == "+") {
@@ -701,7 +793,7 @@ void Board::boardSetup() {
         else if (command == "=") {
             string colour;
             cin >> colour;
-            firstTurn = colour;
+            gameboard->setFirstTurn(colour);
         } 
         else {
             continue; //continues with command loop if any command is misspelled

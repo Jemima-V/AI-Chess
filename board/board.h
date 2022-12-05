@@ -23,6 +23,9 @@ class Board: public Subject{
 
   bool isOppKnightAt(Position tempPos, int curOwner);
 
+  bool setupDone = false;
+  string firstTurn = "white";
+
 
  public:
 
@@ -78,7 +81,21 @@ class Board: public Subject{
   
   vector<Position> getPiecePositions(int owner);
 
-  void boardSetup();
+  //converting a square into a position struct
+  Position convert(string square);
+
+  //creating a piece 
+  Pieces* createPiece(char piece);
+
+  void setSetupDone(bool isSetup);
+
+  bool getSetupDone();
+
+  void setFirstTurn(string turn);
+
+  string getFirstTurn();
+
+  void boardSetup(Board *gameboard);
 
 };
 
