@@ -131,6 +131,9 @@ int main() {
 
     //for tie games
     int ties = 0;
+
+    //checks if the player has done a personalized setup move
+    bool setupDone = false;
     
     while (true) {
         //creates the game board
@@ -138,9 +141,6 @@ int main() {
 
         //checks if the game is running
         bool grunning = false;
-
-        //checks if the player has done a personalized setup move
-        bool setupDone = false;
 
         //checks which player goes first when the game starts
         string firstTurn = "white";
@@ -211,6 +211,8 @@ int main() {
 
                     //creates a new game 
                     g = new Game(gameboard, w, b, firstTurn); //white moves first
+                    //game is running now
+                    grunning = true;
 
                     //creates observers
                     t = new addText{gameboard}; //text observer
@@ -227,12 +229,19 @@ int main() {
                         ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
                             //checks if the game is not in checkmate for either player
                             while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                                if (cin.eof()) {
+                                    break;
+                                }
                                 g->computerMove(gameboard, w, b);
                             }
+                        setupDone == false;   
                     }
                     //if game is human vs computer
                     else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                            if (cin.eof()) {
+                                break;
+                            }
                             if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
                                 string wantsMove;
                                 cin >> wantsMove;
@@ -259,10 +268,14 @@ int main() {
                                 g->computerMove(gameboard, w, b);
                             }
                         }
+                        setupDone == false;
                     }
                     //if game is computer vs human
                     else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                            if (cin.eof()) {
+                                break;
+                            }
                             if ((g->getTurn() == "white") && (w->hasMoved() == false)) {
                                 g->computerMove(gameboard, w, b);
                             }
@@ -289,10 +302,14 @@ int main() {
                                 }
                             }
                         }
+                        setupDone == false;
                     }
                     //if game is human vs computer
                     else if ((p1 == "human") && (p2 == "human")) {
                         while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                            if (cin.eof()) {
+                                break;
+                            }
                             string wantsMove;
                             cin >> wantsMove;
                             if (wantsMove == "move") {
@@ -314,6 +331,7 @@ int main() {
                                 continue;
                             }
                         }
+                        setupDone == false;
                     }
                 }
                 else {
@@ -327,10 +345,12 @@ int main() {
                 if (w->hasMoved() == false) { //if w has not moved, this means that it is w's turn so if they resign, it is b's point
                     ++black; 
                     cout << "Black Wins!" << endl;
+                    setupDone == false;
                 } 
                 else {
                     ++white;
                     cout << "White Wins!" << endl;
+                    setupDone == false;
                 }
             }
             else if (s == "setup") {
@@ -343,6 +363,7 @@ int main() {
                             break;
                         }
                         else if (command == "+") {
+                            //cout << "adding piece" << endl;
                             char piece;
                             string square;
                             cin >> piece >> square;
@@ -357,6 +378,7 @@ int main() {
                             else {
                                 gameboard->place(piecePlace, p);
                             }
+                            //cout << "piece added" << endl;
                             gameboard->render(); //displays board
                         }
                         else if (command == "-") {

@@ -154,22 +154,20 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             }      
         }
         //en passant case 
-        else if ((p->getId() == 'P') && (s1.rank == 2) && (s2.rank == 4) && (p->getFirstMove() == true)) {
-            if (p->potentialSetupCaptureEnPassant(s1, s2, gameboard) == true) {
-                if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
-                    Position left{s1.file - 1, s1.rank + 2};
-                    Pieces *oppPawnL = gameboard->pieceAt(left);
-                    if (oppPawnL != nullptr) {
-                        Position oppPawnNewPos{s1.file, s1.rank + 1};
-                        gameboard->removePiece(s1);
-                        gameboard->makeMove(oppPawnL, left, oppPawnNewPos);
-                        //show render
-                    }
-                    else {
-                        Position right{s1.file + 1, s1.rank + 2};
-                        Pieces *oppPawnR = gameboard->pieceAt(right);
-                        //add
-                    }
+        else if (p->getId() == 'P') {
+            if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
+                Position left{s1.file - 1, s1.rank + 2};
+                Pieces *oppPawnL = gameboard->pieceAt(left);
+                if (oppPawnL != nullptr) {
+                    Position oppPawnNewPos{s1.file, s1.rank + 1};
+                    gameboard->removePiece(s1);
+                    gameboard->makeMove(oppPawnL, left, oppPawnNewPos);
+                    //show render
+                }
+                else {
+                    Position right{s1.file + 1, s1.rank + 2};
+                    Pieces *oppPawnR = gameboard->pieceAt(right);
+                    //add
                 }
             }
         }
