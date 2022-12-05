@@ -100,6 +100,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                             cout << "Checkmate! White wins!" << endl;
                         }
                     }
+                    if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                        cout << "Stalemate!" << endl;
+                    }
                     gameboard->makeMove(p, s1, s2); 
                     Position rpos{7, 0};
                     Position rnew{5, 0};
@@ -120,6 +123,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                             if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                 cout << "Checkmate! White wins!" << endl;
                             }
+                        }
+                        if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                            cout << "Stalemate!" << endl;
                         }
                         gameboard->makeMove(p, s1, s2); 
                         Position rpos{0, 0};
@@ -142,6 +148,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                         cout << "Checkmate! White wins!" << endl;
                     }
+                }
+                if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                    cout << "Stalemate!" << endl;
                 }
                 gameboard->makeMove(p, s1, s2); 
                 Pieces *promoPiece = promo("white", promotionChar);
@@ -181,6 +190,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     cout << "Checkmate! White wins!" << endl;
                 }
             }
+            if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                cout << "Stalemate!" << endl;
+            }
             gameboard->makeMove(p, s1, s2); 
             moved = true;
             gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
@@ -207,6 +219,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                             cout << "Checkmate! Black wins!" << endl;
                         }
                     }
+                    if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                        cout << "Stalemate!" << endl;
+                    }
                     gameboard->makeMove(p, s1, s2); 
                     Position rpos{7, 7};
                     Position rnew{5, 7};
@@ -227,6 +242,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                             if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                                 cout << "Checkmate! Black wins!" << endl;
                             }
+                        }
+                        if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                            cout << "Stalemate!" << endl;
                         }
                         gameboard->makeMove(p, s1, s2); 
                         Position rpos{0, 7};
@@ -250,6 +268,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         cout << "Checkmate! Black wins!" << endl;
                     }
                 }
+                if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                    cout << "Stalemate!" << endl;
+                }
                 gameboard->makeMove(p, s1, s2); 
                 Pieces *promoPiece = promo("black", promotionChar);
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
@@ -267,6 +288,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
                     cout << "Checkmate! Black wins!" << endl;
                 }
+            }
+            if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+                cout << "Stalemate!" << endl;
             }
             gameboard->makeMove(p, s1, s2); 
             moved = true;

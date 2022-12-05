@@ -67,6 +67,9 @@ void LevelTwo::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces
             }
         }
     }
+    if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+        cout << "Stalemate!" << endl;
+    }
     gameboard->makeMove(p, s1, s2); 
     moved = true;
     gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
