@@ -69,7 +69,7 @@ void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Piec
     }
     gameboard->makeMove(p, s1, s2); 
     moved = true;
-    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+    gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
     if ((p->getId() == 'P') || (p->getId() == 'p')) {
         if (p->getFirstMove() == true) {
             p->setFirstMove(false);
@@ -126,7 +126,7 @@ bool LevelThree::moveCanCapture(Position s1, Position s2, Board *gameboard, Piec
 }
 
 void LevelThree::makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    while (moved != true) { 
+    while ((moved != true) && (startPosSize != 0)) { 
         --startPosSize;
         //creates a random index from the possible starting position
         int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;

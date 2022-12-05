@@ -108,7 +108,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     p->setMoved(true);
                     rook->setMoved(true);
                     moved = true;
-                    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                    gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                 }
         }
         //castling case 2
@@ -129,7 +129,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         p->setMoved(true);
                         rook->setMoved(true);
                         moved = true;
-                        gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                        gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                     }
         }
         //pawn promotion case
@@ -147,12 +147,13 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 Pieces *promoPiece = promo("white", promotionChar);
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
                 moved = true;
-                gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                 if (p->getFirstMove() == true) {
                     p->setFirstMove(false);
                 }
             }      
         }
+        /*
         //en passant case 
         else if (p->getId() == 'P') {
             if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
@@ -171,6 +172,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 }
             }
         }
+        */
         //regular move
         else if (p->validMoveFinal(s1, s2, gameboard) == true) {
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -181,7 +183,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             }
             gameboard->makeMove(p, s1, s2); 
             moved = true;
-            gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+            gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
             if (p->getId() == 'P') {
                 if (p->getFirstMove() == true) {
                     p->setFirstMove(false);
@@ -213,7 +215,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     p->setMoved(true);
                     rook->setMoved(true);
                     moved = true;
-                    gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                    gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                 }
         }
         //castling case 2
@@ -234,7 +236,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         p->setMoved(true);
                         rook->setMoved(true);
                         moved = true;
-                        gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                        gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                     }
         }
         //pawn promotion case
@@ -252,7 +254,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 Pieces *promoPiece = promo("black", promotionChar);
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
                 moved = true;
-                gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+                gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                 if (p->getFirstMove() == true) {
                     p->setFirstMove(false);
                 }
@@ -268,7 +270,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             }
             gameboard->makeMove(p, s1, s2); 
             moved = true;
-            gameboard->renderMove(s1.rank, s1.file, s2.rank, s2.file);
+            gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
             if (p->getId() == 'p') {
                 if (p->getFirstMove() == true) {
                     p->setFirstMove(false);
