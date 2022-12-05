@@ -78,6 +78,8 @@ class Board: public Subject{
   
   vector<Position> getPiecePositions(int owner);
 
+  void boardSetup();
+
 };
 
 #endif

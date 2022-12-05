@@ -33,6 +33,7 @@ Board:: Board(){
 //Board copy constructor
 //call default ctor in MIL to initalize vector
 Board::Board(const Board &other): Board{}{
+//cout << "Enter copy ctor" << endl;
     whiteKing.file = other.whiteKing.file;
     whiteKing.rank = other.whiteKing.rank;
     blackKing.file = other.blackKing.file;
@@ -45,18 +46,30 @@ Board::Board(const Board &other): Board{}{
 
             //make sure we dont call makeCopy() on an empty position
             if(other.currBoard[i][j] != nullptr){
+                
+                //cout << "Before Makecopy" << endl;
+                //cout << other.currBoard[i][j]->getId() << endl;
+                
+                
+                //cout << i << j << endl;
                 currBoard[i][j] = other.currBoard[i][j]->makeCopy();
+                //cout << currBoard[i][j]->getId() << endl;
+                //cout << "after makeCopy" << endl;
             } else {
                 currBoard[i][j] = nullptr;
             }
             
         }
+
     }
+
+    //cout << "Exit copy" << endl;
 }
 
   //dtor 
 Board:: ~Board(){
     //iterate over the 2D vector and delete each piece pointer it contains
+    cout << "Enter Dtor" << endl;
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             delete currBoard[i][j];
@@ -470,12 +483,11 @@ Position Board:: checkDiagOpp(int owner, Position from, int direction){
 
 
 
-//TALK OVER WITH MALVIKA
+
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
     
     //update the whiteking/black king if it is moved
-
     //update if a white king moves
     if(p->getId() == 'K'){
         whiteKing.file = posNew.file;
@@ -486,8 +498,6 @@ void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
         blackKing.file = posNew.file;
         blackKing.rank = posNew.rank;
     }
-
-    //DOUBLE CHECK FOR MEMORY LEAK?
 
     //check if new position is already occuppied (if the move will cause a capture)
     //capturing move
@@ -516,13 +526,13 @@ void Board::place(Pieces* addPiece, Position pos){
 }
   
 void Board::removePiece(Position pos){
-    //AGAIN ASK BRAD -> SINCE CURRBOARD IS A VECTOR DO I STILL DELETE THE PIECE BEFORE SETTING TO NULL??
     delete currBoard[pos.file][pos.rank];
     currBoard[pos.file][pos.rank] = nullptr;
 }
 
   
 void Board::render(){
+    cout << "enter render" << endl;
     notifyObservers();
 }
 
@@ -647,5 +657,55 @@ vector<Position> Board::getPiecePositions(int owner){
     return posVec;
 }
 
-
+void Board::boardSetup() {
+    while (true) {
+        string command;
+        cin >> command;
+        if (command == "done") {
+            setupDone = true;
+            break;
+        }
+        else if (command == "+") {
+            cout << "adding piece" << endl;
+            char piece;
+            string square;
+            cin >> piece >> square;
+            Pieces *piecePlace = createPiece(piece);
+            //converting square into a position struct
+            Position p = convert(square); 
+            //if there is an exisiting piece at that position
+            if (gameboard->pieceAt(p) != nullptr) {
+                gameboard->place(piecePlace, p); //board handles case for replacing piece
+            }
+            //if the position is a null pointer 
+            else {
+                gameboard->place(piecePlace, p);
+            }
+            cout << "piece added" << endl;
+            gameboard->render(); //displays board
+            cout << "after render" << endl;
+        }
+        else if (command == "-") {
+            string square;
+            cin >> square;
+            //converting square into a position struct
+            Position p = convert(square);
+            if (gameboard->pieceAt(p) != nullptr) {
+                gameboard->removePiece(p); //board handles case for removing piece at position
+                gameboard->render(); //displays board
+            } 
+            else {
+                continue; //if position is a nullptr
+            }
+        }
+        else if (command == "=") {
+            string colour;
+            cin >> colour;
+            firstTurn = colour;
+        } 
+        else {
+            continue; //continues with command loop if any command is misspelled
+        }
+    }
+}
 

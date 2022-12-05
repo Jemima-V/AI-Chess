@@ -207,22 +207,22 @@ int main() {
                     if (setupDone == false) {
                         //initializes the gameboard
                         gameboard->initBoard();
+
+                        //creates observers
+                        t = new addText{gameboard}; //text observer
+                        gr = new addGraphics{gameboard}; //graphics observer
+
+                        //pushes the observers onto the stack
+                        stack.push_back(t);
+                        stack.push_back(gr);
+
+                        gameboard->render(); //displays text and graphics observers
                     }
 
                     //creates a new game 
                     g = new Game(gameboard, w, b, firstTurn); //white moves first
                     //game is running now
                     grunning = true;
-
-                    //creates observers
-                    t = new addText{gameboard}; //text observer
-                    gr = new addGraphics{gameboard}; //graphics observer
-
-                    //pushes the observers onto the stack
-                    stack.push_back(t);
-                    stack.push_back(gr);
-
-                    gameboard->render(); //displays text and graphics observers
 
                     //if game is computer vs computer
                     if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
@@ -355,54 +355,14 @@ int main() {
             }
             else if (s == "setup") {
                 if (grunning == false) {
-                    while (true) {
-                        string command;
-                        cin >> command;
-                        if (command == "done") {
-                            setupDone = true;
-                            break;
-                        }
-                        else if (command == "+") {
-                            //cout << "adding piece" << endl;
-                            char piece;
-                            string square;
-                            cin >> piece >> square;
-                            Pieces *piecePlace = createPiece(piece);
-                            //converting square into a position struct
-                            Position p = convert(square); 
-                            //if there is an exisiting piece at that position
-                            if (gameboard->pieceAt(p) != nullptr) {
-                                gameboard->place(piecePlace, p); //board handles case for replacing piece
-                            }
-                            //if the position is a null pointer 
-                            else {
-                                gameboard->place(piecePlace, p);
-                            }
-                            //cout << "piece added" << endl;
-                            gameboard->render(); //displays board
-                        }
-                        else if (command == "-") {
-                            string square;
-                            cin >> square;
-                            //converting square into a position struct
-                            Position p = convert(square);
-                            if (gameboard->pieceAt(p) != nullptr) {
-                                gameboard->removePiece(p); //board handles case for removing piece at position
-                                gameboard->render(); //displays board
-                            } 
-                            else {
-                                continue; //if position is a nullptr
-                            }
-                        }
-                        else if (command == "=") {
-                            string colour;
-                            cin >> colour;
-                            firstTurn = colour;
-                        } 
-                        else {
-                            continue; //continues with command loop if any command is misspelled
-                        }
-                    }
+                    //creates observers
+                    t = new addText{gameboard}; //text observer
+                    gr = new addGraphics{gameboard}; //graphics observer
+
+                    //pushes the observers onto the stack
+                    stack.push_back(t);
+                    stack.push_back(gr);
+                    gameboard->boardSetup();
                 }
             }
             else {
