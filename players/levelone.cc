@@ -64,6 +64,7 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
     cout << startPosSize << endl;
     while (moved != true) {
         cout << "in while" << endl;
+        --startPosSize;
         //creates a random index from the possible starting position
         int ranPiece = std::rand() % (startPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
         cout << ranPiece << endl;
