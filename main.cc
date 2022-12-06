@@ -27,37 +27,46 @@ int main() {
         else {
             string s;
             cin >> s;
-
-            if (g.getIsSetup() == false) {
-                //the entire gameboard
-                gameboard = new Board(); 
-
-                //sets up text observer
-                t = new addText{gameboard};
-                //sets up graphics observer
-                gr = new addGraphics{gameboard};
-
-                //pushes the observers onto the stack
-                stack.push_back(t);
-                stack.push_back(gr);
-            }
-
             if (s == "game") {
+                if (g.getIsSetup() == false) {
+                    //the entire gameboard
+                    gameboard = new Board(); 
+
+                    //sets up text observer
+                    Observer *t = new addText{gameboard};
+                    //sets up graphics observer
+                    Observer *gr = new addGraphics{gameboard};
+
+                    //pushes the observers onto the stack
+                    stack.push_back(t);
+                    stack.push_back(gr);
+                }
                 string player1;
                 string player2;
                 cin >> player1 >> player2;
                 g.startGame(player1, player2, gameboard); 
             }
             else if (s == "setup") {
+                gameboard = new Board(); 
+
+                //sets up text observer
+                Observer *t = new addText{gameboard};
+                //sets up graphics observer
+                Observer *gr = new addGraphics{gameboard};
+
+                //pushes the observers onto the stack
+                stack.push_back(t);
+                stack.push_back(gr);
+                
                 g.setupBoard(gameboard);
             }
             else {
+                cout << "Invalid input! Please re-enter your command" << endl;
                 continue; //if command is misspelled 
-            }
-
-            delete gameboard;
-
-            for (auto &ob : stack) delete ob;
+            }    
         }
     }
+    delete gameboard;
+
+    for (auto &ob : stack) delete ob;
 }
