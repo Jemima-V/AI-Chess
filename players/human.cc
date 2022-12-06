@@ -115,7 +115,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
     bool checkPassantSetup = p->potentialSetupCaptureEnPassant(s1, s2, gameboard);
     //white moves
     if (turn == "white") {
+        cout << "white" << endl;
+        cout << blackSetupEnPassant << endl;
         if (checkPassantSetup == true) {
+            cout << "possible white passant" << endl;
             whiteSetupEnPassant = true;
         } else {
             whiteSetupEnPassant = false;
@@ -190,7 +193,9 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             }      
         }
          else if (p->getId() == 'P' && blackSetupEnPassant == true) {
+            cout << "almost there" << endl;
             if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
+                cout << "here!" << endl;
                 // left diagonal or right diagonal
                 int rankChange = s2.rank - s1.rank;
                 int fileChange = s2.file - s1.file;
@@ -205,6 +210,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 gameboard->removePiece(posCheck);
                 gameboard->makeMove(p, s1, s2);
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+                moved = true;
             }
             /*
             if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
@@ -250,7 +256,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
     }
     //black moves
     else if (turn == "black") {
+        cout << "black" << endl;
+        cout << whiteSetupEnPassant << endl;
         if (checkPassantSetup == true) {
+             cout << "possible black passant" << endl;
             blackSetupEnPassant = true;
         } else {
             blackSetupEnPassant = false;
@@ -325,7 +334,8 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             }      
         }
         //en passant case 
-        else if (p->getId() == 'P' && whiteSetupEnPassant == true) {
+        else if (p->getId() == 'p' && whiteSetupEnPassant == true) {
+            cout << "almost there 222" << endl;
             cout << "black en passant testing" << endl;
             if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
                 // left diagonal or right diagonal
@@ -342,6 +352,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 gameboard->removePiece(posCheck);
                 gameboard->makeMove(p, s1, s2);
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+                moved = true;
             }
             /*
             if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
