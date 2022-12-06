@@ -20,6 +20,12 @@ class Human : public Player {
     //checks if the player has moved yet
     bool moved = false;
 
+    //checks if black has a setup for en passant
+    //bool blackSetupEnPassant;
+
+    //checks if white has a setup for en passant
+    //bool whiteSetupEnPassant;
+
     public:
         //constructor 
         Human(string name);
@@ -34,6 +40,16 @@ class Human : public Player {
         void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) override;
         //sets if the player has moved
         void setMoved(bool checkMoved) override;
+
+        //checks if black has a setup for en passant
+        //bool getBlackSetupEnPassant() const;
+        //checks if black has a setup for en passant
+        //void setBlackSetupEnPassant(bool newCheck);
+
+        //checks if white has a setup for en passant
+        //bool getWhiteSetupEnPassant() const;
+        //checks if white has a setup for en passant
+        //void setWhiteSetupEnPassant(bool newCheck);
 
         //destructor
         ~Human();

@@ -588,33 +588,42 @@ bool Pieces::isOppPawnAt(Position tempPos, int curOwner, Board* board) const {
 }
 
 bool Pieces::pawnCheckL(int owner, Position start, Board* board) const {
+    Pieces* currPiece = board->pieceAt(start);
     Position tempPos{-1,-1};
     if (owner == 1) {
         // check right
         tempPos.file = start.file + 1;
         tempPos.rank = start.rank + 2;
-        if (isOppPawnAt(tempPos, owner, board)) {
-            return true;
+        if (currPiece->checkBounds(tempPos) == true) {
+            if (isOppPawnAt(tempPos, owner, board)) {
+                return true;
+            }
         }
         // check left
         tempPos.file = start.file - 1;
         tempPos.rank = start.rank + 2;
-        if (isOppPawnAt(tempPos, owner, board)) {
-            return true;
+        if (currPiece->checkBounds(tempPos) == true) {
+            if (isOppPawnAt(tempPos, owner, board)) {
+                return true;
+            }
         }
         return false;
     } else {
         // check right
         tempPos.file = start.file + 1;
         tempPos.rank = start.rank - 2;
-        if (isOppPawnAt(tempPos, owner, board)) {
-            return true;
+        if (currPiece->checkBounds(tempPos) == true) {
+            if (isOppPawnAt(tempPos, owner, board)) {
+                return true;
+            }
         }
         // check left
         tempPos.file = start.file - 1;
         tempPos.rank = start.rank - 2;
-        if (isOppPawnAt(tempPos, owner, board)) {
-            return true;
+        if (currPiece->checkBounds(tempPos) == true) {
+            if (isOppPawnAt(tempPos, owner, board)) {
+                return true;
+            }
         }
         return false;
     }
@@ -626,7 +635,7 @@ bool Pieces::potentialSetupCaptureEnPassant(Position start, Position end, Board*
     char currId = currPiece->getId();
     int currPlayer = currPiece->getOwner();
     // check whether the piece is a pawn and it is the first move for the pawn
-    if ((currId == 'p' || currId == 'P') && currPiece->getFirstMove() == false) {
+    if ((currId == 'p' || currId == 'P') && currPiece->getFirstMove() == true) {
         // check whether there is an opponent pawn to the checkL left or right of this pawn
         bool isCapture = pawnCheckL(currPlayer, start, board); 
         if (isCapture == true) {

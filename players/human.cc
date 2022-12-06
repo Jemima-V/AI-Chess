@@ -13,6 +13,12 @@
 
 using namespace std;
 
+//checks if black has a setup for en passant
+bool blackSetupEnPassant = false;
+
+//checks if white has a setup for en passant
+bool whiteSetupEnPassant = false;
+
 //returns the Promotion piece for pawn promotion
 Pieces* promo(string player, char promoChar) {
     //creates piece id
@@ -87,9 +93,33 @@ void Human::setMoved(bool checkMoved) {
     moved = checkMoved;
 }
 
+//checks if black has a setup for en passant
+//bool Human::getBlackSetupEnPassant() const {
+  //  return blackSetupEnPassant;
+//}
+//checks if black has a setup for en passant
+//void Human::setBlackSetupEnPassant(bool newCheck) {
+  //  blackSetupEnPassant = newCheck;
+//}
+
+//checks if white has a setup for en passant
+//bool Human::getWhiteSetupEnPassant() const {
+  //  return whiteSetupEnPassant;
+//}
+//checks if white has a setup for en passant
+//void Human::setWhiteSetupEnPassant(bool newCheck) {
+  //  whiteSetupEnPassant = newCheck;
+//}
+
 void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    bool checkPassantSetup = p->potentialSetupCaptureEnPassant(s1, s2, gameboard);
     //white moves
     if (turn == "white") {
+        if (checkPassantSetup == true) {
+            whiteSetupEnPassant = true;
+        } else {
+            whiteSetupEnPassant = false;
+        }
         //castling case 1
         if (((s1.file == 4) && (s1.rank == 0)) &&
             ((s2.file == 6) && (s2.rank == 0))) {
@@ -159,9 +189,24 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
             }      
         }
-        /*
-        //en passant case 
-        else if (p->getId() == 'P') {
+         else if (p->getId() == 'P' && blackSetupEnPassant == true) {
+            if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
+                // left diagonal or right diagonal
+                int rankChange = s2.rank - s1.rank;
+                int fileChange = s2.file - s1.file;
+                Position posCheck{0,0};
+                if (rankChange == 1 && fileChange == 1) {
+                    posCheck.file = s1.file + 1;
+                    posCheck.rank = s1.rank;
+                } else { // rankChange == 1 && fileChange == -1
+                    posCheck.file = s1.file - 1;
+                    posCheck.rank = s1.rank;
+                }
+                gameboard->removePiece(posCheck);
+                gameboard->makeMove(p, s1, s2);
+                gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+            }
+            /*
             if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
                 Position left{s1.file - 1, s1.rank + 2};
                 Pieces *oppPawnL = gameboard->pieceAt(left);
@@ -176,9 +221,8 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     Pieces *oppPawnR = gameboard->pieceAt(right);
                     //add
                 }
-            }
+            }*/
         }
-        */
         //regular move
         else if (p->validMoveFinal(s1, s2, gameboard) == true) {
             if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
@@ -206,6 +250,11 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
     }
     //black moves
     else if (turn == "black") {
+        if (checkPassantSetup == true) {
+            blackSetupEnPassant = true;
+        } else {
+            blackSetupEnPassant = false;
+        }
         //castling case 1
         if (((s1.file == 4) && (s1.rank == 7)) &&
             ((s2.file == 6) && (s2.rank == 7))) {
@@ -274,6 +323,42 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 moved = true;
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
             }      
+        }
+        //en passant case 
+        else if (p->getId() == 'P' && whiteSetupEnPassant == true) {
+            cout << "black en passant testing" << endl;
+            if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
+                // left diagonal or right diagonal
+                int rankChange = s2.rank - s1.rank;
+                int fileChange = s2.file - s1.file;
+                Position posCheck{0,0};
+                if (rankChange == -1 && fileChange == 1) {
+                    posCheck.file = s1.file + 1;
+                    posCheck.rank = s1.rank;
+                } else { // rankChange == -1 && fileChange == -1
+                    posCheck.file = s1.file - 1;
+                    posCheck.rank = s1.rank;
+                }
+                gameboard->removePiece(posCheck);
+                gameboard->makeMove(p, s1, s2);
+                gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+            }
+            /*
+            if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
+                Position left{s1.file - 1, s1.rank + 2};
+                Pieces *oppPawnL = gameboard->pieceAt(left);
+                if (oppPawnL != nullptr) {
+                    Position oppPawnNewPos{s1.file, s1.rank + 1};
+                    gameboard->removePiece(s1);
+                    gameboard->makeMove(oppPawnL, left, oppPawnNewPos);
+                    //show render
+                }
+                else {
+                    Position right{s1.file + 1, s1.rank + 2};
+                    Pieces *oppPawnR = gameboard->pieceAt(right);
+                    //add
+                }
+            }*/
         }
         //regular move
         else if (p->validMoveFinal(s1, s2, gameboard) == true) {
