@@ -93,27 +93,30 @@ void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Piec
 bool LevelThree::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     Board boardCopy = *gameboard;
     Pieces* newPiece = boardCopy.pieceAt(s1);
-    //we moved the piece
-    boardCopy.makeMove(newPiece, s1, s2);
-    vector <Position> oppStartPos;
-    if (turn == "white") {
-        oppStartPos = posOfPiecesOnBoard(&boardCopy, "black");
-    }
-    else if (turn == "black") {
-        oppStartPos = posOfPiecesOnBoard(&boardCopy, "white");
-    }
-    int oppStartPosSize = oppStartPos.size();
-    for (int j = 0; j < oppStartPosSize; ++j) {
-        Position oppS1 = oppStartPos[j];
-        Pieces *opp = boardCopy.pieceAt(oppS1);
-        vector <Position> oppEndPos;
-        oppEndPos = opp->moveGenerator(oppS1, &boardCopy);
-        int oppEndPosSize = oppEndPos.size();
-        if (oppEndPosSize != 0) {
-            for (int m = 0; m < oppEndPosSize; ++m) {
-                if ((s2.file == oppEndPos[m].file) &&
-                    (s2.rank == oppEndPos[m].rank)) {
-                    return true;
+    if(newPiece != nullptr){
+        cout << "New Piece ID: " << newPiece->getId() << endl;
+        //we moved the piece
+        boardCopy.makeMove(newPiece, s1, s2);
+        vector <Position> oppStartPos;
+        if (turn == "white") {
+            oppStartPos = posOfPiecesOnBoard(&boardCopy, "black");
+        }
+        else if (turn == "black") {
+            oppStartPos = posOfPiecesOnBoard(&boardCopy, "white");
+        }
+        int oppStartPosSize = oppStartPos.size();
+        for (int j = 0; j < oppStartPosSize; ++j) {
+            Position oppS1 = oppStartPos[j];
+            Pieces *opp = boardCopy.pieceAt(oppS1);
+            vector <Position> oppEndPos;
+            oppEndPos = opp->moveGenerator(oppS1, &boardCopy);
+            int oppEndPosSize = oppEndPos.size();
+            if (oppEndPosSize != 0) {
+                for (int m = 0; m < oppEndPosSize; ++m) {
+                    if ((s2.file == oppEndPos[m].file) &&
+                        (s2.rank == oppEndPos[m].rank)) {
+                        return true;
+                    }
                 }
             }
         }

@@ -19,7 +19,7 @@ addGraphics::~addGraphics() {
 }
 
 int addGraphics::getType(){
-  return 2;;
+  return 2;
 }
 
 /*string findPieceName(char letter){

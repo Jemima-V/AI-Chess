@@ -329,23 +329,27 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* newPiece = boardCopy.pieceAt(start);
-    int currPlayer = newPiece->getOwner();
-    boardCopy.makeMove(newPiece, start, end);
-    if (currPlayer == 1) {
-        // get location of the opponent's king
-        Position opponentKingLoc = boardCopy.getBlackKing(); // white's opponent is black
-        // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = newPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
-        // if validMoveFinal returns true, then the opponent king is now in check, else return false
-        return potentialKill;
-    } else { // currPlayer = 2
-        // get location of the opponent's king
-        Position opponentKingLoc = boardCopy.getWhiteKing();
-        // call validMoveFinal for this piece with (start position end) and (end position the King's location)
-        bool potentialKill = newPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
-        // if validMoveFinal returns true, then the opponent king is now in check, else return false
-        return potentialKill;
+    if (newPiece != nullptr){
+        int currPlayer = newPiece->getOwner();
+        boardCopy.makeMove(newPiece, start, end);
+        if (currPlayer == 1) {
+            // get location of the opponent's king
+            Position opponentKingLoc = boardCopy.getBlackKing(); // white's opponent is black
+            // call validMoveFinal for this piece with (start position end) and (end position the King's location)
+            bool potentialKill = newPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
+            // if validMoveFinal returns true, then the opponent king is now in check, else return false
+            return potentialKill;
+        } else { // currPlayer = 2
+            // get location of the opponent's king
+            Position opponentKingLoc = boardCopy.getWhiteKing();
+            // call validMoveFinal for this piece with (start position end) and (end position the King's location)
+            bool potentialKill = newPiece->validMoveFinal(end, opponentKingLoc, &boardCopy);
+            // if validMoveFinal returns true, then the opponent king is now in check, else return false
+            return potentialKill;
+        }
     }
+
+    return false;
 }
 
 // return whether the king is in check
@@ -406,16 +410,17 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     // get what piece is at our current location
     Position p{0,0};
     Pieces* currPiece = board->pieceAt(start);
-    int currPlayer = currPiece->getOwner();
-    int oppPlayer = 0;
-    Position oppKingLoc{0,0};
-    if (currPlayer == 1) {
-        oppKingLoc = board->getBlackKing();
-        oppPlayer = 2;
-    } else { //currPlayer is 2
-        oppKingLoc = board->getWhiteKing();
-        oppPlayer = 1;
-    }
+        int currPlayer = currPiece->getOwner();
+        int oppPlayer = 0;
+        Position oppKingLoc{0,0};
+        if (currPlayer == 1) {
+            oppKingLoc = board->getBlackKing();
+            oppPlayer = 2;
+        } else { //currPlayer is 2
+            oppKingLoc = board->getWhiteKing();
+            oppPlayer = 1;
+        }
+        
     Pieces* oppKing = board->pieceAt(oppKingLoc);
     // check if the opponent king is in check after this move is made
     // (only consider if this piece is going to put the king in check and not if its alr in check)
@@ -424,56 +429,60 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* newPiece = boardCopy.pieceAt(start);
-    boardCopy.makeMove(newPiece, start, end);
-    // call inCheck to see if this puts opp's king in check and return this value
-    bool isCheck = newPiece->inCheck(false, p, oppPlayer, &boardCopy);
-    if (isCheck == false) { // checks if the opponent king is in check
-        // return true if the opponent king has no more valid moves, i.e king can't escape
-        bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
-        // see if our piece can get captured instead: validMove to kill from any of the opp pieces to our piece
-        vector<Position> oppPositions = boardCopy.getPiecePositions(oppPlayer);
-        bool replaceCapture = false;
-        for (auto it : oppPositions) {
-            Pieces* oppPiece = boardCopy.pieceAt(it);
-            if (oppPiece->validMoveFinal(it, end, &boardCopy) == true) {
-                replaceCapture = true;
+
+    if(newPiece != nullptr){
+        boardCopy.makeMove(newPiece, start, end);
+        // call inCheck to see if this puts opp's king in check and return this value
+        bool isCheck = newPiece->inCheck(false, p, oppPlayer, &boardCopy);
+        if (isCheck == false) { // checks if the opponent king is in check
+            // return true if the opponent king has no more valid moves, i.e king can't escape
+            bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
+            // see if our piece can get captured instead: validMove to kill from any of the opp pieces to our piece
+            vector<Position> oppPositions = boardCopy.getPiecePositions(oppPlayer);
+            bool replaceCapture = false;
+            for (auto it : oppPositions) {
+                Pieces* oppPiece = boardCopy.pieceAt(it);
+                if (oppPiece->validMoveFinal(it, end, &boardCopy) == true) {
+                    replaceCapture = true;
+                }
             }
-        }
-        // see if the check is blocked by another piece that can get in the way of our kill
-        //   call moveGenerator here: 
-        //   go thru all the oppPieces and generate moves for them
-        //     go thru all these moves and see if, when these moves are completed, inCheck for the king is now false
-        bool possibleBlock = false;
-        for (auto it : oppPositions) {
-            Pieces* oppPiece = boardCopy.pieceAt(it);
-            vector<Position> possibleMoves = oppPiece->moveGenerator(it, &boardCopy);
-            for (auto it2 : possibleMoves) {
-                // new board for when these moves are stimulated
-                Board boardCopy2 = boardCopy; // invoke copy ctor for the board
-                // we already know that the move is valid from the pieces perspective, 
-                //   we just need to see if the king goes in check once that move is made
-                // stimulate the move for the currPiece on the boardCopy
-                Pieces* newPiece2 = boardCopy2.pieceAt(it);
-                boardCopy2.makeMove(newPiece2, it, it2);
-                // call inCheck to see if this puts our king out of check and return this value
-                bool isCheck2 = newPiece2->inCheck(false, p, oppPlayer, &boardCopy2);
-                if (isCheck2 == true) {
-                    Pieces* check1 = board->pieceAt(it);
-                    Pieces* check2 = boardCopy2.pieceAt(it);
-                    if (check1->getId() == check1->getId()) {
-                        possibleBlock = true;
+            // see if the check is blocked by another piece that can get in the way of our kill
+            //   call moveGenerator here: 
+            //   go thru all the oppPieces and generate moves for them
+            //     go thru all these moves and see if, when these moves are completed, inCheck for the king is now false
+            bool possibleBlock = false;
+            for (auto it : oppPositions) {
+                Pieces* oppPiece = boardCopy.pieceAt(it);
+                vector<Position> possibleMoves = oppPiece->moveGenerator(it, &boardCopy);
+                for (auto it2 : possibleMoves) {
+                    // new board for when these moves are stimulated
+                    Board boardCopy2 = boardCopy; // invoke copy ctor for the board
+                    // we already know that the move is valid from the pieces perspective, 
+                    //   we just need to see if the king goes in check once that move is made
+                    // stimulate the move for the currPiece on the boardCopy
+                    Pieces* newPiece2 = boardCopy2.pieceAt(it);
+                    boardCopy2.makeMove(newPiece2, it, it2);
+                    // call inCheck to see if this puts our king out of check and return this value
+                    bool isCheck2 = newPiece2->inCheck(false, p, oppPlayer, &boardCopy2);
+                    if (isCheck2 == true) {
+                        Pieces* check1 = board->pieceAt(it);
+                        Pieces* check2 = boardCopy2.pieceAt(it);
+                        if (check1->getId() == check1->getId()) {
+                            possibleBlock = true;
+                        }
                     }
                 }
             }
-        }
-        if (checkKingMovement == true && replaceCapture == false && possibleBlock == false) {
-            return true;
+            if (checkKingMovement == true && replaceCapture == false && possibleBlock == false) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
-    } else {
-        return false;
-    }
+    } 
+    return false;  
 }
 
 // checks if the move for the player's piece places the Opponent's King in stalemate

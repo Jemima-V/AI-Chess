@@ -534,10 +534,6 @@ void Board::render(){
     notifyObservers();
 }
 
-/*void Board::renderText(){
-    notifyText();
-}*/
-
 void Board::renderMove(int x1, int x2, int y1, int y2){
     notifyMove(x1, x2, y1, y2);
 }
