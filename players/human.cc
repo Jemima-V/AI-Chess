@@ -141,10 +141,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     moved = true;
                     gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                     if (inCheck == true) {
-                        cout << "White is in check." << endl;
+                        cout << "Black is in check." << endl;
                         if (inCheckmate == true) {
                             kingExists = false;
-                            cout << "Checkmate! Black wins!" << endl;
+                            cout << "Checkmate! White wins!" << endl;
                         }
                     }
                     if (inStalemate == true) {
@@ -170,10 +170,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         moved = true;
                         gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                         if (inCheck == true) {
-                            cout << "White is in check." << endl;
+                            cout << "Black is in check." << endl;
                             if (inCheckmate == true) {
                                 kingExists = false;
-                                cout << "Checkmate! Black wins!" << endl;
+                                cout << "Checkmate! White wins!" << endl;
                             }
                         }
                         if (inStalemate == true) {
@@ -196,10 +196,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 moved = true;
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                 if (inCheck == true) {
-                    cout << "White is in check." << endl;
+                    cout << "Black is in check." << endl;
                     if (inCheckmate == true) {
                         kingExists = false;
-                        cout << "Checkmate! Black wins!" << endl;
+                        cout << "Checkmate! White wins!" << endl;
                     }
                 }
                 if (inStalemate == true) {
@@ -229,10 +229,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
                 moved = true;
                 if (inCheck == true) {
-                    cout << "White is in check." << endl;
+                    cout << "Black is in check." << endl;
                     if (inCheckmate == true) {
                         kingExists = false;
-                        cout << "Checkmate! Black wins!" << endl;
+                        cout << "Checkmate! White wins!" << endl;
                     }
                 }
                 if (inStalemate == true) {
@@ -266,10 +266,10 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
             moved = true;
             gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
             if (inCheck == true) {
-                cout << "White is in check." << endl;
+                cout << "Black is in check." << endl;
                 if (inCheckmate == true) {
                     kingExists = false;
-                    cout << "Checkmate! Black wins!" << endl;
+                    cout << "Checkmate! White wins!" << endl;
                 }
             }
             if (inStalemate == true) {

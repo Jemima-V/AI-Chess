@@ -177,10 +177,20 @@ void LevelFour::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pi
         moved = true;
         gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
         if (inCheck == true) {
-            cout << "White is in check." << endl;
+            if (turn == "black") {
+                cout << "White is in check." << endl;
+            }
+            else if (turn == "white") {
+                cout << "Black is in check." << endl;
+            }
             if (inCheckmate == true) {
                 kingExists = false;
-                cout << "Checkmate! Black wins!" << endl;
+                if (turn == "black") {
+                    cout << "Checkmate! Black wins!" << endl;
+                }
+                else if (turn == "white") {
+                    cout << "Checkmate! White wins!" << endl;
+                }
             }
         }
         if (inStalemate == true) {
