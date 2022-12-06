@@ -66,7 +66,7 @@ int main() {
             }    
         }
     }
-    delete gameboard;
-
+    
     for (auto &ob : stack) delete ob;
+    delete gameboard;
 }
