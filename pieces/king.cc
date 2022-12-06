@@ -108,7 +108,6 @@ bool King::validMoveFinal(Position start, Position end, Board* board) const {
     // make sure the move doesn't put the king in check
     bool checkMoveKingInCheck = currPiece->kingSelfCheck(start, end, board);
     if (checkMoveKingInCheck == true) { // false = move is valid
-        cout << "validMove final is correct" << endl;
         return false;
     }
     return true;

@@ -120,7 +120,6 @@ bool Pawn::validMove(Position start, Position end, Board* board) const {
 
 // checks if a move is fully valid, this is overridden by each derived piece
 bool Pawn::validMoveFinal(Position start, Position end, Board* board) const {
-    //cout << "in vmf" << endl;
     Pieces* currPiece = board->pieceAt(start);
     int currPlayer = currPiece->getOwner();
     if (currPiece->checkBounds(start) == false) {
@@ -155,7 +154,6 @@ Pawn* Pawn::makeCopy() const {
 
 // generate all valid moves for each derived piece -> TO IMPLEMENT STILLL!!!!
 std::vector<Position> Pawn::moveGenerator(Position loc, Board* board) const {
-    //cout << "in move gen" << endl;
     std::vector<Position> moveList;
     //creates a new location for the pawn
     for (int i = 0; i <= 7; ++i) {

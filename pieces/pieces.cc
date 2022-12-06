@@ -403,12 +403,9 @@ bool checkKingEscape(Pieces* currPiece, Pieces* oppKing, Position oppKingLoc, Bo
 
 // checks if the move for the player's piece places the Opponent's King in checkmate
 bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) const {
-    cout << "here now" << endl;
     // get what piece is at our current location
     Position p{0,0};
     Pieces* currPiece = board->pieceAt(start);
-    cout << currPiece->getId() << endl;
-    cout << currPiece->getOwner() << endl;
     int currPlayer = currPiece->getOwner();
     int oppPlayer = 0;
     Position oppKingLoc{0,0};
@@ -430,37 +427,29 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
     boardCopy.makeMove(newPiece, start, end);
     // call inCheck to see if this puts opp's king in check and return this value
     bool isCheck = newPiece->inCheck(false, p, oppPlayer, &boardCopy);
-    cout << "here after checking" << endl;
     if (isCheck == false) { // checks if the opponent king is in check
-        cout << "isCheck is false" << endl;
         // return true if the opponent king has no more valid moves, i.e king can't escape
         bool checkKingMovement = checkKingEscape(currPiece, oppKing, oppKingLoc, board);
-        cout << "checkKingMovement" << endl;
-        cout << checkKingMovement << endl;
         // see if our piece can get captured instead: validMove to kill from any of the opp pieces to our piece
-        vector<Position> oppPositions = board->getPiecePositions(oppPlayer);
+        vector<Position> oppPositions = boardCopy.getPiecePositions(oppPlayer);
         bool replaceCapture = false;
         for (auto it : oppPositions) {
-            Pieces* oppPiece = board->pieceAt(it);
+            Pieces* oppPiece = boardCopy.pieceAt(it);
             if (oppPiece->validMoveFinal(it, end, &boardCopy) == true) {
                 replaceCapture = true;
             }
         }
-        cout << "check replace capture" << endl;
-        cout << replaceCapture << endl;
         // see if the check is blocked by another piece that can get in the way of our kill
         //   call moveGenerator here: 
         //   go thru all the oppPieces and generate moves for them
         //     go thru all these moves and see if, when these moves are completed, inCheck for the king is now false
         bool possibleBlock = false;
         for (auto it : oppPositions) {
-            Pieces* oppPiece = board->pieceAt(it);
-            cout << "checking player" << endl;
-            cout << oppPiece->getOwner() << endl;
+            Pieces* oppPiece = boardCopy.pieceAt(it);
             vector<Position> possibleMoves = oppPiece->moveGenerator(it, &boardCopy);
             for (auto it2 : possibleMoves) {
                 // new board for when these moves are stimulated
-                Board boardCopy2 = *board; // invoke copy ctor for the board
+                Board boardCopy2 = boardCopy; // invoke copy ctor for the board
                 // we already know that the move is valid from the pieces perspective, 
                 //   we just need to see if the king goes in check once that move is made
                 // stimulate the move for the currPiece on the boardCopy
@@ -472,19 +461,11 @@ bool Pieces::opponentKingCheckmate(Position start, Position end, Board* board) c
                     Pieces* check1 = board->pieceAt(it);
                     Pieces* check2 = boardCopy2.pieceAt(it);
                     if (check1->getId() == check1->getId()) {
-                        cout << "true belief" << endl;
-                        cout << newPiece2->getId() << endl;
-                        cout << "start" << endl;
-                        cout << it.file << " , " << it.rank << endl;
-                        cout << "end" << endl;
-                        cout << it2.file << " , " << it2.rank << endl;
                         possibleBlock = true;
                     }
                 }
             }
         }
-        cout << "possible block test" << endl;
-        cout << possibleBlock << endl;
         if (checkKingMovement == true && replaceCapture == false && possibleBlock == false) {
             return true;
         } else {
@@ -569,7 +550,6 @@ void Pieces::setSetupCaptureEnPassant(bool newCheck) {}
 // check if king, at loc, puts itself in check
 // true if it puts itself in check and false if it doesn't
 bool Pieces::kingSelfCheck(Position start, Position end, Board* board) const {
-    cout << "check king self check" << endl;
     Board boardCopy = *board; // copy ctor for the board
     // make the move for the currPiece on the boardCopy
     Pieces* newPiece = boardCopy.pieceAt(start);
@@ -588,12 +568,9 @@ bool Pieces::kingSelfCheck(Position start, Position end, Board* board) const {
     // call inCheck to see if this puts our king in check and return the opposite value
     // true if king is not in check and false if the king is in check
     bool isCheck = newPiece->inCheck(kingSelfCheck, end, currPlayer, &boardCopy);
-    cout << "check king self check calls in check" << endl;
     if (isCheck == true) {
-        cout << "king not in check for the future move" << endl;
         return false;
     } else {
-        cout << "king in check for the future move" << endl;
         return true;
     }
 }
