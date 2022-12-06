@@ -33,6 +33,8 @@ class Player {
         //sets if the player has moved
         virtual void setMoved(bool checkMoved) = 0;
 
+        virtual bool getInStalemate() = 0;
+
         //destructor 
         virtual ~Player() = 0;
 };

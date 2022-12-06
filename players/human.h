@@ -20,6 +20,8 @@ class Human : public Player {
     //checks if the player has moved yet
     bool moved = false;
 
+    bool inStalemate = false;
+
     //checks if black has a setup for en passant
     //bool blackSetupEnPassant;
 
@@ -40,6 +42,8 @@ class Human : public Player {
         void playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) override;
         //sets if the player has moved
         void setMoved(bool checkMoved) override;
+
+        bool getInStalemate() override;
 
         //checks if black has a setup for en passant
         //bool getBlackSetupEnPassant() const;

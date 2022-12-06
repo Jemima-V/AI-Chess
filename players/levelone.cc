@@ -52,6 +52,10 @@ std::vector<Position> LevelOne::posOfPiecesOnBoard(Board* board, string turn) co
     return posOfPieces;
 }
 
+bool LevelOne::getInStalemate() {
+    return inStalemate;
+}
+
 //allows the player to make a valid move
 void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     //stores possible starting positions for turn's pieces on curr board
@@ -78,14 +82,20 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
             int ranEndPos = std::rand() % (endPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
             //gets the random starting position
             s2 = endPos[ranEndPos];
-            if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+            bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
+            bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
+            bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+            gameboard->makeMove(p, s1, s2); 
+            moved = true;
+            gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+            if (inCheck == true) {
                 if (turn == "black") {
                     cout << "White is in check." << endl;
                 }
                 else if (turn == "white") {
                     cout << "Black is in check." << endl;
                 }
-                if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+                if (inCheckmate == true) {
                     kingExists = false;
                     if (turn == "black") {
                         cout << "Checkmate! Black wins!" << endl;
@@ -95,12 +105,10 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
                     }
                 }
             }
-            if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+            if (inStalemate == true) {
+                inStalemate = true;
                 cout << "Stalemate!" << endl;
             }
-            gameboard->makeMove(p, s1, s2); 
-            moved = true;
-            gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
             if ((p->getId() == 'P') || (p->getId() == 'p')) {
                 if (p->getFirstMove() == true) {
                     p->setFirstMove(false);

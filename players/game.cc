@@ -207,6 +207,15 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                         break;
                     }
                     computerMove(gameboard, w, b);
+                    if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
+                        ++ties;
+                        break;
+                    }
+                }
+                if (w->kingIsThere() == false) {
+                    ++black;
+                } else {
+                    ++white;
                 }
             gameboard->setSetupDone(false);   
         }
@@ -233,6 +242,15 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                 else if ((getTurn() == "black") && (b->hasMoved() == false)) {
                     computerMove(gameboard, w, b);
                 }
+                if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
+                    ++ties;
+                    break;
+                }
+            }
+            if (w->kingIsThere() == false) {
+                ++black;
+            } else {
+                ++white;
             }
             gameboard->setSetupDone(false);  
         }
@@ -259,6 +277,15 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                         continue;
                     }
                 }
+                if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
+                    ++ties;
+                    break;
+                }
+            }
+            if (w->kingIsThere() == false) {
+                ++black;
+            } else {
+                ++white;
             }
             gameboard->setSetupDone(false);  
         }
@@ -280,6 +307,15 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                 else {
                     continue;
                 }
+                if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
+                    ++ties;
+                    break;
+                }
+            }
+            if (w->kingIsThere() == false) {
+                ++black;
+            } else {
+                ++white;
             }
             gameboard->setSetupDone(false);  
         }

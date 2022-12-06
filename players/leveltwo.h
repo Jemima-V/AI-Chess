@@ -16,6 +16,8 @@ class LevelTwo : public Player {
     //checks if the player has moved yet
     bool moved = false;
 
+    bool inStalemate = false;
+
     public:
         //constructor 
         LevelTwo(string name);
@@ -38,6 +40,8 @@ class LevelTwo : public Player {
         bool moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
         //generates a random move
         void makeRandomMove(vector <Position> startPos, int startPosSize, Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        
+        bool getInStalemate() override;
 
         //destructor
         ~LevelTwo();

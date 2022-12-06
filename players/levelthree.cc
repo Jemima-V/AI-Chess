@@ -49,15 +49,25 @@ std::vector<Position> LevelThree::posOfPiecesOnBoard(Board* board, string turn) 
     return posOfPieces;
 }
 
+bool LevelThree::getInStalemate() {
+    return inStalemate;
+}
+
 void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    if (p->opponentKingInCheck(s1, s2, gameboard) == true) {
+    bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
+    bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
+    bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+    gameboard->makeMove(p, s1, s2); 
+    moved = true;
+    gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+    if (inCheck == true) {
         if (turn == "black") {
             cout << "White is in check." << endl;
         }
         else if (turn == "white") {
             cout << "Black is in check." << endl;
         }
-        if (p->opponentKingCheckmate(s1, s2, gameboard) == true) {
+        if (inCheckmate == true) {
             kingExists = false;
             if (turn == "black") {
                 cout << "Checkmate! Black wins!" << endl;
@@ -67,12 +77,10 @@ void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Piec
             }
         }
     }
-    if (p->opponentKingStalemate(s1, s2, gameboard) == true) {
+    if (inStalemate == true) {
+        inStalemate = true;
         cout << "Stalemate!" << endl;
     }
-    gameboard->makeMove(p, s1, s2); 
-    moved = true;
-    gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
     if ((p->getId() == 'P') || (p->getId() == 'p')) {
         if (p->getFirstMove() == true) {
             p->setFirstMove(false);

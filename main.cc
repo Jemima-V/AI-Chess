@@ -33,9 +33,9 @@ int main() {
                     gameboard = new Board(); 
 
                     //sets up text observer
-                    Observer *t = new addText{gameboard};
+                    t = new addText{gameboard};
                     //sets up graphics observer
-                    Observer *gr = new addGraphics{gameboard};
+                    gr = new addGraphics{gameboard};
 
                     //pushes the observers onto the stack
                     stack.push_back(t);
@@ -50,14 +50,14 @@ int main() {
                 gameboard = new Board(); 
 
                 //sets up text observer
-                Observer *t = new addText{gameboard};
+                t = new addText{gameboard};
                 //sets up graphics observer
-                Observer *gr = new addGraphics{gameboard};
+                gr = new addGraphics{gameboard};
 
                 //pushes the observers onto the stack
                 stack.push_back(t);
                 stack.push_back(gr);
-                
+
                 g.setupBoard(gameboard);
             }
             else {

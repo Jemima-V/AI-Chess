@@ -17,6 +17,8 @@ class LevelOne : public Player {
     //checks if the player has moved yet
     bool moved = false;
 
+    bool inStalemate = false;
+
     public:
         //constructor 
         LevelOne(string name);
@@ -33,6 +35,8 @@ class LevelOne : public Player {
         void setMoved(bool checkMoved) override;
         //creates a vector of all the pieces on the board for the specific player
         std::vector<Position> posOfPiecesOnBoard(Board* board, string turn) const;
+
+        bool getInStalemate() override;
         
         //destructor
         ~LevelOne();

@@ -485,7 +485,7 @@ Position Board:: checkDiagOpp(int owner, Position from, int direction){
 
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
-    cout << p->getId() << endl;
+    //cout << p->getId() << endl;
     //update the whiteking/black king if it is moved
     //update if a white king moves
     if(p->getId() == 'K'){
