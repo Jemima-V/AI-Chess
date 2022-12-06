@@ -91,7 +91,11 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
 }
 
 bool LevelFour::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    cout << "before board copy" << endl;
+    Position x{7,7};
+    cout << "gameboard ID: " << gameboard->pieceAt(x)->getId() << endl;
     Board boardCopy = *gameboard;
+    cout << "after board copy" << endl;
     Pieces* newPiece = boardCopy.pieceAt(s1);
     if(newPiece != nullptr){
         //we moved the piece
@@ -252,6 +256,7 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
                 index = y;
             }
         }
+        
         playerMakeMove(pc[index].start, pc[index].end, gameboard, p, turn);
     } 
     else {

@@ -52,6 +52,8 @@ Board::Board(const Board &other): Board{}{
                 
                 
                 //cout << i << j << endl;
+                cout << "Other ID: " << other.currBoard[i][j]->getId() << endl;
+                cout << "ij: " << i << j << endl;
                 currBoard[i][j] = other.currBoard[i][j]->makeCopy();
                 //cout << currBoard[i][j]->getId() << endl;
                 //cout << "after makeCopy" << endl;
