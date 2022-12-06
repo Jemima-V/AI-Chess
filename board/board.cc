@@ -69,7 +69,6 @@ Board::Board(const Board &other): Board{}{
   //dtor 
 Board:: ~Board(){
     //iterate over the 2D vector and delete each piece pointer it contains
-    cout << "Enter Dtor" << endl;
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             delete currBoard[i][j];
@@ -486,7 +485,7 @@ Position Board:: checkDiagOpp(int owner, Position from, int direction){
 
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
-    
+    cout << p->getId() << endl;
     //update the whiteking/black king if it is moved
     //update if a white king moves
     if(p->getId() == 'K'){
@@ -532,7 +531,6 @@ void Board::removePiece(Position pos){
 
   
 void Board::render(){
-    cout << "enter render" << endl;
     notifyObservers();
 }
 
@@ -758,7 +756,6 @@ void Board::boardSetup(Board *gameboard) {
             break;
         }
         else if (command == "+") {
-            cout << "adding piece" << endl;
             char piece;
             string square;
             cin >> piece >> square;
@@ -773,9 +770,7 @@ void Board::boardSetup(Board *gameboard) {
             else {
                 gameboard->place(piecePlace, p);
             }
-            cout << "piece added" << endl;
             gameboard->render(); //displays board
-            cout << "after render" << endl;
         }
         else if (command == "-") {
             string square;

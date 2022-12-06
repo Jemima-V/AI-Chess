@@ -6,8 +6,6 @@
 #include "board.h"
 
 class LevelTwo : public Player {
-    
-    Player *p;
 
     //player name
     string name;

@@ -118,6 +118,4 @@ void LevelOne::setMoved(bool checkMoved) {
 }
 
 //destructor
-LevelOne::~LevelOne() {
-    delete p;
-}
+LevelOne::~LevelOne() {}

@@ -8,8 +8,6 @@
 
 class LevelOne : public Player {
 
-    Player *p;
-
     //player name
     string name;
 

@@ -151,6 +151,4 @@ void LevelTwo::setMoved(bool checkMoved) {
 }
 
 //destructor
-LevelTwo::~LevelTwo() {
-    delete p;
-}
+LevelTwo::~LevelTwo() {}

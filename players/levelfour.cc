@@ -205,6 +205,4 @@ void LevelFour::setMoved(bool checkMoved) {
 }
 
 //destructor
-LevelFour::~LevelFour() {
-    delete p;
-}
+LevelFour::~LevelFour() {}

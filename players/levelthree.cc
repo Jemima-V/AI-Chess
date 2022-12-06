@@ -200,6 +200,4 @@ void LevelThree::setMoved(bool checkMoved) {
 }
 
 //destructor
-LevelThree::~LevelThree() {
-    delete p;
-}
+LevelThree::~LevelThree() {}

@@ -34,7 +34,7 @@ class Player {
         virtual void setMoved(bool checkMoved) = 0;
 
         //destructor 
-        ~Player();
+        virtual ~Player() = 0;
 };
 
 #endif 

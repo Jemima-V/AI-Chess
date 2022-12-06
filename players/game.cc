@@ -3,30 +3,16 @@
 #include <sstream>
 #include "game.h"
 #include "player.h"
-#include "bishop.h"
-#include "king.h"
-#include "knight.h"
-#include "pawn.h"
-#include "pieces.h"
-#include "queen.h"
-#include "rook.h"
 #include "board.h"
+#include "human.h"
+#include "levelone.h"
+#include "leveltwo.h"
+#include "levelthree.h"
+#include "levelfour.h"
+#include "textObserver.h"
+#include "graphicsObserver.h"
 
 using namespace std;
-
-//constructor 
-Game::Game(Board *gameBoard, Player *white, Player *black, string turn) : gameBoard{gameBoard}, white{white},
-                                                                          black{black}, turn{turn} {}
-
-//gets the players turn
-string Game::getTurn() {
-    return turn;
-}
-
-//sets the players turn
-void Game::setTurn(string t) {
-    turn = t;
-}
 
 //converting a square into a position struct
 Position Game::convert(string square) {
@@ -63,6 +49,44 @@ Position Game::convert(string square) {
     Position p{f, r};
     return p;
 }
+
+//creates a player
+Player* Game::create(string player) {
+    if (player == "human") {
+        Player *h = new Human{player};
+        return h;
+    } 
+    else if (player == "computer1") {
+        Player *one = new LevelOne{player}; 
+        return one;
+    } 
+    else if (player == "computer2") {
+        Player *two = new LevelTwo{player};
+        return two;
+    } 
+    else if (player == "computer3") {
+        Player *three = new LevelThree{player}; 
+        return three;
+    }
+    else if (player == "computer4") {
+        Player *four = new LevelFour{player};
+        return four;
+    }
+}
+
+//constructor 
+Game::Game() {}
+
+//gets the players turn
+string Game::getTurn() {
+    return turn;
+}
+
+//sets the players turn
+void Game::setTurn(string t) {
+    turn = t;
+}
+
 
 //creates a human move
 void Game::humanMove(Board *gameboard, Player *w, Player *b) {
@@ -146,9 +170,202 @@ void Game::computerMove(Board *gameboard, Player *w, Player *b) {
     }
 }
 
+//starts a game
+void Game::startGame(string player1, string player2) {
+
+    //t = new addText{gameboard};
+    //gr = new addGraphics{gameboard};
+
+    //pushes the observers onto the stack
+    stack.push_back(t);
+    stack.push_back(gr);
+
+    if (((player1 == "human") || (player1 == "computer1")|| (player1 == "computer2") || (player1 == "computer3") || (player1 == "computer4")) &&
+        ((player2 == "human") || (player2 == "computer1")|| (player2 == "computer2") || (player2 == "computer3") || (player2 == "computer4"))) {
+
+        //creates players
+        w = create(player1); //creates white player
+        b = create(player2); //creates black player
+
+        //stores players names in a string
+        string p1 = w->getName();
+        string p2 = b->getName();
+
+        //sets up regular gameboard only if personalized setup is not done
+        if (isSetup == false) {
+            //initializes the gameboard
+            gameboard->initBoard();
+        }
+
+        gameboard->render(); //displays text and graphics observers
+
+        //creates a new game 
+        turn = gameboard->getFirstTurn();
+
+        //game is running now
+        grunning = true;
+
+        //if game is computer vs computer
+        if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && 
+            ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
+                //checks if the game is not in checkmate for either player
+                while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                    if (cin.eof()) {
+                        break;
+                    }
+                    computerMove(gameboard, w, b);
+                }
+            gameboard->setSetupDone(false);   
+        }
+        //if game is human vs computer
+        else if ((p1 == "human") && ((p2 == "computer1") || (p2 == "computer2") || (p2 == "computer3") || (p2 == "computer4"))) {
+            while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                if (cin.eof()) {
+                    break;
+                }
+                if ((getTurn() == "white") && (w->hasMoved() == false)) {
+                    string wantsMove;
+                    cin >> wantsMove;
+                    if (wantsMove == "move") {
+                        humanMove(gameboard, w, b);
+                    }
+                    else if (wantsMove == "resign") {
+                        endGame();
+                        break;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                else if ((getTurn() == "black") && (b->hasMoved() == false)) {
+                    computerMove(gameboard, w, b);
+                }
+            }
+            gameboard->setSetupDone(false);  
+        }
+        //if game is computer vs human
+        else if (((p1 == "computer1") || (p1 == "computer2") || (p1 == "computer3") || (p1 == "computer4")) && (p2 == "human")) {
+            while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                if (cin.eof()) {
+                    break;
+                }
+                if ((getTurn() == "white") && (w->hasMoved() == false)) {
+                    computerMove(gameboard, w, b);
+                }
+                else if ((getTurn() == "black") && (b->hasMoved() == false)) {
+                    string wantsMove;
+                    cin >> wantsMove;
+                    if (wantsMove == "move") {
+                        humanMove(gameboard, w, b);
+                    }
+                    else if (wantsMove == "resign") {
+                        endGame();
+                        break;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+            }
+            gameboard->setSetupDone(false);  
+        }
+        //if game is human vs computer
+        else if ((p1 == "human") && (p2 == "human")) {
+            while ((w->kingIsThere() != false) || (b->kingIsThere() != false)) {
+                if (cin.eof()) {
+                    break;
+                }
+                string wantsMove;
+                cin >> wantsMove;
+                if (wantsMove == "move") {
+                    humanMove(gameboard, w, b);
+                }
+                else if (wantsMove == "resign") {
+                    endGame();
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+            gameboard->setSetupDone(false);  
+        }
+    }
+}
+
+//creates a personalized setup board
+void Game::setupBoard() {
+    if (grunning == false) {
+        //t = new addText{gameboard};
+        //gr = new addGraphics{gameboard};
+        //pushes the observers onto the stack
+        stack.push_back(t);
+        stack.push_back(gr);
+        gameboard->boardSetup(gameboard);
+        isSetup = true;
+    }
+}
+
+void Game::showPoints() {
+    //distributes draws
+    int draws = ties / 2;
+    white += draws;
+    black += draws;
+    //converts int to string
+    string w = to_string(white);
+    string b = to_string(black);
+    //prints final results
+    cout << "Final Score:" << endl;
+    cout << "White 0" << endl;
+    cout << "Black 0" << endl;
+}
+
+void Game::endGame() {
+    if (w->hasMoved() == false) {
+        ++black; 
+        cout << "Black Wins!" << endl;
+    } 
+    else {
+        ++white;
+        cout << "White Wins!" << endl;
+    }
+    delete gameboard; 
+    delete w;
+    delete b;
+    delete t; 
+    delete gr;
+    for (auto &ob : stack) delete ob;
+
+    gameboard = new Board();
+    w = nullptr;
+    b = nullptr;
+    t = nullptr;
+    gr = nullptr;
+
+    turn = "white";
+    grunning = false;
+    isSetup = false;
+}
+
 //destructor
 Game::~Game() {
-    delete gameBoard;
-    delete white;
-    delete black;
+    //deletes pointers
+    delete gameboard;
+    if (w != nullptr) {
+        delete w;
+    }
+    if (b != nullptr) {
+        delete b;
+    }
+    if (t != nullptr) {
+        delete t;
+    }
+    if (gr != nullptr) {
+        delete gr;
+    }
+    //deletes observers
+    int stackSize = stack.size();
+    if (stackSize != 0) {
+        for (auto &ob : stack) delete ob;
+    }
 }

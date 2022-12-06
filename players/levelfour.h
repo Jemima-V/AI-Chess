@@ -14,8 +14,6 @@ class LevelFour : public Player {
         int value;
     };
 
-    Player *p;
-
     //player name
     string name;
 
