@@ -747,6 +747,7 @@ void Board::boardSetup(Board *gameboard) {
     bool whiteKing = false;
     bool blackKing = false;
     bool pawnInFirstLastRow = false;
+    gameboard->render();
     while (true) {
         string command;
         cin >> command;
@@ -787,7 +788,7 @@ void Board::boardSetup(Board *gameboard) {
             else if (piece == 'k') {
                 blackKing = true;
             }
-            gameboard->render(); //displays board
+            gameboard->renderMove(p.file, p.rank, p.file, p.rank); //displays board
         }
         else if (command == "-") {
             string square;
@@ -796,7 +797,7 @@ void Board::boardSetup(Board *gameboard) {
             Position p = convert(square);
             if (gameboard->pieceAt(p) != nullptr) {
                 gameboard->removePiece(p); //board handles case for removing piece at position
-                gameboard->render(); //displays board
+                gameboard->renderMove(p.file, p.rank, p.file, p.rank); //displays board
             } 
             else {
                 continue; //if position is a nullptr
