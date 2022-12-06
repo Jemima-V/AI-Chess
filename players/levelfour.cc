@@ -91,11 +91,11 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
 }
 
 bool LevelFour::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    cout << "before board copy" << endl;
-    Position x{7,7};
-    cout << "gameboard ID: " << gameboard->pieceAt(x)->getId() << endl;
+    //cout << "before board copy" << endl;
+    //Position x{7,7};
+    //cout << "gameboard ID: " << gameboard->pieceAt(x)->getId() << endl;
     Board boardCopy = *gameboard;
-    cout << "after board copy" << endl;
+    //cout << "after board copy" << endl;
     Pieces* newPiece = boardCopy.pieceAt(s1);
     if(newPiece != nullptr){
         //we moved the piece
@@ -228,10 +228,12 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
                     bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
                     //move can capture case
                     Pieces *capturePiece = gameboard->pieceAt(s2);
-                    if (capturePiece != nullptr) {
-                        int value = capturePiece->getPoints();
-                        PotentialCapture pieceVal{s1, s2, value};
-                        pc.push_back(pieceVal);
+                    if (gameboard->pieceAt(s1) != nullptr) {
+                        if (capturePiece != nullptr) {
+                            int value = capturePiece->getPoints();
+                            PotentialCapture pieceVal{s1, s2, value, p};
+                            pc.push_back(pieceVal);
+                        }
                     }
                     if (avoidsCapture == false) {
                         if (checksOpp == true) {
@@ -244,10 +246,14 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
     }
     //captures peice of the highest value
     int pcSize = pc.size();
+    //cout << "pcsize bf if" << endl;
+    //cout << pcSize << endl;
     if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
         computerPawnPromo(s1, s2, gameboard, p, turn);
     }
     else if (pcSize != 0) {
+        //cout << "pcsize" << endl;
+        //cout << pcSize << endl;
         int max = pc[0].value; 
         int index = 0;
         for (int y = 1; y < pcSize; ++y) {
@@ -256,9 +262,10 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
                 index = y;
             }
         }
-        
-        playerMakeMove(pc[index].start, pc[index].end, gameboard, p, turn);
-    } 
+        //cout << max << endl;
+        //cout << index << endl;
+        playerMakeMove(pc[index].start, pc[index].end, gameboard, pc[index].piece, turn);
+    }
     else {
         makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
     } 

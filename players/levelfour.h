@@ -12,6 +12,7 @@ class LevelFour : public Player {
         Position start;
         Position end;
         int value;
+        Pieces *piece;
     };
 
     //player name
