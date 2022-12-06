@@ -750,14 +750,20 @@ void Board::boardSetup(Board *gameboard) {
     bool blackKing = false;
     bool pawnInFirstLastRow = false;
     gameboard->render();
+    Position setupKing;
+    Position setupking;
     while (true) {
         string command;
         cin >> command;
         if (command == "done") {
-            cout << "Make sure there is exactly one white king and one black king and no pawns are on the first and last row of the board." << endl;
             if ((whiteKing == true) && (blackKing == true) && (pawnInFirstLastRow == false)) {
-                gameboard->setSetupDone(true);
-                break;
+                if ((gameboard->pieceAt(setupKing)->inCheck(false, setupKing, 1, gameboard)) && 
+                    (gameboard->pieceAt(setupking)->inCheck(false, setupKing, 2, gameboard))) {
+                        gameboard->setSetupDone(true);
+                        break;
+                    }
+            } else {
+                cout << "Make sure there is exactly one white king and one black king and no pawns are on the first and last row of the board." << endl;
             }
         }
         else if (command == "+") {
@@ -785,9 +791,11 @@ void Board::boardSetup(Board *gameboard) {
                 gameboard->place(piecePlace, p);
             }
             if (piece == 'K') {
+                setupKing = p;
                 whiteKing = true;
             }
             else if (piece == 'k') {
+                setupking = p;
                 blackKing = true;
             }
             gameboard->renderMove(p.file, p.rank, p.file, p.rank); //displays board
