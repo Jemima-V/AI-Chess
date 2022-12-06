@@ -748,27 +748,48 @@ string Board::getFirstTurn() {
 }
 
 void Board::boardSetup(Board *gameboard) {
+    bool whiteKing = false;
+    bool blackKing = false;
+    bool pawnInFirstLastRow = false;
     while (true) {
         string command;
         cin >> command;
         if (command == "done") {
-            gameboard->setSetupDone(true);
-            break;
+            cout << "Make sure there is exactly one white king and one black king and no pawns are on the first and last row of the board." << endl;
+            if ((whiteKing == true) && (blackKing == true) && (pawnInFirstLastRow == false)) {
+                gameboard->setSetupDone(true);
+                break;
+            }
         }
         else if (command == "+") {
             char piece;
             string square;
             cin >> piece >> square;
+            if (((piece == 'K') && (whiteKing == true)) ||
+                ((piece == 'k') && (blackKing == true))) {
+                    continue;
+            }
             Pieces *piecePlace = createPiece(piece);
             //converting square into a position struct
             Position p = convert(square); 
             //if there is an exisiting piece at that position
+            if ((piece == 'P') || (piece == 'p')) {
+                if ((p.rank == 0) || (p.rank == 7)) {
+                    continue;
+                }
+            }
             if (gameboard->pieceAt(p) != nullptr) {
                 gameboard->place(piecePlace, p); //board handles case for replacing piece
             }
             //if the position is a null pointer 
             else {
                 gameboard->place(piecePlace, p);
+            }
+            if (piece == 'K') {
+                whiteKing = true;
+            }
+            else if (piece == 'k') {
+                blackKing = true;
             }
             gameboard->render(); //displays board
         }
@@ -795,4 +816,3 @@ void Board::boardSetup(Board *gameboard) {
         }
     }
 }
-

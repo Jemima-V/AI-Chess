@@ -211,11 +211,13 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                         ++ties;
                         break;
                     }
-                }
-                if (w->kingIsThere() == false) {
-                    ++black;
-                } else {
-                    ++white;
+                    if (w->kingIsThere() == false) {
+                        ++black;
+                        break;
+                    } else if (b->kingIsThere() == false) {
+                        ++white;
+                        break;
+                    }
                 }
             gameboard->setSetupDone(false);   
         }
@@ -246,11 +248,13 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     ++ties;
                     break;
                 }
-            }
-            if (w->kingIsThere() == false) {
-                ++black;
-            } else {
-                ++white;
+                if (w->kingIsThere() == false) {
+                    ++black;
+                    break;
+                } else if (b->kingIsThere() == false) {
+                    ++white;
+                    break;
+                }
             }
             gameboard->setSetupDone(false);  
         }
@@ -281,11 +285,13 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     ++ties;
                     break;
                 }
-            }
-            if (w->kingIsThere() == false) {
-                ++black;
-            } else {
-                ++white;
+                if (w->kingIsThere() == false) {
+                    ++black;
+                    break;
+                } else if (b->kingIsThere() == false) {
+                    ++white;
+                    break;
+                }
             }
             gameboard->setSetupDone(false);  
         }
@@ -311,11 +317,13 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     ++ties;
                     break;
                 }
-            }
-            if (w->kingIsThere() == false) {
-                ++black;
-            } else {
-                ++white;
+                if (w->kingIsThere() == false) {
+                    ++black;
+                    break;
+                } else if (b->kingIsThere() == false) {
+                    ++white;
+                    break;
+                }
             }
             gameboard->setSetupDone(false);  
         }
@@ -340,8 +348,8 @@ void Game::showPoints() {
     string b = to_string(black);
     //prints final results
     cout << "Final Score:" << endl;
-    cout << "White 0" << endl;
-    cout << "Black 0" << endl;
+    cout << "White " + w << endl;
+    cout << "Black " + b << endl;
 }
 
 void Game::endGame() {
