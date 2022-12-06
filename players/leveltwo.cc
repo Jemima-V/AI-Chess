@@ -2,6 +2,8 @@
 #include <string.h>
 #include "player.h"
 #include "leveltwo.h"
+#include "pieces.h"
+#include "queen.h"
 
 using namespace std;
 
@@ -125,6 +127,36 @@ void LevelTwo::makeRandomMove(vector <Position> startPos, int startPosSize, Posi
     }
 }
 
+void LevelTwo::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    Pieces *promoPiece;
+    if (p->validMoveFinal(s1, s2, gameboard) == true) {
+        bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
+        bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
+        bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+        gameboard->makeMove(p, s1, s2); 
+        if (turn == "white") {
+            promoPiece = new Queen{1, false, 'Q'};
+        }  
+        else {
+            promoPiece = new Queen{2, false, 'q'};
+        }
+        gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
+        moved = true;
+        gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+        if (inCheck == true) {
+            cout << "White is in check." << endl;
+            if (inCheckmate == true) {
+                kingExists = false;
+                cout << "Checkmate! Black wins!" << endl;
+            }
+        }
+        if (inStalemate == true) {
+            inStalemate = true;
+            cout << "Stalemate!" << endl;
+        }
+    } 
+}
+
 //allows the player to make a valid move
 void LevelTwo::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     //cout << "before vector startPos" << endl;
@@ -151,7 +183,11 @@ void LevelTwo::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
             }
         }
     }
-    makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
+    if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
+        computerPawnPromo(s1, s2, gameboard, p, turn);
+    } else {
+        makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
+    } 
 }
 
 void LevelTwo::setMoved(bool checkMoved) {

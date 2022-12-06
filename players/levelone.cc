@@ -1,6 +1,7 @@
 #include <string.h>
 #include "player.h"
-//#include "computer.h"
+#include "pieces.h"
+#include "queen.h"
 #include "levelone.h"
 #include "textObserver.h"
 #include "graphicsObserver.h"
@@ -56,6 +57,37 @@ bool LevelOne::getInStalemate() {
     return inStalemate;
 }
 
+void LevelOne::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
+    Pieces *promoPiece;
+    if (p->validMoveFinal(s1, s2, gameboard) == true) {
+        bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
+        bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
+        bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+        gameboard->makeMove(p, s1, s2); 
+        if (turn == "white") {
+            promoPiece = new Queen{1, false, 'Q'};
+        }  
+        else {
+            promoPiece = new Queen{2, false, 'q'};
+        }
+        gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
+        moved = true;
+        gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+        if (inCheck == true) {
+            cout << "White is in check." << endl;
+            if (inCheckmate == true) {
+                kingExists = false;
+                cout << "Checkmate! Black wins!" << endl;
+            }
+        }
+        if (inStalemate == true) {
+            inStalemate = true;
+            cout << "Stalemate!" << endl;
+        }
+    } 
+}
+        
+
 //allows the player to make a valid move
 void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     //stores possible starting positions for turn's pieces on curr board
@@ -82,36 +114,41 @@ void LevelOne::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
             int ranEndPos = std::rand() % (endPosSize - 0 + 1) + 0; //int randNum = rand()%(max-min + 1) + min;
             //gets the random starting position
             s2 = endPos[ranEndPos];
-            bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
-            bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-            bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
-            gameboard->makeMove(p, s1, s2); 
-            moved = true;
-            gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
-            if (inCheck == true) {
-                if (turn == "black") {
-                    cout << "White is in check." << endl;
-                }
-                else if (turn == "white") {
-                    cout << "Black is in check." << endl;
-                }
-                if (inCheckmate == true) {
-                    kingExists = false;
+            if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
+                computerPawnPromo(s1, s2, gameboard, p, turn);
+            }
+            else {
+                bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
+                bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
+                bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+                gameboard->makeMove(p, s1, s2); 
+                moved = true;
+                gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
+                if (inCheck == true) {
                     if (turn == "black") {
-                        cout << "Checkmate! Black wins!" << endl;
+                        cout << "White is in check." << endl;
                     }
                     else if (turn == "white") {
-                        cout << "Checkmate! White wins!" << endl;
+                        cout << "Black is in check." << endl;
+                    }
+                    if (inCheckmate == true) {
+                        kingExists = false;
+                        if (turn == "black") {
+                            cout << "Checkmate! Black wins!" << endl;
+                        }
+                        else if (turn == "white") {
+                            cout << "Checkmate! White wins!" << endl;
+                        }
                     }
                 }
-            }
-            if (inStalemate == true) {
-                inStalemate = true;
-                cout << "Stalemate!" << endl;
-            }
-            if ((p->getId() == 'P') || (p->getId() == 'p')) {
-                if (p->getFirstMove() == true) {
-                    p->setFirstMove(false);
+                if (inStalemate == true) {
+                    inStalemate = true;
+                    cout << "Stalemate!" << endl;
+                }
+                if ((p->getId() == 'P') || (p->getId() == 'p')) {
+                    if (p->getFirstMove() == true) {
+                        p->setFirstMove(false);
+                    }
                 }
             }
         }

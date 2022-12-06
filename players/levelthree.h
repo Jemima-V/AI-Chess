@@ -47,6 +47,8 @@ class LevelThree : public Player {
 
         bool getInStalemate() override;
 
+        void computerPawnPromo(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
+        
         //destructor
         ~LevelThree();
 };

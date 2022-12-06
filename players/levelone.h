@@ -37,6 +37,8 @@ class LevelOne : public Player {
         std::vector<Position> posOfPiecesOnBoard(Board* board, string turn) const;
 
         bool getInStalemate() override;
+
+        void computerPawnPromo(Position s1, Position s2, Board *gameboard, Pieces *p, string turn);
         
         //destructor
         ~LevelOne();
