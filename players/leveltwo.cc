@@ -79,7 +79,7 @@ void LevelTwo::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces
             }
         }
     }
-    if (inStalemate == true) {
+    else if (inStalemate == true) {
         inStalemate = true;
         cout << "Stalemate!" << endl;
     }
@@ -160,7 +160,7 @@ void LevelTwo::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pie
                 }
             }
         }
-        if (inStalemate == true) {
+        else if (inStalemate == true) {
             inStalemate = true;
             cout << "Stalemate!" << endl;
         }

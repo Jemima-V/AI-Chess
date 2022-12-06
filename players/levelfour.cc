@@ -79,7 +79,7 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
             }
         }
     }
-    if (inStalemate == true) {
+    else if (inStalemate == true) {
         inStalemate = true;
         cout << "Stalemate!" << endl;
     }
@@ -93,27 +93,29 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
 bool LevelFour::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     Board boardCopy = *gameboard;
     Pieces* newPiece = boardCopy.pieceAt(s1);
-    //we moved the piece
-    boardCopy.makeMove(newPiece, s1, s2);
-    vector <Position> oppStartPos;
-    if (turn == "white") {
-        oppStartPos = posOfPiecesOnBoard(&boardCopy, "black");
-    }
-    else if (turn == "black") {
-        oppStartPos = posOfPiecesOnBoard(&boardCopy, "white");
-    }
-    int oppStartPosSize = oppStartPos.size();
-    for (int j = 0; j < oppStartPosSize; ++j) {
-        Position oppS1 = oppStartPos[j];
-        Pieces *opp = boardCopy.pieceAt(oppS1);
-        vector <Position> oppEndPos;
-        oppEndPos = opp->moveGenerator(oppS1, &boardCopy);
-        int oppEndPosSize = oppEndPos.size();
-        if (oppEndPosSize != 0) {
-            for (int m = 0; m < oppEndPosSize; ++m) {
-                if ((s2.file == oppEndPos[m].file) &&
-                    (s2.rank == oppEndPos[m].rank)) {
-                    return true;
+    if(newPiece != nullptr){
+        //we moved the piece
+        boardCopy.makeMove(newPiece, s1, s2);
+        vector <Position> oppStartPos;
+        if (turn == "white") {
+            oppStartPos = posOfPiecesOnBoard(&boardCopy, "black");
+        }
+        else if (turn == "black") {
+            oppStartPos = posOfPiecesOnBoard(&boardCopy, "white");
+        }
+        int oppStartPosSize = oppStartPos.size();
+        for (int j = 0; j < oppStartPosSize; ++j) {
+            Position oppS1 = oppStartPos[j];
+            Pieces *opp = boardCopy.pieceAt(oppS1);
+            vector <Position> oppEndPos;
+            oppEndPos = opp->moveGenerator(oppS1, &boardCopy);
+            int oppEndPosSize = oppEndPos.size();
+            if (oppEndPosSize != 0) {
+                for (int m = 0; m < oppEndPosSize; ++m) {
+                    if ((s2.file == oppEndPos[m].file) &&
+                        (s2.rank == oppEndPos[m].rank)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -193,7 +195,7 @@ void LevelFour::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pi
                 }
             }
         }
-        if (inStalemate == true) {
+        else if (inStalemate == true) {
             inStalemate = true;
             cout << "Stalemate!" << endl;
         }
@@ -216,19 +218,21 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
         int endPosSize = endPos.size();
         if (endPosSize != 0) {
             for (int k = 0; k < endPosSize; ++k) {
-                s2 = endPos[k];
-                bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
-                bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
-                //move can capture case
-                Pieces *capturePiece = gameboard->pieceAt(s2);
-                if (capturePiece != nullptr) {
-                    int value = capturePiece->getPoints();
-                    PotentialCapture pieceVal{s1, s2, value};
-                    pc.push_back(pieceVal);
-                }
-                if (avoidsCapture == false) {
-                    if (checksOpp == true) {
-                        return;
+                if (gameboard->pieceAt(s1) != nullptr) {
+                    s2 = endPos[k];
+                    bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
+                    bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
+                    //move can capture case
+                    Pieces *capturePiece = gameboard->pieceAt(s2);
+                    if (capturePiece != nullptr) {
+                        int value = capturePiece->getPoints();
+                        PotentialCapture pieceVal{s1, s2, value};
+                        pc.push_back(pieceVal);
+                    }
+                    if (avoidsCapture == false) {
+                        if (checksOpp == true) {
+                            return;
+                        }
                     }
                 }
             }

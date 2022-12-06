@@ -79,7 +79,7 @@ void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Piec
             }
         }
     }
-    if (inStalemate == true) {
+    else if (inStalemate == true) {
         inStalemate = true;
         cout << "Stalemate!" << endl;
     }
@@ -94,7 +94,6 @@ bool LevelThree::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, P
     Board boardCopy = *gameboard;
     Pieces* newPiece = boardCopy.pieceAt(s1);
     if(newPiece != nullptr){
-        cout << "New Piece ID: " << newPiece->getId() << endl;
         //we moved the piece
         boardCopy.makeMove(newPiece, s1, s2);
         vector <Position> oppStartPos;
@@ -134,9 +133,14 @@ bool LevelThree::moveChecksOpp(Position s1, Position s2, Board *gameboard, Piece
 
 bool LevelThree::moveCanCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     Pieces *capturePiece = gameboard->pieceAt(s2);
-    if (capturePiece != nullptr) {
-        playerMakeMove(s1, s2, gameboard, p, turn);
-        return true;
+    if (gameboard->pieceAt(s1) != nullptr) {
+        if (capturePiece != nullptr) {
+            playerMakeMove(s1, s2, gameboard, p, turn);
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
     return false;
 }
@@ -205,7 +209,7 @@ void LevelThree::computerPawnPromo(Position s1, Position s2, Board *gameboard, P
                 }
             }
         }
-        if (inStalemate == true) {
+        else if (inStalemate == true) {
             inStalemate = true;
             cout << "Stalemate!" << endl;
         }
@@ -214,14 +218,11 @@ void LevelThree::computerPawnPromo(Position s1, Position s2, Board *gameboard, P
 
 //allows the player to make a valid move
 void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    //cout << "before vector startPos" << endl;
     //stores possible starting positions for turn's pieces on curr board
     vector <Position> startPos;
     startPos = posOfPiecesOnBoard(gameboard, turn);
-    //cout << "after vector startPos" << endl;
     //gets size of vector startPos
     int startPosSize = startPos.size();
-    //cout << startPosSize << endl;
     for(int i = 0; i < startPosSize; ++i) {
         s1 = startPos[i];
         p = gameboard->pieceAt(s1);
@@ -230,16 +231,18 @@ void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *
         int endPosSize = endPos.size();
         if (endPosSize != 0) {
             for (int k = 0; k < endPosSize; ++k) {
-                s2 = endPos[k];
-                bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
-                bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
-                bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
-                if (avoidsCapture == false) {
-                    if (checksOpp == true) {
-                        return;
-                    }
-                    else if (canCapture == true) {
-                        return;
+                if (gameboard->pieceAt(s1) != nullptr) {
+                    s2 = endPos[k];
+                    bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
+                    bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
+                    bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
+                    if (avoidsCapture == false) {
+                        if (checksOpp == true) {
+                            return;
+                        }
+                        else if (canCapture == true) {
+                            return;
+                        }
                     }
                 }
             }

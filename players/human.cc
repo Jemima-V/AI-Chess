@@ -147,7 +147,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                             cout << "Checkmate! White wins!" << endl;
                         }
                     }
-                    if (inStalemate == true) {
+                    else if (inStalemate == true) {
                         inStalemate = true;
                         cout << "Stalemate!" << endl;
                     }
@@ -176,7 +176,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                                 cout << "Checkmate! White wins!" << endl;
                             }
                         }
-                        if (inStalemate == true) {
+                        else if (inStalemate == true) {
                             inStalemate = true;
                             cout << "Stalemate!" << endl;
                         }
@@ -202,7 +202,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         cout << "Checkmate! White wins!" << endl;
                     }
                 }
-                if (inStalemate == true) {
+                else if (inStalemate == true) {
                     inStalemate = true;
                     cout << "Stalemate!" << endl;
                 }
@@ -235,7 +235,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         cout << "Checkmate! White wins!" << endl;
                     }
                 }
-                if (inStalemate == true) {
+                else if (inStalemate == true) {
                     inStalemate = true;
                     cout << "Stalemate!" << endl;
                 }
@@ -272,7 +272,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     cout << "Checkmate! White wins!" << endl;
                 }
             }
-            if (inStalemate == true) {
+            else if (inStalemate == true) {
                 inStalemate = true;
                 cout << "Stalemate!" << endl;
             }
@@ -317,7 +317,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                             cout << "Checkmate! Black wins!" << endl;
                         }
                     }
-                    if (inStalemate == true) {
+                    else if (inStalemate == true) {
                         inStalemate = true;
                         cout << "Stalemate!" << endl;
                     }
@@ -346,7 +346,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                                 cout << "Checkmate! Black wins!" << endl;
                             }
                         }
-                        if (inStalemate == true) {
+                        else if (inStalemate == true) {
                             inStalemate = true;
                             cout << "Stalemate!" << endl;
                         }
@@ -372,7 +372,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         cout << "Checkmate! Black wins!" << endl;
                     }
                 }
-                if (inStalemate == true) {
+                else if (inStalemate == true) {
                     inStalemate = true;
                     cout << "Stalemate!" << endl;
                 }
@@ -406,7 +406,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                         cout << "Checkmate! Black wins!" << endl;
                     }
                 }
-                if (inStalemate == true) {
+                else if (inStalemate == true) {
                     inStalemate = true;
                     cout << "Stalemate!" << endl;
                 }
@@ -443,7 +443,7 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     cout << "Checkmate! Black wins!" << endl;
                 }
             }
-            if (inStalemate == true) {
+            else if (inStalemate == true) {
                 inStalemate = true;
                 cout << "Stalemate!" << endl;
             }
