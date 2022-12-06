@@ -462,6 +462,4 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
 }
 
 //destructor
-Human::~Human() {
-    delete p;
-}
+Human::~Human() {}

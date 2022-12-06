@@ -9,8 +9,6 @@ using namespace std;
 
 class Human : public Player {
 
-    Player *p;
-
     //player name
     string name;
 

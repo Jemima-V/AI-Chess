@@ -30,6 +30,7 @@ int main() {
             if (s == "game") {
                 if (g.getIsSetup() == false) {
                     //the entire gameboard
+                    delete gameboard;
                     gameboard = new Board(); 
 
                     //sets up text observer
@@ -47,6 +48,7 @@ int main() {
                 g.startGame(player1, player2, gameboard); 
             }
             else if (s == "setup") {
+                delete gameboard;
                 gameboard = new Board(); 
 
                 //sets up text observer
@@ -66,7 +68,7 @@ int main() {
             }    
         }
     }
-    
+
     for (auto &ob : stack) delete ob;
     delete gameboard;
 }
