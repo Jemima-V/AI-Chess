@@ -157,9 +157,6 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
                 moved = true;
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
-                if (p->getFirstMove() == true) {
-                    p->setFirstMove(false);
-                }
             }      
         }
         /*
@@ -276,9 +273,6 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                 gameboard->place(promoPiece, s2); //replace pawn with new promoPiece
                 moved = true;
                 gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
-                if (p->getFirstMove() == true) {
-                    p->setFirstMove(false);
-                }
             }      
         }
         //regular move

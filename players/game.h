@@ -11,8 +11,6 @@ using namespace std;
 class Player;
 
 class Game {
-    //the entire gameboard
-    Board *gameboard = new Board(); 
 
     //white wins
     int white = 0;
@@ -31,14 +29,6 @@ class Game {
 
     //to track which player's turn it is
     string turn = "white";
-
-    //stack for storing observers
-    std::vector<Observer*> stack;
-
-    //sets up text observer
-    Observer *t = new addText{gameboard};
-    //sets up graphics observer
-    Observer *gr = new addGraphics{gameboard};
 
     //checks if the game is running
     bool grunning = false;
@@ -63,10 +53,10 @@ class Game {
         void computerMove(Board *gameboard, Player *w, Player *b);
 
         //starts a game
-        void startGame(string player1, string player2);
+        void startGame(string player1, string player2, Board *gameboard);
 
         //creates a personalized setup board
-        void setupBoard();
+        void setupBoard(Board *gameboard);
 
         //ends a running game
         void endGame();
@@ -79,6 +69,8 @@ class Game {
 
         //creates a player
         Player* create(string player);
+
+        bool getIsSetup();
         
         //destructor
         ~Game();

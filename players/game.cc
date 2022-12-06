@@ -171,14 +171,7 @@ void Game::computerMove(Board *gameboard, Player *w, Player *b) {
 }
 
 //starts a game
-void Game::startGame(string player1, string player2) {
-
-    //t = new addText{gameboard};
-    //gr = new addGraphics{gameboard};
-
-    //pushes the observers onto the stack
-    stack.push_back(t);
-    stack.push_back(gr);
+void Game::startGame(string player1, string player2, Board *gameboard) {
 
     if (((player1 == "human") || (player1 == "computer1")|| (player1 == "computer2") || (player1 == "computer3") || (player1 == "computer4")) &&
         ((player2 == "human") || (player2 == "computer1")|| (player2 == "computer2") || (player2 == "computer3") || (player2 == "computer4"))) {
@@ -294,13 +287,8 @@ void Game::startGame(string player1, string player2) {
 }
 
 //creates a personalized setup board
-void Game::setupBoard() {
+void Game::setupBoard(Board *gameboard) {
     if (grunning == false) {
-        //t = new addText{gameboard};
-        //gr = new addGraphics{gameboard};
-        //pushes the observers onto the stack
-        stack.push_back(t);
-        stack.push_back(gr);
         gameboard->boardSetup(gameboard);
         isSetup = true;
     }
@@ -329,43 +317,28 @@ void Game::endGame() {
         ++white;
         cout << "White Wins!" << endl;
     }
-    delete gameboard; 
     delete w;
     delete b;
-    delete t; 
-    delete gr;
-    for (auto &ob : stack) delete ob;
 
-    gameboard = new Board();
     w = nullptr;
     b = nullptr;
-    t = nullptr;
-    gr = nullptr;
 
     turn = "white";
     grunning = false;
     isSetup = false;
 }
 
+bool Game::getIsSetup() {
+    return isSetup;
+}
+
 //destructor
 Game::~Game() {
     //deletes pointers
-    delete gameboard;
     if (w != nullptr) {
         delete w;
     }
     if (b != nullptr) {
         delete b;
-    }
-    if (t != nullptr) {
-        delete t;
-    }
-    if (gr != nullptr) {
-        delete gr;
-    }
-    //deletes observers
-    int stackSize = stack.size();
-    if (stackSize != 0) {
-        for (auto &ob : stack) delete ob;
     }
 }
