@@ -150,11 +150,12 @@ int dim = 60;
 int y; 
 string pieceName;
 
+window->drawString((dim*6)-(dim/2), dim - (dim/2), "MKJ CHESSERS");
 
   
   //print a blank board
   for (int i = 0; i <= 7; ++i) {
-    //cout << row << ' ';
+  
     window->drawString(dim+(dim/2), (dim*(i))+(dim*2+(dim/2)), to_string(row));
     row--;
 
@@ -179,7 +180,7 @@ string pieceName;
 
     for (int j = 0; j <= 7; ++j) {
       char letter = subject->getState(j,i);
-      //cout << "Check: "<< letter << j << i;
+
 
       //null pointer at the location
       if(letter == 'X'){

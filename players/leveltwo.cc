@@ -58,7 +58,7 @@ bool LevelTwo::getInStalemate() {
 void LevelTwo::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
     bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-    bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+    bool inSmate = p->opponentKingStalemate(s1, s2, gameboard);
     gameboard->makeMove(p, s1, s2); 
     moved = true;
     gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
@@ -78,8 +78,12 @@ void LevelTwo::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces
                 cout << "Checkmate! White wins!" << endl;
             }
         }
+        else if (inSmate == true) {
+            inStalemate = true;
+            cout << "Stalemate!" << endl;
+        }
     }
-    else if (inStalemate == true) {
+    else if (inSmate == true) {
         inStalemate = true;
         cout << "Stalemate!" << endl;
     }
@@ -132,7 +136,7 @@ void LevelTwo::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pie
     if (p->validMoveFinal(s1, s2, gameboard) == true) {
         bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
         bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-        bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+        bool inSmate = p->opponentKingStalemate(s1, s2, gameboard);
         gameboard->makeMove(p, s1, s2); 
         if (turn == "white") {
             promoPiece = new Queen{1, false, 'Q'};
@@ -159,8 +163,12 @@ void LevelTwo::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pie
                     cout << "Checkmate! White wins!" << endl;
                 }
             }
+            else if (inSmate == true) {
+                inStalemate = true;
+                cout << "Stalemate!" << endl;
+            }
         }
-        else if (inStalemate == true) {
+        else if (inSmate == true) {
             inStalemate = true;
             cout << "Stalemate!" << endl;
         }
@@ -169,14 +177,11 @@ void LevelTwo::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pie
 
 //allows the player to make a valid move
 void LevelTwo::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    //cout << "before vector startPos" << endl;
     //stores possible starting positions for turn's pieces on curr board
     vector <Position> startPos;
     startPos = posOfPiecesOnBoard(gameboard, turn);
-    //cout << "after vector startPos" << endl;
     //gets size of vector startPos
     int startPosSize = startPos.size();
-    //cout << startPosSize << endl;
     for(int i = 0; i < startPosSize; ++i) {
         s1 = startPos[i];
         p = gameboard->pieceAt(s1);
@@ -186,15 +191,22 @@ void LevelTwo::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p,
         if (endPosSize != 0) {
             for (int k = 0; k < endPosSize; ++k) {
                 s2 = endPos[k];
-                bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
-                if (canCapture == true) {
+                if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
+                    computerPawnPromo(s1, s2, gameboard, p, turn);
                     return;
+                }
+                else {
+                    bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
+                    if (canCapture == true) {
+                        return;
+                    }
                 }
             }
         }
     }
     if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
         computerPawnPromo(s1, s2, gameboard, p, turn);
+        return;
     } else {
         makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
     } 

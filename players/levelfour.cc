@@ -58,7 +58,7 @@ bool LevelFour::getInStalemate() {
 void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
     bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-    bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+    bool inSmate = p->opponentKingStalemate(s1, s2, gameboard);
     gameboard->makeMove(p, s1, s2); 
     moved = true;
     gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
@@ -78,8 +78,12 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
                 cout << "Checkmate! White wins!" << endl;
             }
         }
+        else if (inSmate == true) {
+            inStalemate = true;
+            cout << "Stalemate!" << endl;
+        }
     }
-    else if (inStalemate == true) {
+    else if (inSmate == true) {
         inStalemate = true;
         cout << "Stalemate!" << endl;
     }
@@ -91,11 +95,9 @@ void LevelFour::playerMakeMove(Position s1, Position s2, Board *gameboard, Piece
 }
 
 bool LevelFour::moveAvoidsCapture(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
-    //cout << "before board copy" << endl;
-    //Position x{7,7};
-    //cout << "gameboard ID: " << gameboard->pieceAt(x)->getId() << endl;
+
     Board boardCopy = *gameboard;
-    //cout << "after board copy" << endl;
+
     Pieces* newPiece = boardCopy.pieceAt(s1);
     if(newPiece != nullptr){
         //we moved the piece
@@ -171,7 +173,7 @@ void LevelFour::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pi
     if (p->validMoveFinal(s1, s2, gameboard) == true) {
         bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
         bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-        bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+        bool inSmate = p->opponentKingStalemate(s1, s2, gameboard);
         gameboard->makeMove(p, s1, s2); 
         if (turn == "white") {
             promoPiece = new Queen{1, false, 'Q'};
@@ -198,8 +200,12 @@ void LevelFour::computerPawnPromo(Position s1, Position s2, Board *gameboard, Pi
                     cout << "Checkmate! White wins!" << endl;
                 }
             }
+            else if (inSmate == true) {
+                inStalemate = true;
+                cout << "Stalemate!" << endl;
+            }
         }
-        else if (inStalemate == true) {
+        else if (inSmate == true) {
             inStalemate = true;
             cout << "Stalemate!" << endl;
         }
@@ -224,20 +230,25 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
             for (int k = 0; k < endPosSize; ++k) {
                 if (gameboard->pieceAt(s1) != nullptr) {
                     s2 = endPos[k];
-                    bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
-                    bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
-                    //move can capture case
-                    Pieces *capturePiece = gameboard->pieceAt(s2);
-                    if (gameboard->pieceAt(s1) != nullptr) {
-                        if (capturePiece != nullptr) {
-                            int value = capturePiece->getPoints();
-                            PotentialCapture pieceVal{s1, s2, value, p};
-                            pc.push_back(pieceVal);
+                    if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
+                        computerPawnPromo(s1, s2, gameboard, p, turn);
+                        return;
+                    } else {
+                        bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
+                        bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
+                        //move can capture case
+                        Pieces *capturePiece = gameboard->pieceAt(s2);
+                        if (gameboard->pieceAt(s1) != nullptr) {
+                            if (capturePiece != nullptr) {
+                                int value = capturePiece->getPoints();
+                                PotentialCapture pieceVal{s1, s2, value, p};
+                                pc.push_back(pieceVal);
+                            }
                         }
-                    }
-                    if (avoidsCapture == false) {
-                        if (checksOpp == true) {
-                            return;
+                        if (avoidsCapture == false) {
+                            if (checksOpp == true) {
+                                return;
+                            }
                         }
                     }
                 }
@@ -246,14 +257,13 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
     }
     //captures peice of the highest value
     int pcSize = pc.size();
-    //cout << "pcsize bf if" << endl;
-    //cout << pcSize << endl;
+
     if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
         computerPawnPromo(s1, s2, gameboard, p, turn);
+        return;
     }
     else if (pcSize != 0) {
-        //cout << "pcsize" << endl;
-        //cout << pcSize << endl;
+
         int max = pc[0].value; 
         int index = 0;
         for (int y = 1; y < pcSize; ++y) {
@@ -262,8 +272,7 @@ void LevelFour::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p
                 index = y;
             }
         }
-        //cout << max << endl;
-        //cout << index << endl;
+
         playerMakeMove(pc[index].start, pc[index].end, gameboard, pc[index].piece, turn);
     }
     else {

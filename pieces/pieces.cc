@@ -329,8 +329,8 @@ bool Pieces::opponentKingInCheck(Position start, Position end, Board* board) con
     //   we just need to see if the king goes in check once that move is made
     // stimulate the move for the currPiece on the boardCopy
     Pieces* newPiece = boardCopy.pieceAt(start);
-    cout << newPiece->getId() << endl;
-    cout << start.file << start.rank << endl;
+    //cout << newPiece->getId() << endl;
+    //cout << start.file << start.rank << endl;
     if(newPiece != nullptr){
         int currPlayer = newPiece->getOwner();
         boardCopy.makeMove(newPiece, start, end);

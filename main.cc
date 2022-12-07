@@ -63,7 +63,6 @@ int main() {
                 g.setupBoard(gameboard);
             }
             else {
-                //cout << "Invalid input! Please re-enter your command" << endl;
                 continue; //if command is misspelled 
             }    
         }

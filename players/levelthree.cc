@@ -58,7 +58,7 @@ bool LevelThree::getInStalemate() {
 void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Pieces *p, string turn) {
     bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
     bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-    bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+    bool inSmate = p->opponentKingStalemate(s1, s2, gameboard);
     gameboard->makeMove(p, s1, s2); 
     moved = true;
     gameboard->renderMove(s1.file, s1.rank, s2.file, s2.rank);
@@ -78,8 +78,12 @@ void LevelThree::playerMakeMove(Position s1, Position s2, Board *gameboard, Piec
                 cout << "Checkmate! White wins!" << endl;
             }
         }
+        else if (inSmate == true) {
+            inStalemate = true;
+            cout << "Stalemate!" << endl;
+        }
     }
-    else if (inStalemate == true) {
+    else if (inSmate == true) {
         inStalemate = true;
         cout << "Stalemate!" << endl;
     }
@@ -181,7 +185,7 @@ void LevelThree::computerPawnPromo(Position s1, Position s2, Board *gameboard, P
     if (p->validMoveFinal(s1, s2, gameboard) == true) {
         bool inCheck = p->opponentKingInCheck(s1, s2, gameboard);
         bool inCheckmate = p->opponentKingCheckmate(s1, s2, gameboard);
-        bool inStalemate = p->opponentKingStalemate(s1, s2, gameboard);
+        bool inSmate = p->opponentKingStalemate(s1, s2, gameboard);
         gameboard->makeMove(p, s1, s2); 
         if (turn == "white") {
             promoPiece = new Queen{1, false, 'Q'};
@@ -208,8 +212,12 @@ void LevelThree::computerPawnPromo(Position s1, Position s2, Board *gameboard, P
                     cout << "Checkmate! White wins!" << endl;
                 }
             }
+            else if (inSmate == true) {
+                inStalemate = true;
+                cout << "Stalemate!" << endl;
+            }
         }
-        else if (inStalemate == true) {
+        else if (inSmate == true) {
             inStalemate = true;
             cout << "Stalemate!" << endl;
         }
@@ -233,15 +241,20 @@ void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *
             for (int k = 0; k < endPosSize; ++k) {
                 if (gameboard->pieceAt(s1) != nullptr) {
                     s2 = endPos[k];
-                    bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
-                    bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
-                    bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
-                    if (avoidsCapture == false) {
-                        if (checksOpp == true) {
-                            return;
-                        }
-                        else if (canCapture == true) {
-                            return;
+                    if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
+                        computerPawnPromo(s1, s2, gameboard, p, turn);
+                        return;
+                    } else {
+                        bool avoidsCapture = moveAvoidsCapture(s1, s2, gameboard, p, turn);
+                        bool checksOpp = moveChecksOpp(s1, s2, gameboard, p, turn);
+                        bool canCapture = moveCanCapture(s1, s2, gameboard, p, turn);
+                        if (avoidsCapture == false) {
+                            if (checksOpp == true) {
+                                return;
+                            }
+                            else if (canCapture == true) {
+                                return;
+                            }
                         }
                     }
                 }
@@ -250,6 +263,7 @@ void LevelThree::playerMove(Position s1, Position s2, Board *gameboard, Pieces *
     }
     if (((p->getId() == 'P') && (s1.rank == 6)) || ((p->getId() == 'p') && (s1.rank == 1))) {
         computerPawnPromo(s1, s2, gameboard, p, turn);
+        return;
     } else {
         makeRandomMove(startPos, startPosSize, s1, s2, gameboard, p, turn);
     } 

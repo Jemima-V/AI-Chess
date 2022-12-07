@@ -47,16 +47,8 @@ Board::Board(const Board &other): Board{}{
             //make sure we dont call makeCopy() on an empty position
             if(other.currBoard[i][j] != nullptr){
                 
-                //cout << "Before Makecopy" << endl;
-                //cout << other.currBoard[i][j]->getId() << endl;
-                
-                
-                //cout << i << j << endl;
-                //cout << "Other ID: " << other.currBoard[i][j]->getId() << endl;
-                //cout << "ij: " << i << j << endl;
                 currBoard[i][j] = other.currBoard[i][j]->makeCopy();
-                //cout << currBoard[i][j]->getId() << endl;
-                //cout << "after makeCopy" << endl;
+
             } else {
                 currBoard[i][j] = nullptr;
             }
@@ -65,7 +57,6 @@ Board::Board(const Board &other): Board{}{
 
     }
 
-    //cout << "Exit copy" << endl;
 }
 
   //dtor 
@@ -77,7 +68,6 @@ Board:: ~Board(){
         }
     }
 
-    //delete currBoard;*/
 }
 
 void Board:: initBoard(){
@@ -487,7 +477,7 @@ Position Board:: checkDiagOpp(int owner, Position from, int direction){
 
 //alter the main board to reflect the move -> set old location to null, new position to the piece
 void Board:: makeMove(Pieces *p, Position posOld, Position posNew){
-    //cout << p->getId() << endl;
+
     //update the whiteking/black king if it is moved
     //update if a white king moves
     if(p->getId() == 'K'){
@@ -746,8 +736,8 @@ string Board::getFirstTurn() {
 }
 
 void Board::boardSetup(Board *gameboard) {
-    bool whiteKing = false;
-    bool blackKing = false;
+    bool whiteK = false;
+    bool blackK = false;
     bool pawnInFirstLastRow = false;
     gameboard->render();
     Position setupKing;
@@ -756,12 +746,14 @@ void Board::boardSetup(Board *gameboard) {
         string command;
         cin >> command;
         if (command == "done") {
-            if ((whiteKing == true) && (blackKing == true) && (pawnInFirstLastRow == false)) {
+            if ((whiteK == true) && (blackK == true) && (pawnInFirstLastRow == false)) {
                 if ((gameboard->pieceAt(setupKing)->inCheck(false, setupKing, 1, gameboard)) && 
-                    (gameboard->pieceAt(setupking)->inCheck(false, setupKing, 2, gameboard))) {
+                    (gameboard->pieceAt(setupking)->inCheck(false, setupking, 2, gameboard))) {
                         gameboard->setSetupDone(true);
                         break;
-                    }
+                } else {
+                    cout << "Make sure that the two kings are not in check." << endl;
+                }
             } else {
                 cout << "Make sure there is exactly one white king and one black king and no pawns are on the first and last row of the board." << endl;
             }
@@ -770,8 +762,8 @@ void Board::boardSetup(Board *gameboard) {
             char piece;
             string square;
             cin >> piece >> square;
-            if (((piece == 'K') && (whiteKing == true)) ||
-                ((piece == 'k') && (blackKing == true))) {
+            if (((piece == 'K') && (whiteK == true)) ||
+                ((piece == 'k') && (blackK == true))) {
                     continue;
             }
             Pieces *piecePlace = createPiece(piece);
@@ -792,11 +784,13 @@ void Board::boardSetup(Board *gameboard) {
             }
             if (piece == 'K') {
                 setupKing = p;
-                whiteKing = true;
+                whiteKing = setupKing;
+                whiteK = true;
             }
             else if (piece == 'k') {
                 setupking = p;
-                blackKing = true;
+                blackKing = setupking;
+                blackK = true;
             }
             gameboard->renderMove(p.file, p.rank, p.file, p.rank); //displays board
         }
@@ -806,6 +800,16 @@ void Board::boardSetup(Board *gameboard) {
             //converting square into a position struct
             Position p = convert(square);
             if (gameboard->pieceAt(p) != nullptr) {
+                if (gameboard->pieceAt(p)->getId() == 'K') {
+                    whiteKing.file = -1;
+                    whiteKing.rank = -1;
+                    whiteK = false;
+                }
+                else if (gameboard->pieceAt(p)->getId() == 'k') {
+                    blackKing.file = -1;
+                    blackKing.rank = -1;
+                    blackK = false;
+                }
                 gameboard->removePiece(p); //board handles case for removing piece at position
                 gameboard->renderMove(p.file, p.rank, p.file, p.rank); //displays board
             } 
