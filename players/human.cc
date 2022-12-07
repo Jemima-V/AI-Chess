@@ -93,24 +93,6 @@ void Human::setMoved(bool checkMoved) {
     moved = checkMoved;
 }
 
-//checks if black has a setup for en passant
-//bool Human::getBlackSetupEnPassant() const {
-  //  return blackSetupEnPassant;
-//}
-//checks if black has a setup for en passant
-//void Human::setBlackSetupEnPassant(bool newCheck) {
-  //  blackSetupEnPassant = newCheck;
-//}
-
-//checks if white has a setup for en passant
-//bool Human::getWhiteSetupEnPassant() const {
-  //  return whiteSetupEnPassant;
-//}
-//checks if white has a setup for en passant
-//void Human::setWhiteSetupEnPassant(bool newCheck) {
-  //  whiteSetupEnPassant = newCheck;
-//}
-
 bool Human::getInStalemate() {
     return inStalemate;
 }
@@ -256,22 +238,6 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     cout << "Stalemate!" << endl;
                 }
             }
-            /*
-            if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
-                Position left{s1.file - 1, s1.rank + 2};
-                Pieces *oppPawnL = gameboard->pieceAt(left);
-                if (oppPawnL != nullptr) {
-                    Position oppPawnNewPos{s1.file, s1.rank + 1};
-                    gameboard->removePiece(s1);
-                    gameboard->makeMove(oppPawnL, left, oppPawnNewPos);
-                    //show render
-                }
-                else {
-                    Position right{s1.file + 1, s1.rank + 2};
-                    Pieces *oppPawnR = gameboard->pieceAt(right);
-                    //add
-                }
-            }*/
         }
         //regular move
         else if (p->validMoveFinal(s1, s2, gameboard) == true) {
@@ -447,22 +413,6 @@ void Human::playerMove(Position s1, Position s2, Board *gameboard, Pieces *p, st
                     cout << "Stalemate!" << endl;
                 }
             }
-            /*
-            if (p->validCaptureEnPassant(s1, s2, gameboard) == true) {
-                Position left{s1.file - 1, s1.rank + 2};
-                Pieces *oppPawnL = gameboard->pieceAt(left);
-                if (oppPawnL != nullptr) {
-                    Position oppPawnNewPos{s1.file, s1.rank + 1};
-                    gameboard->removePiece(s1);
-                    gameboard->makeMove(oppPawnL, left, oppPawnNewPos);
-                    //show render
-                }
-                else {
-                    Position right{s1.file + 1, s1.rank + 2};
-                    Pieces *oppPawnR = gameboard->pieceAt(right);
-                    //add
-                }
-            }*/
         }
         //regular move
         else if (p->validMoveFinal(s1, s2, gameboard) == true) {

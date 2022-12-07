@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <sstream>
+#include <iomanip>
 #include "game.h"
 #include "player.h"
 #include "board.h"
@@ -208,7 +209,8 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     }
                     computerMove(gameboard, w, b);
                     if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
-                        ++ties;
+                        black += 0.5;
+                        white += 0.5;
                         break;
                     }
                     if (w->kingIsThere() == false) {
@@ -245,7 +247,8 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     computerMove(gameboard, w, b);
                 }
                 if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
-                    ++ties;
+                    black += 0.5;
+                    white += 0.5;
                     break;
                 }
                 if (w->kingIsThere() == false) {
@@ -282,7 +285,8 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     }
                 }
                 if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
-                    ++ties;
+                    black += 0.5;
+                    white += 0.5;
                     break;
                 }
                 if (w->kingIsThere() == false) {
@@ -314,7 +318,8 @@ void Game::startGame(string player1, string player2, Board *gameboard) {
                     continue;
                 }
                 if ((w->getInStalemate() == true) || (b->getInStalemate() == true)) {
-                    ++ties;
+                    black += 0.5;
+                    white += 0.5;
                     break;
                 }
                 if (w->kingIsThere() == false) {
@@ -339,17 +344,10 @@ void Game::setupBoard(Board *gameboard) {
 }
 
 void Game::showPoints() {
-    //distributes draws
-    int draws = ties / 2;
-    white += draws;
-    black += draws;
-    //converts int to string
-    string w = to_string(white);
-    string b = to_string(black);
     //prints final results
     cout << "Final Score:" << endl;
-    cout << "White " + w << endl;
-    cout << "Black " + b << endl;
+    cout << "White " << setprecision(3) << white << endl;
+    cout << "Black " << setprecision(3) << black << endl;
 }
 
 void Game::endGame() {

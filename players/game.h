@@ -13,13 +13,10 @@ class Player;
 class Game {
 
     //white wins
-    int white = 0;
+    double white = 0;
 
     //black wins
-    int black = 0;
-
-    //ties
-    int ties = 0;
+    double black = 0;
 
     //Player 1
     Player *w = nullptr;
