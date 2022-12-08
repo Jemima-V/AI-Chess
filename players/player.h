@@ -18,6 +18,8 @@ class Player {
     //checks if player has moved
     bool moved;
 
+    bool inStalemate;
+
     public:
         //constructor 
         Player(string name);
